@@ -91,6 +91,7 @@ struct WeeklyChallengePlayView: View {
     @State private var feedbackColor = Color.secondary
     @State private var didRecord = false
     @State private var resultStatus = WeeklyResultStatus.saving
+    @State private var keyboardPresented = false
     @FocusState private var focused: Bool
     let weekID: String
     let poolVersion: String
@@ -120,22 +121,23 @@ struct WeeklyChallengePlayView: View {
                         LivesView(lives: session.lives)
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                    .padding(.top, layout.statusTop)
 
                     Text("\(region.name) 주간 도전")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
-                        .padding(.top, 30)
+                        .padding(.top, layout.contextTop)
 
                     WeeklyStationClueView(
                         previous: question.previous,
                         next: question.next,
-                        line: line
+                        line: line,
+                        compact: keyboardPresented
                     )
-                    .padding(.top, 34)
+                    .padding(.top, layout.signTop)
                     .padding(.horizontal, 20)
 
-                    VStack(spacing: 20) {
+                    VStack(spacing: layout.promptSpacing) {
                         Text("이 역의 이름은?")
                             .font(.largeTitle.bold())
                         if session.hintVisible {
@@ -148,9 +150,10 @@ struct WeeklyChallengePlayView: View {
                         feedbackView
                     }
                     .padding(.horizontal, 24)
-                    .padding(.top, 48)
-                    .padding(.bottom, 32)
+                    .padding(.top, layout.promptTop)
+                    .padding(.bottom, layout.promptBottom)
                 }
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: keyboardPresented)
             } else {
                 EmptyStateView(title: "출제할 역이 없어요", message: "노선 데이터를 확인해 주세요.", symbol: "questionmark.folder")
                     .padding()
@@ -163,12 +166,22 @@ struct WeeklyChallengePlayView: View {
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
         .task { focused = true }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            keyboardPresented = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            keyboardPresented = false
+        }
         .onChange(of: session.isFinished) { _, finished in if finished { finish() } }
         .overlay { if session.isFinished { resultOverlay } }
     }
 
     private var currentLine: Line? {
         session.current.flatMap { catalog.lineByID[$0.lineID] }
+    }
+
+    private var layout: GamePlayLayoutMetrics {
+        keyboardPresented ? .keyboardPresented : .regular
     }
 
     private var answerField: some View {
@@ -335,12 +348,13 @@ private struct WeeklyStationClueView: View {
     let previous: Station
     let next: Station
     let line: Line
+    var compact = false
 
     var body: some View {
         ZStack {
             Capsule()
                 .fill(line.color)
-                .frame(height: 82)
+                .frame(height: compact ? 68 : 82)
 
             HStack(spacing: 8) {
                 neighborLabel(title: "이전 역", station: previous, arrow: "chevron.left")
@@ -350,10 +364,10 @@ private struct WeeklyStationClueView: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
                     Text("?")
-                        .font(.system(size: 46, weight: .bold, design: .rounded))
+                        .font(.system(size: compact ? 38 : 46, weight: .bold, design: .rounded))
                         .foregroundStyle(line.color)
                 }
-                .frame(width: 112, height: 112)
+                .frame(width: compact ? 96 : 112, height: compact ? 96 : 112)
                 .background(.background, in: Capsule())
                 .overlay {
                     Capsule().stroke(line.color, lineWidth: 5)
@@ -363,7 +377,7 @@ private struct WeeklyStationClueView: View {
             }
             .padding(.horizontal, 12)
         }
-        .frame(minHeight: 124)
+        .frame(minHeight: compact ? 106 : 124)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("이전 역 \(previous.name), 다음 역 \(next.name). 두 역 사이의 현재 역을 맞혀 보세요.")
     }
