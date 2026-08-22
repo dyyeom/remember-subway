@@ -67,8 +67,11 @@ final class GameSession: ObservableObject {
 struct WeeklyQuestion: Hashable, Sendable {
     let lineID: String
     let routePatternID: String
-    let anchor: Station
+    let previous: Station
     let target: Station
+    let next: Station
+
+    var anchor: Station { previous }
 }
 
 struct SeededGenerator: RandomNumberGenerator {
@@ -89,22 +92,34 @@ enum WeeklyChallengeFactory {
         return String(format: "%04d-W%02d", parts.yearForWeekOfYear ?? 0, parts.weekOfYear ?? 0)
     }
 
-    static func questions(catalog: TransitCatalog, weekID: String) -> [WeeklyQuestion] {
+    static func questions(catalog: TransitCatalog, weekID: String, regionID: String) -> [WeeklyQuestion] {
         let stations = catalog.stationByID
-        var questions = catalog.routePatterns.flatMap { pattern in
-            zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).flatMap { firstID, secondID -> [WeeklyQuestion] in
-                guard let first = stations[firstID], let second = stations[secondID] else { return [] }
-                return [
-                    WeeklyQuestion(lineID: pattern.lineID, routePatternID: pattern.id, anchor: first, target: second),
-                    WeeklyQuestion(lineID: pattern.lineID, routePatternID: pattern.id, anchor: second, target: first)
-                ]
+        let regionLineIDs = Set(catalog.lines.lazy.filter { $0.regionID == regionID }.map(\.id))
+        var questions = catalog.routePatterns.filter { regionLineIDs.contains($0.lineID) }.flatMap { pattern -> [WeeklyQuestion] in
+            guard pattern.stationIDs.count >= 3 else { return [] }
+            return (1..<(pattern.stationIDs.count - 1)).compactMap { index in
+                guard let previous = stations[pattern.stationIDs[index - 1]],
+                      let target = stations[pattern.stationIDs[index]],
+                      let next = stations[pattern.stationIDs[index + 1]] else { return nil }
+                return WeeklyQuestion(
+                    lineID: pattern.lineID,
+                    routePatternID: pattern.id,
+                    previous: previous,
+                    target: target,
+                    next: next
+                )
             }
         }
-        let seedText = "\(catalog.challengePoolVersion):\(weekID)"
+        let seedText = "\(catalog.challengePoolVersion):\(weekID):\(regionID)"
         let seed = seedText.utf8.reduce(UInt64(14_695_981_039_346_656_037)) { ($0 ^ UInt64($1)) &* 1_099_511_628_211 }
         var generator = SeededGenerator(seed: seed)
         questions.shuffle(using: &generator)
         return questions
+    }
+
+    static func questions(catalog: TransitCatalog, weekID: String) -> [WeeklyQuestion] {
+        let firstRegionID = catalog.regions.min { $0.sortOrder < $1.sortOrder }?.id ?? ""
+        return questions(catalog: catalog, weekID: weekID, regionID: firstRegionID)
     }
 }
 

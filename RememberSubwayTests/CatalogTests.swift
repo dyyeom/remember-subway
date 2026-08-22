@@ -18,10 +18,31 @@ struct CatalogTests {
 
     @Test func weeklyOrderIsDeterministic() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        let first = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33")
-        let second = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33")
+        let first = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital")
+        let second = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital")
         #expect(first == second)
         #expect(!first.isEmpty)
+    }
+
+    @Test func weeklyQuestionsStayInsideRegionAndUseThreeAdjacentStations() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+
+        for region in catalog.regions {
+            let questions = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: region.id)
+            #expect(!questions.isEmpty)
+
+            for question in questions {
+                let line = try #require(catalog.lineByID[question.lineID])
+                let pattern = try #require(catalog.routePatterns.first { $0.id == question.routePatternID })
+                #expect(line.regionID == region.id)
+                #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains {
+                    $0 == question.previous.id && $1 == question.target.id
+                })
+                #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains {
+                    $0 == question.target.id && $1 == question.next.id
+                })
+            }
+        }
     }
 
     @Test func bundledCatalogCoversAllOperatingUrbanRailLines() throws {
