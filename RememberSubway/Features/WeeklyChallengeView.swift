@@ -182,7 +182,7 @@ struct WeeklyChallengePlayView: View {
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .focused($focused)
-            .submitLabel(.done)
+            .submitLabel(.next)
             .onSubmit(submit)
             .accessibilityLabel("역 이름 입력")
     }
@@ -203,6 +203,15 @@ struct WeeklyChallengePlayView: View {
         case .correct: answer = ""; feedback = "정답!"
         case .incorrect: feedback = session.isFinished ? "도전 종료" : "아니에요. 목숨이 하나 줄었어요."
         case .ignored: break
+        }
+        restoreAnswerFocus()
+    }
+
+    private func restoreAnswerFocus() {
+        guard !session.isFinished else { return }
+        Task { @MainActor in
+            await Task.yield()
+            focused = true
         }
     }
 
