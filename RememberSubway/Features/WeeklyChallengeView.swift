@@ -6,6 +6,7 @@ struct WeeklyChallengeHomeView: View {
     @EnvironmentObject private var gameCenter: GameCenterService
     @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var bestRecords: [WeeklyBestRecord]
     @Binding var showSettings: Bool
+    @State private var selectedRegionID: String?
 
     private var weekID: String { WeeklyChallengeFactory.weekID() }
 
@@ -16,24 +17,40 @@ struct WeeklyChallengeHomeView: View {
                     .font(.system(size: 64))
                     .foregroundStyle(.yellow)
                     .accessibilityHidden(true)
-                Text("3개의 목숨으로 얼마나 멀리 갈 수 있을까요?")
+                Text("어느 지역에 도전할까요?")
                     .font(.title2.bold())
                     .multilineTextAlignment(.center)
-                Text("전국의 인접한 역이 매주 같은 순서로 출제됩니다.\n힌트 없이 100점 · 힌트 사용 시 50점")
+                Text("이전 역과 다음 역 사이의 역을 맞혀 보세요.\n힌트 없이 100점 · 힌트 사용 시 50점")
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+                HStack {
+                    Label("도전 지역", systemImage: "map")
+                        .font(.headline)
+                    Spacer()
+                    Picker("도전 지역", selection: $selectedRegionID) {
+                        ForEach(regions) { region in
+                            Text(region.name).tag(Optional(region.id))
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+                .frame(minHeight: 56)
+                .padding(.horizontal, 18)
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 GroupBox {
                     LabeledContent("이번 주", value: weekID)
                     LabeledContent("내 최고 점수", value: "\(currentBest)점")
                     LabeledContent("Game Center", value: gameCenter.isAuthenticated ? "연결됨" : "오프라인")
                 }
-                NavigationLink {
-                    WeeklyChallengePlayView(catalog: catalogStore.catalog, weekID: weekID)
-                } label: {
-                    Label("도전 시작", systemImage: "play.fill")
-                        .frame(maxWidth: .infinity, minHeight: 52)
+                if let selectedRegion {
+                    NavigationLink {
+                        WeeklyChallengePlayView(catalog: catalogStore.catalog, weekID: weekID, region: selectedRegion)
+                    } label: {
+                        Label("\(selectedRegion.name) 도전 시작", systemImage: "play.fill")
+                            .frame(maxWidth: .infinity, minHeight: 52)
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
                 if gameCenter.isAuthenticated {
                     Button("주간 순위 보기", systemImage: "list.number") { gameCenter.showDashboard() }
                         .buttonStyle(.bordered)
@@ -43,6 +60,17 @@ struct WeeklyChallengeHomeView: View {
         }
         .navigationTitle("주간 도전")
         .toolbar { SettingsButton(isPresented: $showSettings) }
+        .task {
+            if selectedRegionID == nil { selectedRegionID = regions.first?.id }
+        }
+    }
+
+    private var regions: [Region] {
+        catalogStore.catalog.regions.sorted { $0.sortOrder < $1.sortOrder }
+    }
+
+    private var selectedRegion: Region? {
+        regions.first { $0.id == selectedRegionID }
     }
 
     private var currentBest: Int {
@@ -61,12 +89,16 @@ struct WeeklyChallengePlayView: View {
     let weekID: String
     let poolVersion: String
     let catalog: TransitCatalog
+    let region: Region
 
-    init(catalog: TransitCatalog, weekID: String) {
+    init(catalog: TransitCatalog, weekID: String, region: Region) {
         self.catalog = catalog
         self.weekID = weekID
+        self.region = region
         poolVersion = catalog.challengePoolVersion
-        _session = StateObject(wrappedValue: WeeklyChallengeSession(questions: WeeklyChallengeFactory.questions(catalog: catalog, weekID: weekID)))
+        _session = StateObject(wrappedValue: WeeklyChallengeSession(
+            questions: WeeklyChallengeFactory.questions(catalog: catalog, weekID: weekID, regionID: region.id)
+        ))
     }
 
     var body: some View {
