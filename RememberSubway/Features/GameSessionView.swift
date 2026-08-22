@@ -122,7 +122,7 @@ struct GameSessionView: View {
             }
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-            .submitLabel(.done)
+            .submitLabel(.next)
             .focused($answerFocused)
             .onSubmit(submit)
             .accessibilityLabel("역 이름 입력")
@@ -138,6 +138,7 @@ struct GameSessionView: View {
                 session.useHint()
                 feedback = "초성 힌트를 사용했어요."
                 feedbackKind = .neutral
+                restoreAnswerFocus()
             },
             onConfirm: submit
         )
@@ -158,6 +159,7 @@ struct GameSessionView: View {
         case .ignored: break
         }
         UIAccessibility.post(notification: .announcement, argument: feedback)
+        restoreAnswerFocus()
     }
 
     private var feedbackView: some View {
@@ -183,6 +185,14 @@ struct GameSessionView: View {
         case .correct: line.color
         case .incorrect: .red
         case .neutral: .secondary
+        }
+    }
+
+    private func restoreAnswerFocus() {
+        guard session.outcome == .playing else { return }
+        Task { @MainActor in
+            await Task.yield()
+            answerFocused = true
         }
     }
 
