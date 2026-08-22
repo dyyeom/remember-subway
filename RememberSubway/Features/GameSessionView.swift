@@ -12,6 +12,7 @@ struct GameSessionView: View {
     @State private var feedback = ""
     @State private var feedbackKind: FeedbackKind = .neutral
     @State private var didRecord = false
+    @State private var keyboardPresented = false
     @FocusState private var answerFocused: Bool
     let line: Line
     let catalog: TransitCatalog
@@ -27,21 +28,22 @@ struct GameSessionView: View {
             VStack(spacing: 0) {
                 statusRow
                     .padding(.horizontal, 20)
-                    .padding(.top, 12)
+                    .padding(.top, layout.statusTop)
 
                 Text(directionLabel)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
-                    .padding(.top, 30)
+                    .padding(.top, layout.contextTop)
 
                 StationSignView(
                     station: previousStation,
                     stationCode: currentStationCode,
-                    line: line
+                    line: line,
+                    compact: keyboardPresented
                 )
-                .padding(.top, 34)
+                .padding(.top, layout.signTop)
 
-                VStack(spacing: 20) {
+                VStack(spacing: layout.promptSpacing) {
                     Text("다음 역은?")
                         .font(.largeTitle.bold())
                         .multilineTextAlignment(.center)
@@ -58,9 +60,10 @@ struct GameSessionView: View {
                     feedbackView
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 48)
-                .padding(.bottom, 32)
+                .padding(.top, layout.promptTop)
+                .padding(.bottom, layout.promptBottom)
             }
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: keyboardPresented)
         }
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
@@ -70,12 +73,22 @@ struct GameSessionView: View {
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(line.color)
         .task { answerFocused = true }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+            keyboardPresented = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            keyboardPresented = false
+        }
         .onChange(of: session.outcome) { _, outcome in handleOutcome(outcome) }
         .overlay { resultOverlay }
     }
 
     private var previousStation: Station {
         session.stations[max(0, session.currentIndex - 1)]
+    }
+
+    private var layout: GamePlayLayoutMetrics {
+        keyboardPresented ? .keyboardPresented : .regular
     }
 
     private var routePattern: RoutePattern? {
