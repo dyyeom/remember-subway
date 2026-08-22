@@ -1,5 +1,36 @@
 import SwiftUI
 
+struct GamePlayLayoutMetrics: Equatable {
+    let statusTop: CGFloat
+    let contextTop: CGFloat
+    let signTop: CGFloat
+    let promptTop: CGFloat
+    let promptSpacing: CGFloat
+    let promptBottom: CGFloat
+
+    static let regular = GamePlayLayoutMetrics(
+        statusTop: 12,
+        contextTop: 30,
+        signTop: 34,
+        promptTop: 48,
+        promptSpacing: 20,
+        promptBottom: 32
+    )
+
+    static let keyboardPresented = GamePlayLayoutMetrics(
+        statusTop: 4,
+        contextTop: 8,
+        signTop: 8,
+        promptTop: 12,
+        promptSpacing: 10,
+        promptBottom: 8
+    )
+
+    var totalVerticalSpacing: CGFloat {
+        statusTop + contextTop + signTop + promptTop + promptSpacing * 2 + promptBottom
+    }
+}
+
 extension Color {
     init(hex: String) {
         let cleaned = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -116,22 +147,23 @@ struct StationSignView: View {
     let station: Station
     let stationCode: String
     let line: Line
+    var compact = false
 
     var body: some View {
         ZStack {
             line.color
-                .frame(height: 34)
+                .frame(height: compact ? 28 : 34)
                 .accessibilityHidden(true)
 
-            HStack(spacing: 14) {
+            HStack(spacing: compact ? 10 : 14) {
                 Text(stationCode)
                     .font(.title3.bold().monospaced())
                     .foregroundStyle(line.colorForeground)
                     .minimumScaleFactor(0.7)
-                    .frame(width: 66, height: 66)
+                    .frame(width: compact ? 56 : 66, height: compact ? 56 : 66)
                     .background(line.color, in: Circle())
 
-                VStack(spacing: 4) {
+                VStack(spacing: compact ? 2 : 4) {
                     Text(station.fullName ?? station.name)
                         .font(.title2.bold())
                         .foregroundStyle(.black)
@@ -147,7 +179,7 @@ struct StationSignView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            .padding(.vertical, 12)
+            .padding(.vertical, compact ? 8 : 12)
             .padding(.leading, 12)
             .padding(.trailing, 24)
             .background(.white, in: Capsule())
