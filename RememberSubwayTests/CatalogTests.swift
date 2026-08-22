@@ -17,11 +17,14 @@ struct CatalogTests {
         }
     }
 
-    @Test func weeklyOrderIsDeterministic() throws {
+    @Test func weeklyOrderChangesByAttemptSeedWithoutChangingQuestionPool() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        let first = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital")
-        let second = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital")
-        #expect(first == second)
+        let first = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 1)
+        let repeated = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 1)
+        let second = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 2)
+        #expect(first == repeated)
+        #expect(first != second)
+        #expect(Set(first) == Set(second))
         #expect(!first.isEmpty)
     }
 

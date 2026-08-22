@@ -51,7 +51,7 @@ struct GameSessionTests {
         #expect(session.current?.target.name == "다역")
         #expect(!session.isFinished)
         #expect(session.submit("다역") == .correct)
-        #expect(session.current?.target.name == "나역")
+        #expect(Set(session.questions.map(\.target.name)) == Set(["나역", "다역"]))
         #expect(!session.isFinished)
     }
 }
