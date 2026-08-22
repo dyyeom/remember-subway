@@ -3,6 +3,7 @@ import SwiftUI
 import UIKit
 
 struct GameSessionView: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query private var settings: [AppSettingsRecord]
@@ -65,6 +66,7 @@ struct GameSessionView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .navigationTitle("\(session.segment.index + 1)구간")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(isCompleted)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(line.color)
         .task { answerFocused = true }
@@ -198,9 +200,14 @@ struct GameSessionView: View {
 
     private func handleOutcome(_ outcome: GameSession.Outcome) {
         guard outcome != .playing, !didRecord else { return }
+        answerFocused = false
         didRecord = true
         try? ProgressStore.recordAttempt(segment: session.segment, session: session, context: modelContext)
         if case .completed(let stars) = outcome {
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: "축하해요. \(line.name) \(session.segment.index + 1)구간의 모든 역을 맞혔어요."
+            )
             let achievementIDs = (try? ProgressStore.earnedAchievementIDs(after: session.segment, stars: stars, catalog: catalog, context: modelContext)) ?? []
             for id in achievementIDs { try? ProgressStore.queueAchievement(id: id, context: modelContext) }
             Task {
@@ -223,33 +230,30 @@ struct GameSessionView: View {
     }
 
     @ViewBuilder private var resultOverlay: some View {
-        if session.outcome != .playing {
+        if case .completed(let stars) = session.outcome {
+            completionOverlay(stars: stars)
+        } else if case .failed = session.outcome {
             ZStack {
                 Color.black.opacity(0.25).ignoresSafeArea()
                 VStack(spacing: 18) {
-                    switch session.outcome {
-                    case .completed(let stars):
-                        Image(systemName: "checkmark.seal.fill").font(.system(size: 56)).foregroundStyle(.green)
-                        Text("구간 완료").font(.title.bold())
-                        StarsView(stars: stars)
-                        Text("오답 \(session.wrongAnswers)회")
-                    case .failed:
-                        Image(systemName: "heart.slash.fill").font(.system(size: 56)).foregroundStyle(.red)
-                        Text("다시 도전해 볼까요?").font(.title2.bold())
-                        if let target = session.currentTarget { Text("이번 정답: \(target.name)").foregroundStyle(.secondary) }
-                    case .playing: EmptyView()
+                    Image(systemName: "heart.slash.fill")
+                        .font(.system(size: 56))
+                        .foregroundStyle(.red)
+                    Text("다시 도전해 볼까요?")
+                        .font(.title2.bold())
+                    if let target = session.currentTarget {
+                        Text("이번 정답: \(target.name)")
+                            .foregroundStyle(.secondary)
                     }
-                    if case .failed = session.outcome {
-                        Button("즉시 재도전") {
-                            didRecord = false
-                            answer = ""
-                            feedback = ""
-                            feedbackKind = .neutral
-                            session.retry()
-                            answerFocused = true
-                        }
-                        .buttonStyle(.borderedProminent)
+                    Button("즉시 재도전") {
+                        didRecord = false
+                        answer = ""
+                        feedback = ""
+                        feedbackKind = .neutral
+                        session.retry()
+                        answerFocused = true
                     }
+                    .buttonStyle(.borderedProminent)
                 }
                 .padding(28)
                 .frame(maxWidth: 340)
@@ -258,6 +262,61 @@ struct GameSessionView: View {
                 .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
         }
+    }
+
+    private var isCompleted: Bool {
+        if case .completed = session.outcome { true } else { false }
+    }
+
+    private func completionOverlay(stars: Int) -> some View {
+        ZStack {
+            Color(uiColor: .systemBackground)
+                .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                Spacer(minLength: 56)
+
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 72, weight: .semibold))
+                    .foregroundStyle(line.color)
+                    .accessibilityHidden(true)
+
+                Text("축하해요!")
+                    .font(.largeTitle.bold())
+                    .padding(.top, 24)
+
+                Text("\(line.name) \(session.segment.index + 1)구간의\n모든 역을 맞혔어요.")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 10)
+
+                VStack(spacing: 16) {
+                    StarsView(stars: stars)
+                    Divider()
+                    LabeledContent("오답", value: "\(session.wrongAnswers)회")
+                }
+                .padding(22)
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .padding(.top, 32)
+
+                Spacer(minLength: 32)
+
+                Button {
+                    dismiss()
+                } label: {
+                    Label("끝내기", systemImage: "checkmark")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, minHeight: 54)
+                }
+                .buttonStyle(.glassProminent)
+                .tint(line.color)
+                .accessibilityHint("완료 화면을 닫고 노선 화면으로 이동합니다")
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 20)
+        }
+        .transition(reduceMotion ? .opacity : .scale(scale: 0.96).combined(with: .opacity))
     }
 }
 
