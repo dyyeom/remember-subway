@@ -5,7 +5,7 @@ struct Catalog: Decodable {
     struct Item: Decodable { let id: String }
     struct Source: Decodable { let title: String; let url: URL }
     struct Line: Decodable { let id: String; let regionID: String; let operatorID: String; let colorHex: String }
-    struct Pattern: Decodable { let id: String; let lineID: String; let stationIDs: [String]; let stationCodes: [String: String]? }
+    struct Pattern: Decodable { let id: String; let lineID: String; let kind: String; let stationIDs: [String]; let stationCodes: [String: String]? }
     let schemaVersion: Int
     let contentVersion: String
     let dataAsOf: String
@@ -45,6 +45,21 @@ for pattern in catalog.routePatterns {
     if pattern.stationIDs.count < 2 || pattern.stationIDs.contains(where: { !stations.contains($0) }) { errors.append("잘못된 역 경로: \(pattern.id)") }
     if zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains(where: ==) { errors.append("연속 중복 역: \(pattern.id)") }
     if pattern.stationCodes?.keys.contains(where: { !pattern.stationIDs.contains($0) }) == true { errors.append("잘못된 역 번호 참조: \(pattern.id)") }
+}
+func contains(_ candidate: [String], asContiguousSubsequenceOf route: [String]) -> Bool {
+    guard candidate.count < route.count else { return false }
+    for start in 0...(route.count - candidate.count) {
+        if Array(route[start..<(start + candidate.count)]) == candidate { return true }
+    }
+    return false
+}
+for line in catalog.lines {
+    let mainPatterns = catalog.routePatterns.filter { $0.lineID == line.id && $0.kind == "main" }
+    for pattern in mainPatterns where mainPatterns.contains(where: {
+        $0.id != pattern.id && contains(pattern.stationIDs, asContiguousSubsequenceOf: $0.stationIDs)
+    }) {
+        errors.append("중복 부분 계통: \(pattern.id)")
+    }
 }
 if errors.isEmpty { print("OK: \(catalog.lines.count)개 노선, \(catalog.stations.count)개 역, \(catalog.routePatterns.count)개 계통") }
 else { errors.forEach { fputs("ERROR: \($0)\n", stderr) }; exit(1) }

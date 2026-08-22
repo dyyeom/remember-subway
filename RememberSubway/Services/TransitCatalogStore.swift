@@ -72,6 +72,22 @@ enum CatalogValidator {
                 errors.append("\(pattern.id)의 역 번호 참조 오류")
             }
         }
+        for line in catalog.lines {
+            let mainPatterns = catalog.routePatterns.filter { $0.lineID == line.id && $0.kind == .main }
+            for pattern in mainPatterns where mainPatterns.contains(where: {
+                $0.id != pattern.id && contains(pattern.stationIDs, asContiguousSubsequenceOf: $0.stationIDs)
+            }) {
+                errors.append("\(pattern.id)의 중복 부분 계통")
+            }
+        }
         return errors
+    }
+
+    private static func contains(_ candidate: [String], asContiguousSubsequenceOf route: [String]) -> Bool {
+        guard candidate.count < route.count else { return false }
+        for start in 0...(route.count - candidate.count) {
+            if Array(route[start..<(start + candidate.count)]) == candidate { return true }
+        }
+        return false
     }
 }
