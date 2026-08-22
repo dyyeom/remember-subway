@@ -39,5 +39,19 @@ struct GameSessionTests {
         #expect(session.submit("다역") == .correct)
         #expect(session.outcome == .completed(stars: 2))
     }
-}
 
+    @Test func weeklySessionKeepsPlayingAcrossConsecutiveCorrectAnswers() {
+        let questions = [
+            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
+            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
+        ]
+        let session = WeeklyChallengeSession(questions: questions)
+
+        #expect(session.submit("나역") == .correct)
+        #expect(session.current?.target.name == "다역")
+        #expect(!session.isFinished)
+        #expect(session.submit("다역") == .correct)
+        #expect(session.current?.target.name == "나역")
+        #expect(!session.isFinished)
+    }
+}
