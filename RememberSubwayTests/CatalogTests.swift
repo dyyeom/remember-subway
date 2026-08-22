@@ -98,4 +98,18 @@ struct CatalogTests {
 
         #expect(catalog.lineByID["seoul-1"]?.name == "서울 1호선")
     }
+
+    @Test func bundledCatalogExposesOnlyReviewedMetropolitanRoutePatterns() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let expectedPatternNames: [String: Set<String>] = [
+            "seoul-1": ["연천 → 인천", "광운대 → 신창", "영등포 → 광명", "병점 → 서동탄"],
+            "seoul-3": ["대화 → 오금"],
+            "seoul-4": ["진접 → 오이도"]
+        ]
+
+        for (lineID, expectedNames) in expectedPatternNames {
+            let line = try #require(catalog.lineByID[lineID])
+            #expect(Set(catalog.patterns(for: line).map(\.name)) == expectedNames)
+        }
+    }
 }
