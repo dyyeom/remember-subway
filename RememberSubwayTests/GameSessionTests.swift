@@ -54,4 +54,14 @@ struct GameSessionTests {
         #expect(Set(session.questions.map(\.target.name)) == Set(["나역", "다역"]))
         #expect(!session.isFinished)
     }
+
+    @Test func keyboardLayoutReducesOnlyVerticalSpacing() {
+        let regular = GamePlayLayoutMetrics.regular
+        let compact = GamePlayLayoutMetrics.keyboardPresented
+
+        #expect(compact.totalVerticalSpacing < regular.totalVerticalSpacing)
+        #expect(compact.statusTop > 0)
+        #expect(compact.promptSpacing > 0)
+        #expect(compact.promptBottom > 0)
+    }
 }
