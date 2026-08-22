@@ -9,6 +9,7 @@ struct GameSessionView: View {
     @StateObject private var session: GameSession
     @State private var answer = ""
     @State private var feedback = ""
+    @State private var feedbackKind: FeedbackKind = .neutral
     @State private var didRecord = false
     @FocusState private var answerFocused: Bool
     let line: Line
@@ -53,11 +54,7 @@ struct GameSessionView: View {
 
                     answerField
 
-                    Text(feedback)
-                        .font(.callout)
-                        .foregroundStyle(feedback.contains("아니") ? .red : .secondary)
-                        .multilineTextAlignment(.center)
-                        .frame(minHeight: 24)
+                    feedbackView
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 48)
@@ -140,23 +137,53 @@ struct GameSessionView: View {
             onHint: {
                 session.useHint()
                 feedback = "초성 힌트를 사용했어요."
+                feedbackKind = .neutral
             },
             onConfirm: submit
         )
     }
 
     private func submit() {
+        let submittedStationName = session.target?.name
         switch session.submit(answer) {
         case .correct:
-            feedback = "정답이에요."
+            feedback = "\(submittedStationName ?? "역 이름"), 정답이에요!"
+            feedbackKind = .correct
             answer = ""
             impact(.success)
         case .incorrect:
             feedback = session.lives > 0 ? "아니에요. 다시 생각해 보세요." : "목숨을 모두 사용했어요."
+            feedbackKind = .incorrect
             impact(.error)
         case .ignored: break
         }
         UIAccessibility.post(notification: .announcement, argument: feedback)
+    }
+
+    private var feedbackView: some View {
+        Group {
+            if feedback.isEmpty {
+                Color.clear
+            } else {
+                Text(feedback)
+                    .font(feedbackKind == .correct ? .largeTitle.bold() : .callout)
+                    .foregroundStyle(feedbackColor)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.72)
+                    .id(feedback)
+                    .transition(reduceMotion ? .opacity : .scale(scale: 0.82).combined(with: .opacity))
+            }
+        }
+        .frame(minHeight: feedbackKind == .correct ? 48 : 24)
+        .animation(reduceMotion ? nil : .spring(duration: 0.34, bounce: 0.28), value: feedback)
+    }
+
+    private var feedbackColor: Color {
+        switch feedbackKind {
+        case .correct: line.color
+        case .incorrect: .red
+        case .neutral: .secondary
+        }
     }
 
     private func handleOutcome(_ outcome: GameSession.Outcome) {
@@ -205,6 +232,7 @@ struct GameSessionView: View {
                             didRecord = false
                             answer = ""
                             feedback = ""
+                            feedbackKind = .neutral
                             session.retry()
                             answerFocused = true
                         }
@@ -219,4 +247,10 @@ struct GameSessionView: View {
             }
         }
     }
+}
+
+private enum FeedbackKind {
+    case neutral
+    case correct
+    case incorrect
 }
