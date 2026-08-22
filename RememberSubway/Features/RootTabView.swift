@@ -28,7 +28,10 @@ struct RootTabView: View {
                 }
             }
         }
-        .task { prepareSettings() }
+        .task {
+            prepareSettings()
+            if gameCenter.isAuthenticated { await syncGameCenterQueue() }
+        }
         .onChange(of: gameCenter.isAuthenticated) { _, authenticated in
             if authenticated { Task { await syncGameCenterQueue() } }
         }
@@ -76,8 +79,8 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("Game Center") {
-                    LabeledContent("상태", value: gameCenter.isAuthenticated ? "연결됨" : "연결 안 됨")
-                    Button(gameCenter.isAuthenticated ? "대시보드 열기" : "연결하기") {
+                    LabeledContent("상태", value: gameCenter.isAuthenticated ? "로그인됨" : "로그인 안 됨")
+                    Button(gameCenter.isAuthenticated ? "대시보드 열기" : "로그인하기") {
                         gameCenter.isAuthenticated ? gameCenter.showDashboard() : gameCenter.authenticate()
                     }
                 }
