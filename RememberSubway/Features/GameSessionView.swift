@@ -273,6 +273,10 @@ struct GameSessionView: View {
             Color(uiColor: .systemBackground)
                 .ignoresSafeArea()
 
+            CelebrationFireworksView(color: line.color, reduceMotion: reduceMotion)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+
             VStack(spacing: 0) {
                 Spacer(minLength: 56)
 
@@ -324,4 +328,85 @@ private enum FeedbackKind {
     case neutral
     case correct
     case incorrect
+}
+
+private struct CelebrationFireworksView: View {
+    @State private var exploded = false
+    let color: Color
+    let reduceMotion: Bool
+
+    var body: some View {
+        GeometryReader { proxy in
+            if reduceMotion {
+                staticSparkles(in: proxy.size)
+            } else {
+                ForEach(0..<42, id: \.self) { index in
+                    particle(index, in: proxy.size)
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .task {
+            guard !reduceMotion else { return }
+            await Task.yield()
+            exploded = true
+        }
+    }
+
+    private func particle(_ index: Int, in size: CGSize) -> some View {
+        let burst = index / 14
+        let ray = index % 14
+        let angle = (Double(ray) / 14 * Double.pi * 2) - Double.pi / 2
+        let origin = burstOrigin(burst, in: size)
+        let distance: CGFloat = burst == 2 ? 112 : 88
+        let destination = CGPoint(
+            x: origin.x + CGFloat(cos(angle)) * distance,
+            y: origin.y + CGFloat(sin(angle)) * distance
+        )
+
+        return Capsule(style: .continuous)
+            .fill(particleColor(index))
+            .frame(width: 6, height: 16)
+            .rotationEffect(.radians(angle + Double.pi / 2))
+            .scaleEffect(exploded ? 0.45 : 1)
+            .position(exploded ? destination : origin)
+            .opacity(exploded ? 0 : 1)
+            .animation(
+                .easeOut(duration: 1.05)
+                    .delay(Double(burst) * 0.16 + Double(ray % 3) * 0.025),
+                value: exploded
+            )
+    }
+
+    private func burstOrigin(_ burst: Int, in size: CGSize) -> CGPoint {
+        switch burst {
+        case 0: CGPoint(x: size.width * 0.22, y: size.height * 0.24)
+        case 1: CGPoint(x: size.width * 0.78, y: size.height * 0.28)
+        default: CGPoint(x: size.width * 0.5, y: size.height * 0.12)
+        }
+    }
+
+    private func particleColor(_ index: Int) -> Color {
+        switch index % 5 {
+        case 0: color
+        case 1: .yellow
+        case 2: .orange
+        case 3: .pink
+        default: .cyan
+        }
+    }
+
+    private func staticSparkles(in size: CGSize) -> some View {
+        ZStack {
+            Image(systemName: "sparkles")
+                .font(.system(size: 42))
+                .foregroundStyle(color)
+                .position(x: size.width * 0.2, y: size.height * 0.2)
+            Image(systemName: "sparkles")
+                .font(.system(size: 34))
+                .foregroundStyle(.yellow)
+                .position(x: size.width * 0.82, y: size.height * 0.25)
+        }
+        .opacity(0.7)
+    }
 }
