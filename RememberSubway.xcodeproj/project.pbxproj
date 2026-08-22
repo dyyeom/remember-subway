@@ -364,7 +364,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
@@ -448,7 +448,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.app;
+				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.app;
 				PRODUCT_MODULE_NAME = RememberSubway;
 				PRODUCT_NAME = "역순서";
 				SDKROOT = iphoneos;
@@ -466,7 +466,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
@@ -490,7 +490,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.app;
+				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.app;
 				PRODUCT_MODULE_NAME = RememberSubway;
 				PRODUCT_NAME = "역순서";
 				SDKROOT = iphoneos;
