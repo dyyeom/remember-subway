@@ -217,7 +217,9 @@ struct GameSessionView: View {
 
     private func impact(_ type: UINotificationFeedbackGenerator.FeedbackType) {
         guard settings.first?.hapticsEnabled ?? true else { return }
-        UINotificationFeedbackGenerator().notificationOccurred(type)
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(type)
     }
 
     @ViewBuilder private var resultOverlay: some View {
