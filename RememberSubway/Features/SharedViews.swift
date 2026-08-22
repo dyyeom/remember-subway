@@ -43,16 +43,53 @@ struct LineBadge: View {
 }
 
 struct LivesView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let lives: Int
+
     var body: some View {
         HStack(spacing: 5) {
             ForEach(0..<3, id: \.self) { index in
-                Image(systemName: index < lives ? "heart.fill" : "heart")
-                    .foregroundStyle(index < lives ? .red : .secondary)
+                BreakingHeartView(isAlive: index < lives, reduceMotion: reduceMotion)
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("남은 목숨 \(lives)개")
+    }
+}
+
+private struct BreakingHeartView: View {
+    let isAlive: Bool
+    let reduceMotion: Bool
+
+    var body: some View {
+        ZStack {
+            Image(systemName: "heart")
+                .foregroundStyle(.secondary)
+                .opacity(isAlive ? 0 : 1)
+
+            heartHalf(alignment: .leading, direction: -1)
+            heartHalf(alignment: .trailing, direction: 1)
+        }
+        .frame(width: 22, height: 22)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.46), value: isAlive)
+    }
+
+    private func heartHalf(alignment: Alignment, direction: CGFloat) -> some View {
+        Image(systemName: "heart.fill")
+            .foregroundStyle(.red)
+            .frame(width: 22, height: 22)
+            .mask {
+                Rectangle()
+                    .frame(width: 11, height: 22)
+                    .frame(maxWidth: .infinity, alignment: alignment)
+            }
+            .rotationEffect(.degrees(isAlive ? 0 : Double(direction * 18)))
+            .offset(
+                x: isAlive ? 0 : direction * 7,
+                y: isAlive ? 0 : 6
+            )
+            .opacity(isAlive ? 1 : 0)
+            .scaleEffect(isAlive ? 1 : 0.82)
     }
 }
 
