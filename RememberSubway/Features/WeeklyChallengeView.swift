@@ -129,7 +129,7 @@ struct WeeklyChallengePlayView: View {
                     .padding(.top, 34)
 
                     VStack(spacing: 20) {
-                        Text("가운데 역은?")
+                        Text("이 역의 이름은?")
                             .font(.largeTitle.bold())
                         if session.hintVisible {
                             Text(session.hint)
