@@ -384,8 +384,8 @@ for seed in lineSeeds {
 
 let catalog = Catalog(
     schemaVersion: 1,
-    contentVersion: "2026.08.official.2",
-    challengePoolVersion: "2026.08.2",
+    contentVersion: "2026.08.official.3",
+    challengePoolVersion: "2026.08.3",
     dataAsOf: "2026-08-22",
     sources: [
         Source(title: "국가철도공단 전국도시철도역사정보 표준데이터", url: URL(string: "https://www.data.go.kr/data/15013205/standard.do")!),
@@ -395,6 +395,7 @@ let catalog = Catalog(
         Source(title: "신림선도시철도", url: URL(string: "https://www.sillimlrt.com/")!),
         Source(title: "인천교통공사 노선도 및 역정보", url: URL(string: "https://www.ictr.or.kr/main/railway/guidance/map.jsp")!),
         Source(title: "한국철도공사 광역철도 운영노선", url: URL(string: "https://info.korail.com/info/contents.do?key=1446")!),
+        Source(title: "국가철도공단 수도권1호선 역정보", url: URL(string: "https://www.data.go.kr/data/15041013/fileData.do")!),
         Source(title: "신분당선 노선도", url: URL(string: "https://www.shinbundang.co.kr/dxline/dxline1.jsp")!),
         Source(title: "공항철도 역·운임 정보", url: URL(string: "https://www.arex.or.kr/content.do?menuNo=MN201503060000000002")!),
         Source(title: "부산교통공사 노선도", url: URL(string: "https://www2.humetro.busan.kr/homepage/default/page/subLocation.do?menu_no=10010101")!),
