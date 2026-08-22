@@ -48,15 +48,17 @@ struct CatalogTests {
     @Test func bundledCatalogCoversAllOperatingUrbanRailLines() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         let expectedStationCounts = [
-            "seoul-1": 10, "seoul-2": 51, "seoul-3": 34, "seoul-4": 29,
+            "seoul-1": 102, "seoul-2": 51, "seoul-3": 44, "seoul-4": 51,
             "seoul-5": 56, "seoul-6": 39, "seoul-7": 53, "seoul-8": 24,
             "seoul-9": 38, "seoul-ui": 13, "seoul-sillim": 11,
             "incheon-1": 33, "incheon-2": 27,
-            "suin-bundang": 63, "gyeongui-jungang": 55,
+            "suin-bundang": 63, "gyeongui-jungang": 58,
+            "gyeongchun": 24, "gyeonggang": 12, "seohae": 21,
             "shinbundang": 16, "arex": 14,
             "busan-1": 40, "busan-2": 43, "busan-3": 17, "busan-4": 14,
-            "busan-gimhae": 21,
+            "busan-gimhae": 21, "donghae": 23,
             "daegu-1": 35, "daegu-2": 29, "daegu-3": 30,
+            "daegyeong": 7,
             "gwangju-1": 20, "daejeon-1": 22
         ]
 
@@ -67,9 +69,33 @@ struct CatalogTests {
         }
         let capital = try #require(catalog.regions.first { $0.id == "capital" })
         #expect(capital.name == "수도권")
-        #expect(catalog.lines(in: capital).count == 17)
+        #expect(catalog.lines(in: capital).count == 20)
         #expect(!catalog.regions.contains { $0.id == "seoul" || $0.id == "incheon" })
-        #expect(catalog.sources.count >= 14)
+        #expect(catalog.sources.count >= 15)
         #expect(catalog.dataAsOf == "2026-08-22")
+    }
+
+    @Test func bundledCatalogIncludesKorailMetropolitanCoverage() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let requiredStations: [String: Set<String>] = [
+            "seoul-1": ["연천", "인천", "신창", "광명", "서동탄"],
+            "seoul-3": ["대화", "오금"],
+            "seoul-4": ["진접", "오이도"],
+            "gyeongui-jungang": ["도라산", "지평", "서울역"],
+            "gyeongchun": ["청량리", "춘천"],
+            "gyeonggang": ["판교", "성남", "여주"],
+            "suin-bundang": ["청량리", "인천"],
+            "seohae": ["일산", "원시"],
+            "donghae": ["부전", "태화강"],
+            "daegyeong": ["구미", "경산"]
+        ]
+
+        for (lineID, requiredNames) in requiredStations {
+            let line = try #require(catalog.lineByID[lineID])
+            let stationNames = Set(catalog.patterns(for: line).flatMap(\.stationIDs).compactMap { catalog.stationByID[$0]?.name })
+            #expect(requiredNames.isSubset(of: stationNames))
+        }
+
+        #expect(catalog.lineByID["seoul-1"]?.name == "서울 1호선")
     }
 }
