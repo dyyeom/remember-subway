@@ -231,18 +231,42 @@ let lineSeeds: [LineSeed] = [
             ]),
             PatternSeed("seoul", "문산 → 서울역", kind: "branch", [
                 "문산", "파주", "월롱", "금촌", "금릉", "운정", "야당", "탄현", "일산", "풍산", "백마", "곡산", "대곡", "능곡", "행신", "강매", "한국항공대", "수색", "디지털미디어시티", "가좌", "신촌|신촌(경의선)", "서울역||서울"
+            ]),
+            PatternSeed("dorasan", "문산 → 도라산", kind: "branch", [
+                "문산", "운천", "임진강", "도라산"
             ])
         ]
     ),
     LineSeed(
-        line: Line(id: "shinbundang", regionID: "capital", operatorID: "shinbundang", name: "신분당선", shortName: "신분", colorHex: "D4003B", sortOrder: 16),
+        line: Line(id: "gyeongchun", regionID: "capital", operatorID: "korail", name: "경춘선", shortName: "경춘", colorHex: "0C8E72", sortOrder: 16),
+        prefix: "gc",
+        patterns: [PatternSeed("청량리 → 춘천", [
+            "청량리|청량리(서울시립대입구)", "회기", "중랑", "상봉|상봉(시외버스터미널)", "망우", "신내", "갈매", "별내", "퇴계원", "사릉", "금곡", "평내호평", "천마산", "마석", "대성리", "청평", "상천", "가평", "굴봉산", "백양리", "강촌", "김유정", "남춘천", "춘천"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "gyeonggang", regionID: "capital", operatorID: "korail", name: "경강선", shortName: "경강", colorHex: "003DA5", sortOrder: 17),
+        prefix: "gg",
+        patterns: [PatternSeed("판교 → 여주", [
+            "판교|판교(판교테크노밸리)", "성남", "이매", "삼동", "경기광주", "초월", "곤지암", "신둔도예촌", "이천", "부발", "세종대왕릉", "여주"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "seohae", regionID: "capital", operatorID: "korail", name: "서해선", shortName: "서해", colorHex: "8FC31F", sortOrder: 18),
+        prefix: "sh",
+        patterns: [PatternSeed("일산 → 원시", [
+            "일산", "풍산", "백마", "곡산", "대곡", "능곡", "김포공항", "원종", "부천종합운동장", "소사", "소새울", "시흥대야", "신천", "신현", "시흥시청", "시흥능곡", "달미", "선부", "초지", "시우", "원시"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "shinbundang", regionID: "capital", operatorID: "shinbundang", name: "신분당선", shortName: "신분", colorHex: "D4003B", sortOrder: 19),
         prefix: "dx",
         patterns: [PatternSeed("신사 → 광교", [
             "신사", "논현", "신논현", "강남", "양재|양재(서초구청)", "양재시민의숲|양재시민의숲(매헌)", "청계산입구", "판교|판교(판교테크노밸리)", "정자", "미금|미금(분당서울대병원)", "동천", "수지구청", "성복", "상현", "광교중앙|광교중앙(아주대)", "광교|광교(경기대)"
         ])]
     ),
     LineSeed(
-        line: Line(id: "arex", regionID: "capital", operatorID: "arex", name: "공항철도", shortName: "AREX", colorHex: "0090D2", sortOrder: 17),
+        line: Line(id: "arex", regionID: "capital", operatorID: "arex", name: "공항철도", shortName: "AREX", colorHex: "0090D2", sortOrder: 20),
         prefix: "ar",
         patterns: [PatternSeed("서울역 → 인천공항2터미널", [
             "서울역||서울", "공덕", "홍대입구", "디지털미디어시티", "마곡나루|마곡나루(서울식물원)", "김포공항", "계양", "검암", "청라국제도시", "영종", "운서", "공항화물청사", "인천공항1터미널", "인천공항2터미널"
@@ -284,6 +308,13 @@ let lineSeeds: [LineSeed] = [
         ])]
     ),
     LineSeed(
+        line: Line(id: "donghae", regionID: "busan", operatorID: "korail", name: "동해선", shortName: "동해", colorHex: "0054A6", sortOrder: 6),
+        prefix: "dh",
+        patterns: [PatternSeed("부전 → 태화강", [
+            "부전", "거제해맞이", "거제", "교대", "동래", "안락", "부산원동", "재송", "센텀", "벡스코", "신해운대", "송정", "오시리아", "기장", "일광", "좌천", "월내", "서생", "남창", "망양", "덕하", "개운포", "태화강"
+        ])]
+    ),
+    LineSeed(
         line: Line(id: "daegu-1", regionID: "daegu", operatorID: "daegu-transit", name: "대구 1호선", shortName: "1", colorHex: "D93F5C", sortOrder: 1),
         prefix: "d1",
         patterns: [PatternSeed("설화명곡 → 하양", [
@@ -302,6 +333,13 @@ let lineSeeds: [LineSeed] = [
         prefix: "d3",
         patterns: [PatternSeed("칠곡경대병원 → 용지", [
             "칠곡경대병원", "학정", "팔거|팔거(국립농관원·통계청)", "동천", "칠곡운암", "구암", "태전", "매천", "매천시장", "팔달", "공단", "만평", "팔달시장", "원대", "북구청", "달성공원", "서문시장|서문시장(동산병원)", "청라언덕|청라언덕(신남)", "남산|남산(계명네거리)", "명덕|명덕(2·28민주운동기념회관)", "건들바위", "대봉교", "수성시장", "수성구민운동장", "어린이세상", "황금", "수성못|수성못(TBC)", "지산", "범물", "용지"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "daegyeong", regionID: "daegu", operatorID: "korail", name: "대경선", shortName: "대경", colorHex: "0054A6", sortOrder: 4),
+        prefix: "dk",
+        patterns: [PatternSeed("구미 → 경산", [
+            "구미", "사곡", "왜관", "서대구", "대구", "동대구", "경산"
         ])]
     ),
     LineSeed(
