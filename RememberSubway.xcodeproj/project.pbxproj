@@ -1,0 +1,534 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C708D56BD0B51F706E83D /* ProgressStore.swift */; };
+		17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B9FF296A68A9377ED664BC /* SharedViews.swift */; };
+		225E5155A0E6B05175618BF6 /* AnswerMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */; };
+		3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */; };
+		624029F789DE51844FF070CE /* AnswerMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */; };
+		88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */; };
+		8D4DC69FA5C8A076F17F6695 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CF08DE04AC029D7990909F /* RootTabView.swift */; };
+		8F7C763F3BD384B92F2CA16E /* GameSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E2AA64023123F2BA091EEB /* GameSessionView.swift */; };
+		9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */; };
+		951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */; };
+		97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB6CD7BC4366C400BEC9137 /* StatsView.swift */; };
+		B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 223B67012D64E7A51047F971 /* transit_data.json */; };
+		D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */; };
+		ED8077749B53C14C73D5ADCF /* WeeklyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */; };
+		EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792A75284D8DF80362680B7 /* TutorialView.swift */; };
+		F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */; };
+		F48F3BC440697271B480984E /* RememberSubwayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */; };
+		F7D8E992F1333953D2CF4BDA /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */; };
+		FA5674B38688750D2BC8FADE /* RegionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90179A1FA3D64115BF6F8957 /* RegionsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		04E16E7CA08AC6C40B97F5BD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ED8D8A6C25B83EEFFD2959A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A6E8FFC7C77554BCD67AD36D;
+			remoteInfo = RememberSubway;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionTests.swift; sourceTree = "<group>"; };
+		0792A75284D8DF80362680B7 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
+		1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
+		223B67012D64E7A51047F971 /* transit_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transit_data.json; sourceTree = "<group>"; };
+		347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterService.swift; sourceTree = "<group>"; };
+		3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RememberSubway.entitlements; sourceTree = "<group>"; };
+		39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTests.swift; sourceTree = "<group>"; };
+		6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RememberSubwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChallengeView.swift; sourceTree = "<group>"; };
+		83CF08DE04AC029D7990909F /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		84B9FF296A68A9377ED664BC /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
+		90179A1FA3D64115BF6F8957 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
+		A2E2AA64023123F2BA091EEB /* GameSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionView.swift; sourceTree = "<group>"; };
+		A82C708D56BD0B51F706E83D /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
+		AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcherTests.swift; sourceTree = "<group>"; };
+		E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitModels.swift; sourceTree = "<group>"; };
+		E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitCatalogStore.swift; sourceTree = "<group>"; };
+		E8E6757CD7409BE2D14B126F /* RememberSubway.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RememberSubway.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECB6CD7BC4366C400BEC9137 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberSubwayApp.swift; sourceTree = "<group>"; };
+		F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcher.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0014B165E0D756302496358C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */,
+				E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		029756A7C68E65134E7B7658 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				223B67012D64E7A51047F971 /* transit_data.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		31EA0E1E7DC70E2D7503E4D5 /* RememberSubway */ = {
+			isa = PBXGroup;
+			children = (
+				3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */,
+				492773553C2E5FF934137793 /* App */,
+				E1BA05B9CF0A3CA6651E323D /* Features */,
+				0014B165E0D756302496358C /* Models */,
+				029756A7C68E65134E7B7658 /* Resources */,
+				D84C723F1A2DF62C6B8F2A40 /* Services */,
+			);
+			path = RememberSubway;
+			sourceTree = "<group>";
+		};
+		4449E804849AD43621CEB224 = {
+			isa = PBXGroup;
+			children = (
+				31EA0E1E7DC70E2D7503E4D5 /* RememberSubway */,
+				83FDD9EE6CF894202CA929ED /* RememberSubwayTests */,
+				6908A96F5B1794081525808F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		492773553C2E5FF934137793 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6908A96F5B1794081525808F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E8E6757CD7409BE2D14B126F /* RememberSubway.app */,
+				6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83FDD9EE6CF894202CA929ED /* RememberSubwayTests */ = {
+			isa = PBXGroup;
+			children = (
+				AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */,
+				39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */,
+				0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */,
+			);
+			path = RememberSubwayTests;
+			sourceTree = "<group>";
+		};
+		D84C723F1A2DF62C6B8F2A40 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */,
+				347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */,
+				1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */,
+				A82C708D56BD0B51F706E83D /* ProgressStore.swift */,
+				E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E1BA05B9CF0A3CA6651E323D /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2AA64023123F2BA091EEB /* GameSessionView.swift */,
+				90179A1FA3D64115BF6F8957 /* RegionsView.swift */,
+				83CF08DE04AC029D7990909F /* RootTabView.swift */,
+				84B9FF296A68A9377ED664BC /* SharedViews.swift */,
+				ECB6CD7BC4366C400BEC9137 /* StatsView.swift */,
+				0792A75284D8DF80362680B7 /* TutorialView.swift */,
+				7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6A3786F7D6F8B1B630B08557 /* RememberSubwayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 90C3A02A5621B52C48A522AB /* Build configuration list for PBXNativeTarget "RememberSubwayTests" */;
+			buildPhases = (
+				209882D18A8D9341F6F856B0 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				042F14B32234EF29DFC29FD0 /* PBXTargetDependency */,
+			);
+			name = RememberSubwayTests;
+			packageProductDependencies = (
+			);
+			productName = RememberSubwayTests;
+			productReference = 6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A6E8FFC7C77554BCD67AD36D /* RememberSubway */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2BFD5F5B1D7BC4BBD26E958B /* Build configuration list for PBXNativeTarget "RememberSubway" */;
+			buildPhases = (
+				7A23C50417BAF1F770EF5F2F /* Sources */,
+				E855BBA848A17E0BEB289273 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RememberSubway;
+			packageProductDependencies = (
+			);
+			productName = RememberSubway;
+			productReference = E8E6757CD7409BE2D14B126F /* RememberSubway.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ED8D8A6C25B83EEFFD2959A7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					6A3786F7D6F8B1B630B08557 = {
+						DevelopmentTeam = "";
+					};
+					A6E8FFC7C77554BCD67AD36D = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = E39A393FDB43562AE5955F1F /* Build configuration list for PBXProject "RememberSubway" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4449E804849AD43621CEB224;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6908A96F5B1794081525808F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A6E8FFC7C77554BCD67AD36D /* RememberSubway */,
+				6A3786F7D6F8B1B630B08557 /* RememberSubwayTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E855BBA848A17E0BEB289273 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		209882D18A8D9341F6F856B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				225E5155A0E6B05175618BF6 /* AnswerMatcherTests.swift in Sources */,
+				F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */,
+				D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A23C50417BAF1F770EF5F2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				624029F789DE51844FF070CE /* AnswerMatcher.swift in Sources */,
+				3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */,
+				88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */,
+				8F7C763F3BD384B92F2CA16E /* GameSessionView.swift in Sources */,
+				F7D8E992F1333953D2CF4BDA /* PersistenceModels.swift in Sources */,
+				004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */,
+				FA5674B38688750D2BC8FADE /* RegionsView.swift in Sources */,
+				F48F3BC440697271B480984E /* RememberSubwayApp.swift in Sources */,
+				8D4DC69FA5C8A076F17F6695 /* RootTabView.swift in Sources */,
+				17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */,
+				97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */,
+				9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */,
+				951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */,
+				EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */,
+				ED8077749B53C14C73D5ADCF /* WeeklyChallengeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		042F14B32234EF29DFC29FD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A6E8FFC7C77554BCD67AD36D /* RememberSubway */;
+			targetProxy = 04E16E7CA08AC6C40B97F5BD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0490552F2D87D46BAD1C2621 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		49EF37477F59CCF59DDC3191 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
+			};
+			name = Debug;
+		};
+		B7FBACB27B89A7FC2162F9A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		BBF7B95724801F3BDE2FB8C7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "역순서";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.app;
+				PRODUCT_MODULE_NAME = RememberSubway;
+				PRODUCT_NAME = "역순서";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C9CC80D5C172F8F9ECEC7873 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
+			};
+			name = Release;
+		};
+		FD2DD005E6E8B09E4B5280D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "역순서";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.remembersubway.app;
+				PRODUCT_MODULE_NAME = RememberSubway;
+				PRODUCT_NAME = "역순서";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2BFD5F5B1D7BC4BBD26E958B /* Build configuration list for PBXNativeTarget "RememberSubway" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBF7B95724801F3BDE2FB8C7 /* Debug */,
+				FD2DD005E6E8B09E4B5280D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		90C3A02A5621B52C48A522AB /* Build configuration list for PBXNativeTarget "RememberSubwayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49EF37477F59CCF59DDC3191 /* Debug */,
+				C9CC80D5C172F8F9ECEC7873 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E39A393FDB43562AE5955F1F /* Build configuration list for PBXProject "RememberSubway" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0490552F2D87D46BAD1C2621 /* Debug */,
+				B7FBACB27B89A7FC2162F9A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ED8D8A6C25B83EEFFD2959A7 /* Project object */;
+}
