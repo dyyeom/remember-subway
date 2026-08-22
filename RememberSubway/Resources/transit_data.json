@@ -1,0 +1,7573 @@
+{
+  "challengePoolVersion" : "2026.08.2",
+  "contentVersion" : "2026.08.official.2",
+  "dataAsOf" : "2026-08-22",
+  "lines" : [
+    {
+      "colorHex" : "0052A4",
+      "id" : "seoul-1",
+      "name" : "서울 1호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "1",
+      "sortOrder" : 1
+    },
+    {
+      "colorHex" : "00A84D",
+      "id" : "seoul-2",
+      "name" : "서울 2호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "2",
+      "sortOrder" : 2
+    },
+    {
+      "colorHex" : "EF7C1C",
+      "id" : "seoul-3",
+      "name" : "서울 3호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "3",
+      "sortOrder" : 3
+    },
+    {
+      "colorHex" : "00A5DE",
+      "id" : "seoul-4",
+      "name" : "서울 4호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "4",
+      "sortOrder" : 4
+    },
+    {
+      "colorHex" : "996CAC",
+      "id" : "seoul-5",
+      "name" : "서울 5호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "5",
+      "sortOrder" : 5
+    },
+    {
+      "colorHex" : "CD7C2F",
+      "id" : "seoul-6",
+      "name" : "서울 6호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "6",
+      "sortOrder" : 6
+    },
+    {
+      "colorHex" : "747F00",
+      "id" : "seoul-7",
+      "name" : "서울 7호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "7",
+      "sortOrder" : 7
+    },
+    {
+      "colorHex" : "E6186C",
+      "id" : "seoul-8",
+      "name" : "서울 8호선",
+      "operatorID" : "seoul-metro",
+      "regionID" : "capital",
+      "shortName" : "8",
+      "sortOrder" : 8
+    },
+    {
+      "colorHex" : "BDB092",
+      "id" : "seoul-9",
+      "name" : "서울 9호선",
+      "operatorID" : "metro9",
+      "regionID" : "capital",
+      "shortName" : "9",
+      "sortOrder" : 9
+    },
+    {
+      "colorHex" : "B7C452",
+      "id" : "seoul-ui",
+      "name" : "우이신설선",
+      "operatorID" : "ui-line",
+      "regionID" : "capital",
+      "shortName" : "UI",
+      "sortOrder" : 10
+    },
+    {
+      "colorHex" : "6789CA",
+      "id" : "seoul-sillim",
+      "name" : "신림선",
+      "operatorID" : "sillim-line",
+      "regionID" : "capital",
+      "shortName" : "SL",
+      "sortOrder" : 11
+    },
+    {
+      "colorHex" : "7CA8D5",
+      "id" : "incheon-1",
+      "name" : "인천 1호선",
+      "operatorID" : "incheon-transit",
+      "regionID" : "capital",
+      "shortName" : "I1",
+      "sortOrder" : 12
+    },
+    {
+      "colorHex" : "E6B64A",
+      "id" : "incheon-2",
+      "name" : "인천 2호선",
+      "operatorID" : "incheon-transit",
+      "regionID" : "capital",
+      "shortName" : "I2",
+      "sortOrder" : 13
+    },
+    {
+      "colorHex" : "F5A200",
+      "id" : "suin-bundang",
+      "name" : "수인분당선",
+      "operatorID" : "korail",
+      "regionID" : "capital",
+      "shortName" : "수인",
+      "sortOrder" : 14
+    },
+    {
+      "colorHex" : "77C4A3",
+      "id" : "gyeongui-jungang",
+      "name" : "경의중앙선",
+      "operatorID" : "korail",
+      "regionID" : "capital",
+      "shortName" : "경의",
+      "sortOrder" : 15
+    },
+    {
+      "colorHex" : "D4003B",
+      "id" : "shinbundang",
+      "name" : "신분당선",
+      "operatorID" : "shinbundang",
+      "regionID" : "capital",
+      "shortName" : "신분",
+      "sortOrder" : 16
+    },
+    {
+      "colorHex" : "0090D2",
+      "id" : "arex",
+      "name" : "공항철도",
+      "operatorID" : "arex",
+      "regionID" : "capital",
+      "shortName" : "AREX",
+      "sortOrder" : 17
+    },
+    {
+      "colorHex" : "F06A00",
+      "id" : "busan-1",
+      "name" : "부산 1호선",
+      "operatorID" : "busan-transit",
+      "regionID" : "busan",
+      "shortName" : "1",
+      "sortOrder" : 1
+    },
+    {
+      "colorHex" : "81BF48",
+      "id" : "busan-2",
+      "name" : "부산 2호선",
+      "operatorID" : "busan-transit",
+      "regionID" : "busan",
+      "shortName" : "2",
+      "sortOrder" : 2
+    },
+    {
+      "colorHex" : "BB8C00",
+      "id" : "busan-3",
+      "name" : "부산 3호선",
+      "operatorID" : "busan-transit",
+      "regionID" : "busan",
+      "shortName" : "3",
+      "sortOrder" : 3
+    },
+    {
+      "colorHex" : "2E67A4",
+      "id" : "busan-4",
+      "name" : "부산 4호선",
+      "operatorID" : "busan-transit",
+      "regionID" : "busan",
+      "shortName" : "4",
+      "sortOrder" : 4
+    },
+    {
+      "colorHex" : "875CAC",
+      "id" : "busan-gimhae",
+      "name" : "부산김해경전철",
+      "operatorID" : "bgl",
+      "regionID" : "busan",
+      "shortName" : "BGL",
+      "sortOrder" : 5
+    },
+    {
+      "colorHex" : "D93F5C",
+      "id" : "daegu-1",
+      "name" : "대구 1호선",
+      "operatorID" : "daegu-transit",
+      "regionID" : "daegu",
+      "shortName" : "1",
+      "sortOrder" : 1
+    },
+    {
+      "colorHex" : "00AA80",
+      "id" : "daegu-2",
+      "name" : "대구 2호선",
+      "operatorID" : "daegu-transit",
+      "regionID" : "daegu",
+      "shortName" : "2",
+      "sortOrder" : 2
+    },
+    {
+      "colorHex" : "FDB913",
+      "id" : "daegu-3",
+      "name" : "대구 3호선",
+      "operatorID" : "daegu-transit",
+      "regionID" : "daegu",
+      "shortName" : "3",
+      "sortOrder" : 3
+    },
+    {
+      "colorHex" : "009088",
+      "id" : "gwangju-1",
+      "name" : "광주 1호선",
+      "operatorID" : "gwangju-transit",
+      "regionID" : "gwangju",
+      "shortName" : "1",
+      "sortOrder" : 1
+    },
+    {
+      "colorHex" : "007448",
+      "id" : "daejeon-1",
+      "name" : "대전 1호선",
+      "operatorID" : "daejeon-transit",
+      "regionID" : "daejeon",
+      "shortName" : "1",
+      "sortOrder" : 1
+    }
+  ],
+  "operators" : [
+    {
+      "id" : "seoul-metro",
+      "name" : "서울교통공사"
+    },
+    {
+      "id" : "metro9",
+      "name" : "서울시메트로9호선"
+    },
+    {
+      "id" : "ui-line",
+      "name" : "우이신설경전철"
+    },
+    {
+      "id" : "sillim-line",
+      "name" : "남서울경전철"
+    },
+    {
+      "id" : "korail",
+      "name" : "한국철도공사"
+    },
+    {
+      "id" : "shinbundang",
+      "name" : "신분당선"
+    },
+    {
+      "id" : "arex",
+      "name" : "공항철도"
+    },
+    {
+      "id" : "incheon-transit",
+      "name" : "인천교통공사"
+    },
+    {
+      "id" : "busan-transit",
+      "name" : "부산교통공사"
+    },
+    {
+      "id" : "bgl",
+      "name" : "부산김해경전철"
+    },
+    {
+      "id" : "daegu-transit",
+      "name" : "대구교통공사"
+    },
+    {
+      "id" : "gwangju-transit",
+      "name" : "광주교통공사"
+    },
+    {
+      "id" : "daejeon-transit",
+      "name" : "대전교통공사"
+    }
+  ],
+  "regions" : [
+    {
+      "id" : "capital",
+      "name" : "수도권",
+      "sortOrder" : 1
+    },
+    {
+      "id" : "busan",
+      "name" : "부산",
+      "sortOrder" : 2
+    },
+    {
+      "id" : "daegu",
+      "name" : "대구",
+      "sortOrder" : 3
+    },
+    {
+      "id" : "gwangju",
+      "name" : "광주",
+      "sortOrder" : 4
+    },
+    {
+      "id" : "daejeon",
+      "name" : "대전",
+      "sortOrder" : 5
+    }
+  ],
+  "routePatterns" : [
+    {
+      "id" : "seoul-1-main",
+      "kind" : "main",
+      "lineID" : "seoul-1",
+      "name" : "서울역 → 청량리",
+      "stationIDs" : [
+        "s1-001",
+        "s1-002",
+        "s1-003",
+        "s1-004",
+        "s1-005",
+        "s1-006",
+        "s1-007",
+        "s1-008",
+        "s1-009",
+        "s1-010"
+      ]
+    },
+    {
+      "id" : "seoul-2-loop",
+      "kind" : "loop",
+      "lineID" : "seoul-2",
+      "name" : "순환선",
+      "stationIDs" : [
+        "s2-001",
+        "s2-002",
+        "s2-003",
+        "s2-004",
+        "s2-005",
+        "s2-006",
+        "s2-007",
+        "s2-008",
+        "s2-009",
+        "s2-010",
+        "s2-011",
+        "s2-012",
+        "s2-013",
+        "s2-014",
+        "s2-015",
+        "s2-016",
+        "s2-017",
+        "s2-018",
+        "s2-019",
+        "s2-020",
+        "s2-021",
+        "s2-022",
+        "s2-023",
+        "s2-024",
+        "s2-025",
+        "s2-026",
+        "s2-027",
+        "s2-028",
+        "s2-029",
+        "s2-030",
+        "s2-031",
+        "s2-032",
+        "s2-033",
+        "s2-034",
+        "s2-035",
+        "s2-036",
+        "s2-037",
+        "s2-038",
+        "s2-039",
+        "s2-040",
+        "s2-041",
+        "s2-042",
+        "s2-043",
+        "s2-001"
+      ]
+    },
+    {
+      "id" : "seoul-2-seongsu",
+      "kind" : "branch",
+      "lineID" : "seoul-2",
+      "name" : "성수 → 신설동",
+      "stationIDs" : [
+        "s2-011",
+        "s2-044",
+        "s2-045",
+        "s2-046",
+        "s2-047"
+      ]
+    },
+    {
+      "id" : "seoul-2-sinjeong",
+      "kind" : "branch",
+      "lineID" : "seoul-2",
+      "name" : "신도림 → 까치산",
+      "stationIDs" : [
+        "s2-034",
+        "s2-048",
+        "s2-049",
+        "s2-050",
+        "s2-051"
+      ]
+    },
+    {
+      "id" : "seoul-3-main",
+      "kind" : "main",
+      "lineID" : "seoul-3",
+      "name" : "지축 → 오금",
+      "stationIDs" : [
+        "s3-001",
+        "s3-002",
+        "s3-003",
+        "s3-004",
+        "s3-005",
+        "s3-006",
+        "s3-007",
+        "s3-008",
+        "s3-009",
+        "s3-010",
+        "s3-011",
+        "s3-012",
+        "s3-013",
+        "s3-014",
+        "s3-015",
+        "s3-016",
+        "s3-017",
+        "s3-018",
+        "s3-019",
+        "s3-020",
+        "s3-021",
+        "s3-022",
+        "s3-023",
+        "s3-024",
+        "s3-025",
+        "s3-026",
+        "s3-027",
+        "s3-028",
+        "s3-029",
+        "s3-030",
+        "s3-031",
+        "s3-032",
+        "s3-033",
+        "s3-034"
+      ]
+    },
+    {
+      "id" : "seoul-4-main",
+      "kind" : "main",
+      "lineID" : "seoul-4",
+      "name" : "진접 → 남태령",
+      "stationIDs" : [
+        "s4-001",
+        "s4-002",
+        "s4-003",
+        "s4-004",
+        "s4-005",
+        "s4-006",
+        "s4-007",
+        "s4-008",
+        "s4-009",
+        "s4-010",
+        "s4-011",
+        "s4-012",
+        "s4-013",
+        "s4-014",
+        "s4-015",
+        "s4-016",
+        "s4-017",
+        "s4-018",
+        "s4-019",
+        "s4-020",
+        "s4-021",
+        "s4-022",
+        "s4-023",
+        "s4-024",
+        "s4-025",
+        "s4-026",
+        "s4-027",
+        "s4-028",
+        "s4-029"
+      ]
+    },
+    {
+      "id" : "seoul-5-hanam",
+      "kind" : "main",
+      "lineID" : "seoul-5",
+      "name" : "방화 → 하남검단산",
+      "stationIDs" : [
+        "s5-001",
+        "s5-002",
+        "s5-003",
+        "s5-004",
+        "s5-005",
+        "s5-006",
+        "s5-007",
+        "s5-008",
+        "s5-009",
+        "s5-010",
+        "s5-011",
+        "s5-012",
+        "s5-013",
+        "s5-014",
+        "s5-015",
+        "s5-016",
+        "s5-017",
+        "s5-018",
+        "s5-019",
+        "s5-020",
+        "s5-021",
+        "s5-022",
+        "s5-023",
+        "s5-024",
+        "s5-025",
+        "s5-026",
+        "s5-027",
+        "s5-028",
+        "s5-029",
+        "s5-030",
+        "s5-031",
+        "s5-032",
+        "s5-033",
+        "s5-034",
+        "s5-035",
+        "s5-036",
+        "s5-037",
+        "s5-038",
+        "s5-039",
+        "s5-040",
+        "s5-041",
+        "s5-042",
+        "s5-043",
+        "s5-044",
+        "s5-045",
+        "s5-046",
+        "s5-047",
+        "s5-048",
+        "s5-049"
+      ]
+    },
+    {
+      "id" : "seoul-5-macheon",
+      "kind" : "branch",
+      "lineID" : "seoul-5",
+      "name" : "방화 → 마천",
+      "stationIDs" : [
+        "s5-001",
+        "s5-002",
+        "s5-003",
+        "s5-004",
+        "s5-005",
+        "s5-006",
+        "s5-007",
+        "s5-008",
+        "s5-009",
+        "s5-010",
+        "s5-011",
+        "s5-012",
+        "s5-013",
+        "s5-014",
+        "s5-015",
+        "s5-016",
+        "s5-017",
+        "s5-018",
+        "s5-019",
+        "s5-020",
+        "s5-021",
+        "s5-022",
+        "s5-023",
+        "s5-024",
+        "s5-025",
+        "s5-026",
+        "s5-027",
+        "s5-028",
+        "s5-029",
+        "s5-030",
+        "s5-031",
+        "s5-032",
+        "s5-033",
+        "s5-034",
+        "s5-035",
+        "s5-036",
+        "s5-037",
+        "s5-038",
+        "s5-039",
+        "s5-050",
+        "s5-051",
+        "s5-052",
+        "s5-053",
+        "s5-054",
+        "s5-055",
+        "s5-056"
+      ]
+    },
+    {
+      "id" : "seoul-6-loop",
+      "kind" : "loop",
+      "lineID" : "seoul-6",
+      "name" : "응암순환 → 신내",
+      "stationIDs" : [
+        "s6-001",
+        "s6-002",
+        "s6-003",
+        "s6-004",
+        "s6-005",
+        "s6-006",
+        "s6-001",
+        "s6-007",
+        "s6-008",
+        "s6-009",
+        "s6-010",
+        "s6-011",
+        "s6-012",
+        "s6-013",
+        "s6-014",
+        "s6-015",
+        "s6-016",
+        "s6-017",
+        "s6-018",
+        "s6-019",
+        "s6-020",
+        "s6-021",
+        "s6-022",
+        "s6-023",
+        "s6-024",
+        "s6-025",
+        "s6-026",
+        "s6-027",
+        "s6-028",
+        "s6-029",
+        "s6-030",
+        "s6-031",
+        "s6-032",
+        "s6-033",
+        "s6-034",
+        "s6-035",
+        "s6-036",
+        "s6-037",
+        "s6-038",
+        "s6-039"
+      ]
+    },
+    {
+      "id" : "seoul-7-main",
+      "kind" : "main",
+      "lineID" : "seoul-7",
+      "name" : "장암 → 석남",
+      "stationIDs" : [
+        "s7-001",
+        "s7-002",
+        "s7-003",
+        "s7-004",
+        "s7-005",
+        "s7-006",
+        "s7-007",
+        "s7-008",
+        "s7-009",
+        "s7-010",
+        "s7-011",
+        "s7-012",
+        "s7-013",
+        "s7-014",
+        "s7-015",
+        "s7-016",
+        "s7-017",
+        "s7-018",
+        "s7-019",
+        "s7-020",
+        "s7-021",
+        "s7-022",
+        "s7-023",
+        "s7-024",
+        "s7-025",
+        "s7-026",
+        "s7-027",
+        "s7-028",
+        "s7-029",
+        "s7-030",
+        "s7-031",
+        "s7-032",
+        "s7-033",
+        "s7-034",
+        "s7-035",
+        "s7-036",
+        "s7-037",
+        "s7-038",
+        "s7-039",
+        "s7-040",
+        "s7-041",
+        "s7-042",
+        "s7-043",
+        "s7-044",
+        "s7-045",
+        "s7-046",
+        "s7-047",
+        "s7-048",
+        "s7-049",
+        "s7-050",
+        "s7-051",
+        "s7-052",
+        "s7-053"
+      ]
+    },
+    {
+      "id" : "seoul-8-main",
+      "kind" : "main",
+      "lineID" : "seoul-8",
+      "name" : "별내 → 모란",
+      "stationIDs" : [
+        "s8-001",
+        "s8-002",
+        "s8-003",
+        "s8-004",
+        "s8-005",
+        "s8-006",
+        "s8-007",
+        "s8-008",
+        "s8-009",
+        "s8-010",
+        "s8-011",
+        "s8-012",
+        "s8-013",
+        "s8-014",
+        "s8-015",
+        "s8-016",
+        "s8-017",
+        "s8-018",
+        "s8-019",
+        "s8-020",
+        "s8-021",
+        "s8-022",
+        "s8-023",
+        "s8-024"
+      ]
+    },
+    {
+      "id" : "seoul-9-main",
+      "kind" : "main",
+      "lineID" : "seoul-9",
+      "name" : "개화 → 중앙보훈병원",
+      "stationIDs" : [
+        "s9-001",
+        "s9-002",
+        "s9-003",
+        "s9-004",
+        "s9-005",
+        "s9-006",
+        "s9-007",
+        "s9-008",
+        "s9-009",
+        "s9-010",
+        "s9-011",
+        "s9-012",
+        "s9-013",
+        "s9-014",
+        "s9-015",
+        "s9-016",
+        "s9-017",
+        "s9-018",
+        "s9-019",
+        "s9-020",
+        "s9-021",
+        "s9-022",
+        "s9-023",
+        "s9-024",
+        "s9-025",
+        "s9-026",
+        "s9-027",
+        "s9-028",
+        "s9-029",
+        "s9-030",
+        "s9-031",
+        "s9-032",
+        "s9-033",
+        "s9-034",
+        "s9-035",
+        "s9-036",
+        "s9-037",
+        "s9-038"
+      ]
+    },
+    {
+      "id" : "seoul-ui-main",
+      "kind" : "main",
+      "lineID" : "seoul-ui",
+      "name" : "북한산우이 → 신설동",
+      "stationIDs" : [
+        "sui-001",
+        "sui-002",
+        "sui-003",
+        "sui-004",
+        "sui-005",
+        "sui-006",
+        "sui-007",
+        "sui-008",
+        "sui-009",
+        "sui-010",
+        "sui-011",
+        "sui-012",
+        "sui-013"
+      ]
+    },
+    {
+      "id" : "seoul-sillim-main",
+      "kind" : "main",
+      "lineID" : "seoul-sillim",
+      "name" : "샛강 → 관악산",
+      "stationIDs" : [
+        "ssl-001",
+        "ssl-002",
+        "ssl-003",
+        "ssl-004",
+        "ssl-005",
+        "ssl-006",
+        "ssl-007",
+        "ssl-008",
+        "ssl-009",
+        "ssl-010",
+        "ssl-011"
+      ]
+    },
+    {
+      "id" : "incheon-1-main",
+      "kind" : "main",
+      "lineID" : "incheon-1",
+      "name" : "검단호수공원 → 송도달빛축제공원",
+      "stationIDs" : [
+        "i1-001",
+        "i1-002",
+        "i1-003",
+        "i1-004",
+        "i1-005",
+        "i1-006",
+        "i1-007",
+        "i1-008",
+        "i1-009",
+        "i1-010",
+        "i1-011",
+        "i1-012",
+        "i1-013",
+        "i1-014",
+        "i1-015",
+        "i1-016",
+        "i1-017",
+        "i1-018",
+        "i1-019",
+        "i1-020",
+        "i1-021",
+        "i1-022",
+        "i1-023",
+        "i1-024",
+        "i1-025",
+        "i1-026",
+        "i1-027",
+        "i1-028",
+        "i1-029",
+        "i1-030",
+        "i1-031",
+        "i1-032",
+        "i1-033"
+      ]
+    },
+    {
+      "id" : "incheon-2-main",
+      "kind" : "main",
+      "lineID" : "incheon-2",
+      "name" : "검단오류 → 운연",
+      "stationIDs" : [
+        "i2-001",
+        "i2-002",
+        "i2-003",
+        "i2-004",
+        "i2-005",
+        "i2-006",
+        "i2-007",
+        "i2-008",
+        "i2-009",
+        "i2-010",
+        "i2-011",
+        "i2-012",
+        "i2-013",
+        "i2-014",
+        "i2-015",
+        "i2-016",
+        "i2-017",
+        "i2-018",
+        "i2-019",
+        "i2-020",
+        "i2-021",
+        "i2-022",
+        "i2-023",
+        "i2-024",
+        "i2-025",
+        "i2-026",
+        "i2-027"
+      ]
+    },
+    {
+      "id" : "suin-bundang-main",
+      "kind" : "main",
+      "lineID" : "suin-bundang",
+      "name" : "청량리 → 인천",
+      "stationIDs" : [
+        "sb-001",
+        "sb-002",
+        "sb-003",
+        "sb-004",
+        "sb-005",
+        "sb-006",
+        "sb-007",
+        "sb-008",
+        "sb-009",
+        "sb-010",
+        "sb-011",
+        "sb-012",
+        "sb-013",
+        "sb-014",
+        "sb-015",
+        "sb-016",
+        "sb-017",
+        "sb-018",
+        "sb-019",
+        "sb-020",
+        "sb-021",
+        "sb-022",
+        "sb-023",
+        "sb-024",
+        "sb-025",
+        "sb-026",
+        "sb-027",
+        "sb-028",
+        "sb-029",
+        "sb-030",
+        "sb-031",
+        "sb-032",
+        "sb-033",
+        "sb-034",
+        "sb-035",
+        "sb-036",
+        "sb-037",
+        "sb-038",
+        "sb-039",
+        "sb-040",
+        "sb-041",
+        "sb-042",
+        "sb-043",
+        "sb-044",
+        "sb-045",
+        "sb-046",
+        "sb-047",
+        "sb-048",
+        "sb-049",
+        "sb-050",
+        "sb-051",
+        "sb-052",
+        "sb-053",
+        "sb-054",
+        "sb-055",
+        "sb-056",
+        "sb-057",
+        "sb-058",
+        "sb-059",
+        "sb-060",
+        "sb-061",
+        "sb-062",
+        "sb-063"
+      ]
+    },
+    {
+      "id" : "gyeongui-jungang-jipyeong",
+      "kind" : "main",
+      "lineID" : "gyeongui-jungang",
+      "name" : "문산 → 지평",
+      "stationIDs" : [
+        "gj-001",
+        "gj-002",
+        "gj-003",
+        "gj-004",
+        "gj-005",
+        "gj-006",
+        "gj-007",
+        "gj-008",
+        "gj-009",
+        "gj-010",
+        "gj-011",
+        "gj-012",
+        "gj-013",
+        "gj-014",
+        "gj-015",
+        "gj-016",
+        "gj-017",
+        "gj-018",
+        "gj-019",
+        "gj-020",
+        "gj-021",
+        "gj-022",
+        "gj-023",
+        "gj-024",
+        "gj-025",
+        "gj-026",
+        "gj-027",
+        "gj-028",
+        "gj-029",
+        "gj-030",
+        "gj-031",
+        "gj-032",
+        "gj-033",
+        "gj-034",
+        "gj-035",
+        "gj-036",
+        "gj-037",
+        "gj-038",
+        "gj-039",
+        "gj-040",
+        "gj-041",
+        "gj-042",
+        "gj-043",
+        "gj-044",
+        "gj-045",
+        "gj-046",
+        "gj-047",
+        "gj-048",
+        "gj-049",
+        "gj-050",
+        "gj-051",
+        "gj-052",
+        "gj-053"
+      ]
+    },
+    {
+      "id" : "gyeongui-jungang-seoul",
+      "kind" : "branch",
+      "lineID" : "gyeongui-jungang",
+      "name" : "문산 → 서울역",
+      "stationIDs" : [
+        "gj-001",
+        "gj-002",
+        "gj-003",
+        "gj-004",
+        "gj-005",
+        "gj-006",
+        "gj-007",
+        "gj-008",
+        "gj-009",
+        "gj-010",
+        "gj-011",
+        "gj-012",
+        "gj-013",
+        "gj-014",
+        "gj-015",
+        "gj-016",
+        "gj-017",
+        "gj-018",
+        "gj-019",
+        "gj-020",
+        "gj-054",
+        "gj-055"
+      ]
+    },
+    {
+      "id" : "shinbundang-main",
+      "kind" : "main",
+      "lineID" : "shinbundang",
+      "name" : "신사 → 광교",
+      "stationIDs" : [
+        "dx-001",
+        "dx-002",
+        "dx-003",
+        "dx-004",
+        "dx-005",
+        "dx-006",
+        "dx-007",
+        "dx-008",
+        "dx-009",
+        "dx-010",
+        "dx-011",
+        "dx-012",
+        "dx-013",
+        "dx-014",
+        "dx-015",
+        "dx-016"
+      ]
+    },
+    {
+      "id" : "arex-main",
+      "kind" : "main",
+      "lineID" : "arex",
+      "name" : "서울역 → 인천공항2터미널",
+      "stationIDs" : [
+        "ar-001",
+        "ar-002",
+        "ar-003",
+        "ar-004",
+        "ar-005",
+        "ar-006",
+        "ar-007",
+        "ar-008",
+        "ar-009",
+        "ar-010",
+        "ar-011",
+        "ar-012",
+        "ar-013",
+        "ar-014"
+      ]
+    },
+    {
+      "id" : "busan-1-main",
+      "kind" : "main",
+      "lineID" : "busan-1",
+      "name" : "다대포해수욕장 → 노포",
+      "stationIDs" : [
+        "b1-001",
+        "b1-002",
+        "b1-003",
+        "b1-004",
+        "b1-005",
+        "b1-006",
+        "b1-007",
+        "b1-008",
+        "b1-009",
+        "b1-010",
+        "b1-011",
+        "b1-012",
+        "b1-013",
+        "b1-014",
+        "b1-015",
+        "b1-016",
+        "b1-017",
+        "b1-018",
+        "b1-019",
+        "b1-020",
+        "b1-021",
+        "b1-022",
+        "b1-023",
+        "b1-024",
+        "b1-025",
+        "b1-026",
+        "b1-027",
+        "b1-028",
+        "b1-029",
+        "b1-030",
+        "b1-031",
+        "b1-032",
+        "b1-033",
+        "b1-034",
+        "b1-035",
+        "b1-036",
+        "b1-037",
+        "b1-038",
+        "b1-039",
+        "b1-040"
+      ]
+    },
+    {
+      "id" : "busan-2-main",
+      "kind" : "main",
+      "lineID" : "busan-2",
+      "name" : "장산 → 양산",
+      "stationIDs" : [
+        "b2-001",
+        "b2-002",
+        "b2-003",
+        "b2-004",
+        "b2-005",
+        "b2-006",
+        "b2-007",
+        "b2-008",
+        "b2-009",
+        "b2-010",
+        "b2-011",
+        "b2-012",
+        "b2-013",
+        "b2-014",
+        "b2-015",
+        "b2-016",
+        "b2-017",
+        "b2-018",
+        "b2-019",
+        "b2-020",
+        "b2-021",
+        "b2-022",
+        "b2-023",
+        "b2-024",
+        "b2-025",
+        "b2-026",
+        "b2-027",
+        "b2-028",
+        "b2-029",
+        "b2-030",
+        "b2-031",
+        "b2-032",
+        "b2-033",
+        "b2-034",
+        "b2-035",
+        "b2-036",
+        "b2-037",
+        "b2-038",
+        "b2-039",
+        "b2-040",
+        "b2-041",
+        "b2-042",
+        "b2-043"
+      ]
+    },
+    {
+      "id" : "busan-3-main",
+      "kind" : "main",
+      "lineID" : "busan-3",
+      "name" : "수영 → 대저",
+      "stationIDs" : [
+        "b3-001",
+        "b3-002",
+        "b3-003",
+        "b3-004",
+        "b3-005",
+        "b3-006",
+        "b3-007",
+        "b3-008",
+        "b3-009",
+        "b3-010",
+        "b3-011",
+        "b3-012",
+        "b3-013",
+        "b3-014",
+        "b3-015",
+        "b3-016",
+        "b3-017"
+      ]
+    },
+    {
+      "id" : "busan-4-main",
+      "kind" : "main",
+      "lineID" : "busan-4",
+      "name" : "미남 → 안평",
+      "stationIDs" : [
+        "b4-001",
+        "b4-002",
+        "b4-003",
+        "b4-004",
+        "b4-005",
+        "b4-006",
+        "b4-007",
+        "b4-008",
+        "b4-009",
+        "b4-010",
+        "b4-011",
+        "b4-012",
+        "b4-013",
+        "b4-014"
+      ]
+    },
+    {
+      "id" : "busan-gimhae-main",
+      "kind" : "main",
+      "lineID" : "busan-gimhae",
+      "name" : "사상 → 가야대",
+      "stationIDs" : [
+        "bgl-001",
+        "bgl-002",
+        "bgl-003",
+        "bgl-004",
+        "bgl-005",
+        "bgl-006",
+        "bgl-007",
+        "bgl-008",
+        "bgl-009",
+        "bgl-010",
+        "bgl-011",
+        "bgl-012",
+        "bgl-013",
+        "bgl-014",
+        "bgl-015",
+        "bgl-016",
+        "bgl-017",
+        "bgl-018",
+        "bgl-019",
+        "bgl-020",
+        "bgl-021"
+      ]
+    },
+    {
+      "id" : "daegu-1-main",
+      "kind" : "main",
+      "lineID" : "daegu-1",
+      "name" : "설화명곡 → 하양",
+      "stationIDs" : [
+        "d1-001",
+        "d1-002",
+        "d1-003",
+        "d1-004",
+        "d1-005",
+        "d1-006",
+        "d1-007",
+        "d1-008",
+        "d1-009",
+        "d1-010",
+        "d1-011",
+        "d1-012",
+        "d1-013",
+        "d1-014",
+        "d1-015",
+        "d1-016",
+        "d1-017",
+        "d1-018",
+        "d1-019",
+        "d1-020",
+        "d1-021",
+        "d1-022",
+        "d1-023",
+        "d1-024",
+        "d1-025",
+        "d1-026",
+        "d1-027",
+        "d1-028",
+        "d1-029",
+        "d1-030",
+        "d1-031",
+        "d1-032",
+        "d1-033",
+        "d1-034",
+        "d1-035"
+      ]
+    },
+    {
+      "id" : "daegu-2-main",
+      "kind" : "main",
+      "lineID" : "daegu-2",
+      "name" : "문양 → 영남대",
+      "stationIDs" : [
+        "d2-001",
+        "d2-002",
+        "d2-003",
+        "d2-004",
+        "d2-005",
+        "d2-006",
+        "d2-007",
+        "d2-008",
+        "d2-009",
+        "d2-010",
+        "d2-011",
+        "d2-012",
+        "d2-013",
+        "d2-014",
+        "d2-015",
+        "d2-016",
+        "d2-017",
+        "d2-018",
+        "d2-019",
+        "d2-020",
+        "d2-021",
+        "d2-022",
+        "d2-023",
+        "d2-024",
+        "d2-025",
+        "d2-026",
+        "d2-027",
+        "d2-028",
+        "d2-029"
+      ]
+    },
+    {
+      "id" : "daegu-3-main",
+      "kind" : "main",
+      "lineID" : "daegu-3",
+      "name" : "칠곡경대병원 → 용지",
+      "stationIDs" : [
+        "d3-001",
+        "d3-002",
+        "d3-003",
+        "d3-004",
+        "d3-005",
+        "d3-006",
+        "d3-007",
+        "d3-008",
+        "d3-009",
+        "d3-010",
+        "d3-011",
+        "d3-012",
+        "d3-013",
+        "d3-014",
+        "d3-015",
+        "d3-016",
+        "d3-017",
+        "d3-018",
+        "d3-019",
+        "d3-020",
+        "d3-021",
+        "d3-022",
+        "d3-023",
+        "d3-024",
+        "d3-025",
+        "d3-026",
+        "d3-027",
+        "d3-028",
+        "d3-029",
+        "d3-030"
+      ]
+    },
+    {
+      "id" : "gwangju-1-main",
+      "kind" : "main",
+      "lineID" : "gwangju-1",
+      "name" : "녹동 → 평동",
+      "stationIDs" : [
+        "g1-001",
+        "g1-002",
+        "g1-003",
+        "g1-004",
+        "g1-005",
+        "g1-006",
+        "g1-007",
+        "g1-008",
+        "g1-009",
+        "g1-010",
+        "g1-011",
+        "g1-012",
+        "g1-013",
+        "g1-014",
+        "g1-015",
+        "g1-016",
+        "g1-017",
+        "g1-018",
+        "g1-019",
+        "g1-020"
+      ]
+    },
+    {
+      "id" : "daejeon-1-main",
+      "kind" : "main",
+      "lineID" : "daejeon-1",
+      "name" : "판암 → 반석",
+      "stationIDs" : [
+        "dj1-001",
+        "dj1-002",
+        "dj1-003",
+        "dj1-004",
+        "dj1-005",
+        "dj1-006",
+        "dj1-007",
+        "dj1-008",
+        "dj1-009",
+        "dj1-010",
+        "dj1-011",
+        "dj1-012",
+        "dj1-013",
+        "dj1-014",
+        "dj1-015",
+        "dj1-016",
+        "dj1-017",
+        "dj1-018",
+        "dj1-019",
+        "dj1-020",
+        "dj1-021",
+        "dj1-022"
+      ]
+    }
+  ],
+  "schemaVersion" : 1,
+  "sources" : [
+    {
+      "title" : "국가철도공단 전국도시철도역사정보 표준데이터",
+      "url" : "https://www.data.go.kr/data/15013205/standard.do"
+    },
+    {
+      "title" : "서울교통공사 사이버스테이션",
+      "url" : "https://www.seoulmetro.co.kr/kr/cyberStation.do?menuIdx=538"
+    },
+    {
+      "title" : "서울시메트로9호선",
+      "url" : "https://www.metro9.co.kr/"
+    },
+    {
+      "title" : "우이신설도시철도",
+      "url" : "https://www.ui-line.com/"
+    },
+    {
+      "title" : "신림선도시철도",
+      "url" : "https://www.sillimlrt.com/"
+    },
+    {
+      "title" : "인천교통공사 노선도 및 역정보",
+      "url" : "https://www.ictr.or.kr/main/railway/guidance/map.jsp"
+    },
+    {
+      "title" : "한국철도공사 광역철도 운영노선",
+      "url" : "https://info.korail.com/info/contents.do?key=1446"
+    },
+    {
+      "title" : "신분당선 노선도",
+      "url" : "https://www.shinbundang.co.kr/dxline/dxline1.jsp"
+    },
+    {
+      "title" : "공항철도 역·운임 정보",
+      "url" : "https://www.arex.or.kr/content.do?menuNo=MN201503060000000002"
+    },
+    {
+      "title" : "부산교통공사 노선도",
+      "url" : "https://www2.humetro.busan.kr/homepage/default/page/subLocation.do?menu_no=10010101"
+    },
+    {
+      "title" : "부산김해경전철 노선도",
+      "url" : "https://www.bglrt.com/00162.web"
+    },
+    {
+      "title" : "대구교통공사",
+      "url" : "https://www.dtro.or.kr/"
+    },
+    {
+      "title" : "광주교통공사 사이버스테이션",
+      "url" : "https://www.grtc.co.kr/cyber/map"
+    },
+    {
+      "title" : "대전교통공사 노선도",
+      "url" : "https://www.djtc.kr/kor/board.do?bbsIdx=4567&menuIdx=325"
+    }
+  ],
+  "stations" : [
+    {
+      "aliases" : [
+        "서울"
+      ],
+      "id" : "s1-001",
+      "name" : "서울역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-002",
+      "name" : "시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-003",
+      "name" : "종각"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-004",
+      "name" : "종로3가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-005",
+      "name" : "종로5가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-006",
+      "name" : "동대문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-007",
+      "name" : "동묘앞"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-008",
+      "name" : "신설동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s1-009",
+      "name" : "제기동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청량리(서울시립대입구)",
+      "id" : "s1-010",
+      "name" : "청량리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-001",
+      "name" : "시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-002",
+      "name" : "을지로입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-003",
+      "name" : "을지로3가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-004",
+      "name" : "을지로4가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동대문역사문화공원(DDP)",
+      "id" : "s2-005",
+      "name" : "동대문역사문화공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-006",
+      "name" : "신당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-007",
+      "name" : "상왕십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "왕십리(성동구청)",
+      "id" : "s2-008",
+      "name" : "왕십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-009",
+      "name" : "한양대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-010",
+      "name" : "뚝섬"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-011",
+      "name" : "성수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-012",
+      "name" : "건대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "구의(광진구청)",
+      "id" : "s2-013",
+      "name" : "구의"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "강변(동서울터미널)",
+      "id" : "s2-014",
+      "name" : "강변"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-015",
+      "name" : "잠실나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "잠실(송파구청)",
+      "id" : "s2-016",
+      "name" : "잠실"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-017",
+      "name" : "잠실새내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-018",
+      "name" : "종합운동장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "삼성(무역센터)",
+      "id" : "s2-019",
+      "name" : "삼성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-020",
+      "name" : "선릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-021",
+      "name" : "역삼"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-022",
+      "name" : "강남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "교대(법원·검찰청)",
+      "id" : "s2-023",
+      "name" : "교대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-024",
+      "name" : "서초"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-025",
+      "name" : "방배"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-026",
+      "name" : "사당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "낙성대(강감찬)",
+      "id" : "s2-027",
+      "name" : "낙성대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "서울대입구(관악구청)",
+      "id" : "s2-028",
+      "name" : "서울대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-029",
+      "name" : "봉천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-030",
+      "name" : "신림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-031",
+      "name" : "신대방"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "구로디지털단지(원광디지털대)",
+      "id" : "s2-032",
+      "name" : "구로디지털단지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대림(구로구청)",
+      "id" : "s2-033",
+      "name" : "대림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-034",
+      "name" : "신도림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-035",
+      "name" : "문래"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-036",
+      "name" : "영등포구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-037",
+      "name" : "당산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-038",
+      "name" : "합정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-039",
+      "name" : "홍대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-040",
+      "name" : "신촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-041",
+      "name" : "이대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-042",
+      "name" : "아현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "충정로(경기대입구)",
+      "id" : "s2-043",
+      "name" : "충정로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-044",
+      "name" : "용답"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-045",
+      "name" : "신답"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "용두(동대문구청)",
+      "id" : "s2-046",
+      "name" : "용두"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-047",
+      "name" : "신설동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-048",
+      "name" : "도림천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-049",
+      "name" : "양천구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-050",
+      "name" : "신정네거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s2-051",
+      "name" : "까치산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-001",
+      "name" : "지축"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-002",
+      "name" : "구파발"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-003",
+      "name" : "연신내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-004",
+      "name" : "불광"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-005",
+      "name" : "녹번"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-006",
+      "name" : "홍제"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-007",
+      "name" : "무악재"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-008",
+      "name" : "독립문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "경복궁(정부서울청사)",
+      "id" : "s3-009",
+      "name" : "경복궁"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-010",
+      "name" : "안국"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-011",
+      "name" : "종로3가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-012",
+      "name" : "을지로3가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-013",
+      "name" : "충무로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-014",
+      "name" : "동대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-015",
+      "name" : "약수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-016",
+      "name" : "금호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-017",
+      "name" : "옥수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-018",
+      "name" : "압구정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-019",
+      "name" : "신사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-020",
+      "name" : "잠원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-021",
+      "name" : "고속터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "교대(법원·검찰청)",
+      "id" : "s3-022",
+      "name" : "교대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남부터미널(예술의전당)",
+      "id" : "s3-023",
+      "name" : "남부터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "양재(서초구청)",
+      "id" : "s3-024",
+      "name" : "양재"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-025",
+      "name" : "매봉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-026",
+      "name" : "도곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-027",
+      "name" : "대치"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "학여울(서울무역전시컨벤션센터)",
+      "id" : "s3-028",
+      "name" : "학여울"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-029",
+      "name" : "대청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-030",
+      "name" : "일원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-031",
+      "name" : "수서"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-032",
+      "name" : "가락시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-033",
+      "name" : "경찰병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s3-034",
+      "name" : "오금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "진접(경복대)",
+      "id" : "s4-001",
+      "name" : "진접"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-002",
+      "name" : "오남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-003",
+      "name" : "별내별가람"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-004",
+      "name" : "당고개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-005",
+      "name" : "상계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-006",
+      "name" : "노원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-007",
+      "name" : "창동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-008",
+      "name" : "쌍문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수유(강북구청)",
+      "id" : "s4-009",
+      "name" : "수유"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "미아(서울사이버대학)",
+      "id" : "s4-010",
+      "name" : "미아"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-011",
+      "name" : "미아사거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-012",
+      "name" : "길음"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "성신여대입구(돈암)",
+      "id" : "s4-013",
+      "name" : "성신여대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "한성대입구(삼선교)",
+      "id" : "s4-014",
+      "name" : "한성대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-015",
+      "name" : "혜화"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-016",
+      "name" : "동대문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동대문역사문화공원(DDP)",
+      "id" : "s4-017",
+      "name" : "동대문역사문화공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-018",
+      "name" : "충무로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-019",
+      "name" : "명동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "회현(남대문시장)",
+      "id" : "s4-020",
+      "name" : "회현"
+    },
+    {
+      "aliases" : [
+        "서울"
+      ],
+      "id" : "s4-021",
+      "name" : "서울역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "숙대입구(갈월)",
+      "id" : "s4-022",
+      "name" : "숙대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-023",
+      "name" : "삼각지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-024",
+      "name" : "신용산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "이촌(국립중앙박물관)",
+      "id" : "s4-025",
+      "name" : "이촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동작(현충원)",
+      "id" : "s4-026",
+      "name" : "동작"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "총신대입구(이수)",
+      "id" : "s4-027",
+      "name" : "총신대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-028",
+      "name" : "사당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s4-029",
+      "name" : "남태령"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-001",
+      "name" : "방화"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-002",
+      "name" : "개화산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-003",
+      "name" : "김포공항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-004",
+      "name" : "송정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-005",
+      "name" : "마곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-006",
+      "name" : "발산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-007",
+      "name" : "우장산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-008",
+      "name" : "화곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-009",
+      "name" : "까치산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "신정(은행정)",
+      "id" : "s5-010",
+      "name" : "신정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-011",
+      "name" : "목동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "오목교(목동운동장앞)",
+      "id" : "s5-012",
+      "name" : "오목교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-013",
+      "name" : "양평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-014",
+      "name" : "영등포구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-015",
+      "name" : "영등포시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-016",
+      "name" : "신길"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-017",
+      "name" : "여의도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-018",
+      "name" : "여의나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-019",
+      "name" : "마포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-020",
+      "name" : "공덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-021",
+      "name" : "애오개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "충정로(경기대입구)",
+      "id" : "s5-022",
+      "name" : "충정로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-023",
+      "name" : "서대문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "광화문(세종문화회관)",
+      "id" : "s5-024",
+      "name" : "광화문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-025",
+      "name" : "종로3가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-026",
+      "name" : "을지로4가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동대문역사문화공원(DDP)",
+      "id" : "s5-027",
+      "name" : "동대문역사문화공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-028",
+      "name" : "청구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-029",
+      "name" : "신금호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-030",
+      "name" : "행당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "왕십리(성동구청)",
+      "id" : "s5-031",
+      "name" : "왕십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-032",
+      "name" : "마장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-033",
+      "name" : "답십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-034",
+      "name" : "장한평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "군자(능동)",
+      "id" : "s5-035",
+      "name" : "군자"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "아차산(어린이대공원후문)",
+      "id" : "s5-036",
+      "name" : "아차산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "광나루(장신대)",
+      "id" : "s5-037",
+      "name" : "광나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "천호(풍납토성)",
+      "id" : "s5-038",
+      "name" : "천호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-039",
+      "name" : "강동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-040",
+      "name" : "길동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "굽은다리(강동구민회관앞)",
+      "id" : "s5-041",
+      "name" : "굽은다리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-042",
+      "name" : "명일"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-043",
+      "name" : "고덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-044",
+      "name" : "상일동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-045",
+      "name" : "강일"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-046",
+      "name" : "미사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-047",
+      "name" : "하남풍산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "하남시청(덕풍·신장)",
+      "id" : "s5-048",
+      "name" : "하남시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-049",
+      "name" : "하남검단산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-050",
+      "name" : "둔촌동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "올림픽공원(한국체대)",
+      "id" : "s5-051",
+      "name" : "올림픽공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-052",
+      "name" : "방이"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-053",
+      "name" : "오금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-054",
+      "name" : "개롱"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-055",
+      "name" : "거여"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s5-056",
+      "name" : "마천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-001",
+      "name" : "응암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-002",
+      "name" : "역촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-003",
+      "name" : "불광"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-004",
+      "name" : "독바위"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-005",
+      "name" : "연신내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-006",
+      "name" : "구산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "새절(신사)",
+      "id" : "s6-007",
+      "name" : "새절"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "증산(명지대앞)",
+      "id" : "s6-008",
+      "name" : "증산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-009",
+      "name" : "디지털미디어시티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "월드컵경기장(성산)",
+      "id" : "s6-010",
+      "name" : "월드컵경기장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-011",
+      "name" : "마포구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-012",
+      "name" : "망원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-013",
+      "name" : "합정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-014",
+      "name" : "상수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "광흥창(서강)",
+      "id" : "s6-015",
+      "name" : "광흥창"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대흥(서강대앞)",
+      "id" : "s6-016",
+      "name" : "대흥"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-017",
+      "name" : "공덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-018",
+      "name" : "효창공원앞"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-019",
+      "name" : "삼각지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "녹사평(용산구청)",
+      "id" : "s6-020",
+      "name" : "녹사평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-021",
+      "name" : "이태원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-022",
+      "name" : "한강진"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-023",
+      "name" : "버티고개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-024",
+      "name" : "약수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-025",
+      "name" : "청구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-026",
+      "name" : "신당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-027",
+      "name" : "동묘앞"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-028",
+      "name" : "창신"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-029",
+      "name" : "보문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "안암(고대병원앞)",
+      "id" : "s6-030",
+      "name" : "안암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "고려대(종암)",
+      "id" : "s6-031",
+      "name" : "고려대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "월곡(동덕여대)",
+      "id" : "s6-032",
+      "name" : "월곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "상월곡(한국과학기술연구원)",
+      "id" : "s6-033",
+      "name" : "상월곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-034",
+      "name" : "돌곶이"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-035",
+      "name" : "석계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-036",
+      "name" : "태릉입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "화랑대(서울여대입구)",
+      "id" : "s6-037",
+      "name" : "화랑대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "봉화산(서울의료원)",
+      "id" : "s6-038",
+      "name" : "봉화산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s6-039",
+      "name" : "신내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-001",
+      "name" : "장암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-002",
+      "name" : "도봉산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-003",
+      "name" : "수락산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-004",
+      "name" : "마들"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-005",
+      "name" : "노원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-006",
+      "name" : "중계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-007",
+      "name" : "하계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "공릉(서울과학기술대)",
+      "id" : "s7-008",
+      "name" : "공릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-009",
+      "name" : "태릉입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-010",
+      "name" : "먹골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-011",
+      "name" : "중화"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "상봉(시외버스터미널)",
+      "id" : "s7-012",
+      "name" : "상봉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-013",
+      "name" : "면목"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-014",
+      "name" : "사가정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "용마산(용마폭포공원)",
+      "id" : "s7-015",
+      "name" : "용마산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-016",
+      "name" : "중곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "군자(능동)",
+      "id" : "s7-017",
+      "name" : "군자"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "어린이대공원(세종대)",
+      "id" : "s7-018",
+      "name" : "어린이대공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-019",
+      "name" : "건대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-020",
+      "name" : "뚝섬유원지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청담(한국금거래소)",
+      "id" : "s7-021",
+      "name" : "청담"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-022",
+      "name" : "강남구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-023",
+      "name" : "학동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-024",
+      "name" : "논현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-025",
+      "name" : "반포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-026",
+      "name" : "고속터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-027",
+      "name" : "내방"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "총신대입구(이수)",
+      "id" : "s7-028",
+      "name" : "총신대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-029",
+      "name" : "남성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "숭실대입구(살피재)",
+      "id" : "s7-030",
+      "name" : "숭실대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-031",
+      "name" : "상도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-032",
+      "name" : "장승배기"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-033",
+      "name" : "신대방삼거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-034",
+      "name" : "보라매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-035",
+      "name" : "신풍"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대림(구로구청)",
+      "id" : "s7-036",
+      "name" : "대림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-037",
+      "name" : "남구로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-038",
+      "name" : "가산디지털단지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-039",
+      "name" : "철산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-040",
+      "name" : "광명사거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-041",
+      "name" : "천왕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "온수(성공회대입구)",
+      "id" : "s7-042",
+      "name" : "온수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-043",
+      "name" : "까치울"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-044",
+      "name" : "부천종합운동장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-045",
+      "name" : "춘의"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-046",
+      "name" : "신중동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-047",
+      "name" : "부천시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-048",
+      "name" : "상동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-049",
+      "name" : "삼산체육관"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-050",
+      "name" : "굴포천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-051",
+      "name" : "부평구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-052",
+      "name" : "산곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s7-053",
+      "name" : "석남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-001",
+      "name" : "별내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-002",
+      "name" : "다산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-003",
+      "name" : "동구릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-004",
+      "name" : "구리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-005",
+      "name" : "장자호수공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-006",
+      "name" : "암사역사공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-007",
+      "name" : "암사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "천호(풍납토성)",
+      "id" : "s8-008",
+      "name" : "천호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-009",
+      "name" : "강동구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "몽촌토성(평화의문)",
+      "id" : "s8-010",
+      "name" : "몽촌토성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "잠실(송파구청)",
+      "id" : "s8-011",
+      "name" : "잠실"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-012",
+      "name" : "석촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-013",
+      "name" : "송파"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-014",
+      "name" : "가락시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-015",
+      "name" : "문정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-016",
+      "name" : "장지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-017",
+      "name" : "복정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-018",
+      "name" : "남위례"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-019",
+      "name" : "산성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남한산성입구(성남법원·검찰청)",
+      "id" : "s8-020",
+      "name" : "남한산성입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-021",
+      "name" : "단대오거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-022",
+      "name" : "신흥"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-023",
+      "name" : "수진"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s8-024",
+      "name" : "모란"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-001",
+      "name" : "개화"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-002",
+      "name" : "김포공항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-003",
+      "name" : "공항시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-004",
+      "name" : "신방화"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "마곡나루(서울식물원)",
+      "id" : "s9-005",
+      "name" : "마곡나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-006",
+      "name" : "양천향교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-007",
+      "name" : "가양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-008",
+      "name" : "증미"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-009",
+      "name" : "등촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-010",
+      "name" : "염창"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-011",
+      "name" : "신목동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-012",
+      "name" : "선유도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-013",
+      "name" : "당산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-014",
+      "name" : "국회의사당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-015",
+      "name" : "여의도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-016",
+      "name" : "샛강"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-017",
+      "name" : "노량진"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-018",
+      "name" : "노들"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "흑석(중앙대입구)",
+      "id" : "s9-019",
+      "name" : "흑석"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동작(현충원)",
+      "id" : "s9-020",
+      "name" : "동작"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-021",
+      "name" : "구반포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-022",
+      "name" : "신반포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-023",
+      "name" : "고속터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-024",
+      "name" : "사평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-025",
+      "name" : "신논현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-026",
+      "name" : "언주"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-027",
+      "name" : "선정릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-028",
+      "name" : "삼성중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-029",
+      "name" : "봉은사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-030",
+      "name" : "종합운동장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-031",
+      "name" : "삼전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-032",
+      "name" : "석촌고분"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-033",
+      "name" : "석촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-034",
+      "name" : "송파나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-035",
+      "name" : "한성백제"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "올림픽공원(한국체대)",
+      "id" : "s9-036",
+      "name" : "올림픽공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-037",
+      "name" : "둔촌오륜"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "s9-038",
+      "name" : "중앙보훈병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "북한산우이(도선사입구)",
+      "id" : "sui-001",
+      "name" : "북한산우이"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-002",
+      "name" : "솔밭공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-003",
+      "name" : "4·19민주묘지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-004",
+      "name" : "가오리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-005",
+      "name" : "화계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-006",
+      "name" : "삼양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-007",
+      "name" : "삼양사거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-008",
+      "name" : "솔샘"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "북한산보국문(서경대)",
+      "id" : "sui-009",
+      "name" : "북한산보국문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "정릉(국민대입구)",
+      "id" : "sui-010",
+      "name" : "정릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "성신여대입구(돈암)",
+      "id" : "sui-011",
+      "name" : "성신여대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-012",
+      "name" : "보문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sui-013",
+      "name" : "신설동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-001",
+      "name" : "샛강"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대방(성애병원)",
+      "id" : "ssl-002",
+      "name" : "대방"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-003",
+      "name" : "서울지방병무청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-004",
+      "name" : "보라매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-005",
+      "name" : "보라매공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "보라매병원(전문건설회관)",
+      "id" : "ssl-006",
+      "name" : "보라매병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-007",
+      "name" : "당곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-008",
+      "name" : "신림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-009",
+      "name" : "서원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ssl-010",
+      "name" : "서울대벤처타운"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "관악산(서울대)",
+      "id" : "ssl-011",
+      "name" : "관악산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-001",
+      "name" : "검단호수공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-002",
+      "name" : "신검단중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-003",
+      "name" : "아라"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-004",
+      "name" : "계양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-005",
+      "name" : "귤현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-006",
+      "name" : "박촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-007",
+      "name" : "임학"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-008",
+      "name" : "계산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-009",
+      "name" : "경인교대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-010",
+      "name" : "작전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-011",
+      "name" : "갈산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-012",
+      "name" : "부평구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-013",
+      "name" : "부평시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-014",
+      "name" : "부평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-015",
+      "name" : "동수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-016",
+      "name" : "부평삼거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-017",
+      "name" : "간석오거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-018",
+      "name" : "인천시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-019",
+      "name" : "예술회관"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-020",
+      "name" : "인천터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-021",
+      "name" : "문학경기장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-022",
+      "name" : "선학"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-023",
+      "name" : "신연수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-024",
+      "name" : "원인재"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-025",
+      "name" : "동춘"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-026",
+      "name" : "동막"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-027",
+      "name" : "캠퍼스타운"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-028",
+      "name" : "테크노파크"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-029",
+      "name" : "지식정보단지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-030",
+      "name" : "인천대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-031",
+      "name" : "센트럴파크"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-032",
+      "name" : "국제업무지구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i1-033",
+      "name" : "송도달빛축제공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "검단오류(검단산업단지)",
+      "id" : "i2-001",
+      "name" : "검단오류"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-002",
+      "name" : "왕길"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-003",
+      "name" : "검단사거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-004",
+      "name" : "마전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-005",
+      "name" : "완정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-006",
+      "name" : "독정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-007",
+      "name" : "검암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-008",
+      "name" : "검바위"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "아시아드경기장(공촌사거리)",
+      "id" : "i2-009",
+      "name" : "아시아드경기장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-010",
+      "name" : "서구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "가정(루원시티)",
+      "id" : "i2-011",
+      "name" : "가정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-012",
+      "name" : "가정중앙시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "석남(거북시장)",
+      "id" : "i2-013",
+      "name" : "석남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-014",
+      "name" : "서부여성회관"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-015",
+      "name" : "인천가좌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-016",
+      "name" : "가재울"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-017",
+      "name" : "주안국가산단"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-018",
+      "name" : "주안"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "시민공원(문화창작지대)",
+      "id" : "i2-019",
+      "name" : "시민공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-020",
+      "name" : "석바위시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-021",
+      "name" : "인천시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-022",
+      "name" : "석천사거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-023",
+      "name" : "모래내시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-024",
+      "name" : "만수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-025",
+      "name" : "남동구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "i2-026",
+      "name" : "인천대공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "운연(서창)",
+      "id" : "i2-027",
+      "name" : "운연"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청량리(서울시립대입구)",
+      "id" : "sb-001",
+      "name" : "청량리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "왕십리(성동구청)",
+      "id" : "sb-002",
+      "name" : "왕십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-003",
+      "name" : "서울숲"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-004",
+      "name" : "압구정로데오"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-005",
+      "name" : "강남구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-006",
+      "name" : "선정릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-007",
+      "name" : "선릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-008",
+      "name" : "한티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-009",
+      "name" : "도곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-010",
+      "name" : "구룡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-011",
+      "name" : "개포동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-012",
+      "name" : "대모산입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-013",
+      "name" : "수서"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-014",
+      "name" : "복정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-015",
+      "name" : "가천대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-016",
+      "name" : "태평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-017",
+      "name" : "모란"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-018",
+      "name" : "야탑"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-019",
+      "name" : "이매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-020",
+      "name" : "서현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수내(한국잡월드)",
+      "id" : "sb-021",
+      "name" : "수내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-022",
+      "name" : "정자"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "미금(분당서울대병원)",
+      "id" : "sb-023",
+      "name" : "미금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-024",
+      "name" : "오리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "죽전(단국대)",
+      "id" : "sb-025",
+      "name" : "죽전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-026",
+      "name" : "보정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-027",
+      "name" : "구성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-028",
+      "name" : "신갈"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "기흥(백남준아트센터)",
+      "id" : "sb-029",
+      "name" : "기흥"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "상갈(루터대학교)",
+      "id" : "sb-030",
+      "name" : "상갈"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-031",
+      "name" : "청명"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "영통(경희대)",
+      "id" : "sb-032",
+      "name" : "영통"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-033",
+      "name" : "망포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-034",
+      "name" : "매탄권선"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수원시청(경기아트센터)",
+      "id" : "sb-035",
+      "name" : "수원시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-036",
+      "name" : "매교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-037",
+      "name" : "수원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-038",
+      "name" : "고색"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "오목천(수원여대)",
+      "id" : "sb-039",
+      "name" : "오목천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-040",
+      "name" : "어천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-041",
+      "name" : "야목"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-042",
+      "name" : "사리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-043",
+      "name" : "한대앞"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-044",
+      "name" : "중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-045",
+      "name" : "고잔"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-046",
+      "name" : "초지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-047",
+      "name" : "안산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-048",
+      "name" : "능길"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-049",
+      "name" : "정왕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-050",
+      "name" : "오이도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-051",
+      "name" : "달월"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-052",
+      "name" : "월곶"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-053",
+      "name" : "소래포구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-054",
+      "name" : "인천논현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-055",
+      "name" : "호구포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-056",
+      "name" : "남동인더스파크"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-057",
+      "name" : "원인재"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-058",
+      "name" : "연수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-059",
+      "name" : "송도"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-060",
+      "name" : "인하대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "숭의(인하대병원)",
+      "id" : "sb-061",
+      "name" : "숭의"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-062",
+      "name" : "신포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "sb-063",
+      "name" : "인천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-001",
+      "name" : "문산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-002",
+      "name" : "파주"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-003",
+      "name" : "월롱"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-004",
+      "name" : "금촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-005",
+      "name" : "금릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-006",
+      "name" : "운정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-007",
+      "name" : "야당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-008",
+      "name" : "탄현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-009",
+      "name" : "일산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-010",
+      "name" : "풍산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-011",
+      "name" : "백마"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-012",
+      "name" : "곡산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-013",
+      "name" : "대곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-014",
+      "name" : "능곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-015",
+      "name" : "행신"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-016",
+      "name" : "강매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-017",
+      "name" : "한국항공대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-018",
+      "name" : "수색"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-019",
+      "name" : "디지털미디어시티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-020",
+      "name" : "가좌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-021",
+      "name" : "홍대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-022",
+      "name" : "서강대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-023",
+      "name" : "공덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-024",
+      "name" : "효창공원앞"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-025",
+      "name" : "용산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "이촌(국립중앙박물관)",
+      "id" : "gj-026",
+      "name" : "이촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-027",
+      "name" : "서빙고"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-028",
+      "name" : "한남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-029",
+      "name" : "옥수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-030",
+      "name" : "응봉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "왕십리(성동구청)",
+      "id" : "gj-031",
+      "name" : "왕십리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청량리(서울시립대입구)",
+      "id" : "gj-032",
+      "name" : "청량리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-033",
+      "name" : "회기"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-034",
+      "name" : "중랑"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "상봉(시외버스터미널)",
+      "id" : "gj-035",
+      "name" : "상봉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-036",
+      "name" : "망우"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-037",
+      "name" : "양원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-038",
+      "name" : "구리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-039",
+      "name" : "도농"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-040",
+      "name" : "양정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-041",
+      "name" : "덕소"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-042",
+      "name" : "도심"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-043",
+      "name" : "팔당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-044",
+      "name" : "운길산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-045",
+      "name" : "양수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-046",
+      "name" : "신원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-047",
+      "name" : "국수"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-048",
+      "name" : "아신"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-049",
+      "name" : "오빈"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-050",
+      "name" : "양평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-051",
+      "name" : "원덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-052",
+      "name" : "용문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gj-053",
+      "name" : "지평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "신촌(경의선)",
+      "id" : "gj-054",
+      "name" : "신촌"
+    },
+    {
+      "aliases" : [
+        "서울"
+      ],
+      "id" : "gj-055",
+      "name" : "서울역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-001",
+      "name" : "신사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-002",
+      "name" : "논현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-003",
+      "name" : "신논현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-004",
+      "name" : "강남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "양재(서초구청)",
+      "id" : "dx-005",
+      "name" : "양재"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "양재시민의숲(매헌)",
+      "id" : "dx-006",
+      "name" : "양재시민의숲"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-007",
+      "name" : "청계산입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "판교(판교테크노밸리)",
+      "id" : "dx-008",
+      "name" : "판교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-009",
+      "name" : "정자"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "미금(분당서울대병원)",
+      "id" : "dx-010",
+      "name" : "미금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-011",
+      "name" : "동천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-012",
+      "name" : "수지구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-013",
+      "name" : "성복"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dx-014",
+      "name" : "상현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "광교중앙(아주대)",
+      "id" : "dx-015",
+      "name" : "광교중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "광교(경기대)",
+      "id" : "dx-016",
+      "name" : "광교"
+    },
+    {
+      "aliases" : [
+        "서울"
+      ],
+      "id" : "ar-001",
+      "name" : "서울역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-002",
+      "name" : "공덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-003",
+      "name" : "홍대입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-004",
+      "name" : "디지털미디어시티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "마곡나루(서울식물원)",
+      "id" : "ar-005",
+      "name" : "마곡나루"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-006",
+      "name" : "김포공항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-007",
+      "name" : "계양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-008",
+      "name" : "검암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-009",
+      "name" : "청라국제도시"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-010",
+      "name" : "영종"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-011",
+      "name" : "운서"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-012",
+      "name" : "공항화물청사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-013",
+      "name" : "인천공항1터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ar-014",
+      "name" : "인천공항2터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-001",
+      "name" : "다대포해수욕장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-002",
+      "name" : "다대포항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-003",
+      "name" : "낫개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-004",
+      "name" : "신장림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-005",
+      "name" : "장림"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-006",
+      "name" : "동매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-007",
+      "name" : "신평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-008",
+      "name" : "하단"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "당리(사하구청)",
+      "id" : "b1-009",
+      "name" : "당리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-010",
+      "name" : "사하"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-011",
+      "name" : "괴정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대티(동주대학)",
+      "id" : "b1-012",
+      "name" : "대티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-013",
+      "name" : "서대신"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-014",
+      "name" : "동대신"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-015",
+      "name" : "토성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-016",
+      "name" : "자갈치"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-017",
+      "name" : "남포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-018",
+      "name" : "중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-019",
+      "name" : "부산역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-020",
+      "name" : "초량"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-021",
+      "name" : "부산진"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-022",
+      "name" : "좌천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-023",
+      "name" : "범일"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-024",
+      "name" : "범내골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-025",
+      "name" : "서면"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "부전(부산시민공원·송상현광장)",
+      "id" : "b1-026",
+      "name" : "부전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-027",
+      "name" : "양정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "시청(연제)",
+      "id" : "b1-028",
+      "name" : "시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-029",
+      "name" : "연산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-030",
+      "name" : "교대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-031",
+      "name" : "동래"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-032",
+      "name" : "명륜"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-033",
+      "name" : "온천장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-034",
+      "name" : "부산대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-035",
+      "name" : "장전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-036",
+      "name" : "구서"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-037",
+      "name" : "두실"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-038",
+      "name" : "남산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b1-039",
+      "name" : "범어사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "노포(종합버스터미널)",
+      "id" : "b1-040",
+      "name" : "노포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-001",
+      "name" : "장산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-002",
+      "name" : "중동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-003",
+      "name" : "해운대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-004",
+      "name" : "동백"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "벡스코(시립미술관)",
+      "id" : "b2-005",
+      "name" : "벡스코"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "센텀시티(벡스코)",
+      "id" : "b2-006",
+      "name" : "센텀시티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-007",
+      "name" : "민락"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-008",
+      "name" : "수영"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-009",
+      "name" : "광안"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-010",
+      "name" : "금련산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남천(KBS·수영구청)",
+      "id" : "b2-011",
+      "name" : "남천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-012",
+      "name" : "경성대·부경대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-013",
+      "name" : "대연"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "못골(남구청)",
+      "id" : "b2-014",
+      "name" : "못골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-015",
+      "name" : "지게골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-016",
+      "name" : "문현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-017",
+      "name" : "국제금융센터·부산은행"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-018",
+      "name" : "전포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-019",
+      "name" : "서면"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-020",
+      "name" : "부암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-021",
+      "name" : "가야"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-022",
+      "name" : "동의대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-023",
+      "name" : "개금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-024",
+      "name" : "냉정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-025",
+      "name" : "주례"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-026",
+      "name" : "감전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-027",
+      "name" : "사상"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-028",
+      "name" : "덕포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-029",
+      "name" : "모라"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-030",
+      "name" : "모덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-031",
+      "name" : "구포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-032",
+      "name" : "구명"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-033",
+      "name" : "덕천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-034",
+      "name" : "수정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-035",
+      "name" : "화명"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-036",
+      "name" : "율리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-037",
+      "name" : "동원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-038",
+      "name" : "금곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-039",
+      "name" : "호포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-040",
+      "name" : "증산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b2-041",
+      "name" : "부산대양산캠퍼스"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남양산(범어)",
+      "id" : "b2-042",
+      "name" : "남양산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "양산(시청)",
+      "id" : "b2-043",
+      "name" : "양산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-001",
+      "name" : "수영"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "망미(병무청)",
+      "id" : "b3-002",
+      "name" : "망미"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-003",
+      "name" : "배산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-004",
+      "name" : "물만골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-005",
+      "name" : "연산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "거제(법원·검찰청)",
+      "id" : "b3-006",
+      "name" : "거제"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "종합운동장(빅토리움)",
+      "id" : "b3-007",
+      "name" : "종합운동장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-008",
+      "name" : "사직"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-009",
+      "name" : "미남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-010",
+      "name" : "만덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남산정(부산폴리텍대학)",
+      "id" : "b3-011",
+      "name" : "남산정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "숙등(부민병원)",
+      "id" : "b3-012",
+      "name" : "숙등"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-013",
+      "name" : "덕천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-014",
+      "name" : "구포"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-015",
+      "name" : "강서구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-016",
+      "name" : "체육공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b3-017",
+      "name" : "대저"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-001",
+      "name" : "미남"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-002",
+      "name" : "동래"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수안(동래읍성임진왜란역사관)",
+      "id" : "b4-003",
+      "name" : "수안"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-004",
+      "name" : "낙민"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "충렬사(안락)",
+      "id" : "b4-005",
+      "name" : "충렬사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-006",
+      "name" : "명장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-007",
+      "name" : "서동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-008",
+      "name" : "금사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-009",
+      "name" : "반여농산물시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-010",
+      "name" : "석대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "영산대(아랫반송)",
+      "id" : "b4-011",
+      "name" : "영산대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동부산대학(윗반송)",
+      "id" : "b4-012",
+      "name" : "동부산대학"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "b4-013",
+      "name" : "고촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "안평(고촌주택단지)",
+      "id" : "b4-014",
+      "name" : "안평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "사상(서부터미널)",
+      "id" : "bgl-001",
+      "name" : "사상"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "괘법르네시떼(강변공원)",
+      "id" : "bgl-002",
+      "name" : "괘법르네시떼"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "서부산유통지구(금호마을·에어부산)",
+      "id" : "bgl-003",
+      "name" : "서부산유통지구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-004",
+      "name" : "공항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-005",
+      "name" : "덕두"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-006",
+      "name" : "등구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-007",
+      "name" : "대저"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-008",
+      "name" : "평강"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-009",
+      "name" : "대사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-010",
+      "name" : "불암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-011",
+      "name" : "지내"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "김해대학(안동)",
+      "id" : "bgl-012",
+      "name" : "김해대학"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "인제대(활천)",
+      "id" : "bgl-013",
+      "name" : "인제대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-014",
+      "name" : "김해시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "부원(아이스퀘어몰)",
+      "id" : "bgl-015",
+      "name" : "부원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "봉황(김해여객터미널)",
+      "id" : "bgl-016",
+      "name" : "봉황"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수로왕릉(김해보건소)",
+      "id" : "bgl-017",
+      "name" : "수로왕릉"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-018",
+      "name" : "박물관"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "bgl-019",
+      "name" : "연지공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "장신대(화정)",
+      "id" : "bgl-020",
+      "name" : "장신대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "가야대(삼계)",
+      "id" : "bgl-021",
+      "name" : "가야대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-001",
+      "name" : "설화명곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-002",
+      "name" : "화원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대곡(정부대구청사)",
+      "id" : "d1-003",
+      "name" : "대곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-004",
+      "name" : "진천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-005",
+      "name" : "월배"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-006",
+      "name" : "상인"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-007",
+      "name" : "월촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-008",
+      "name" : "송현"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "서부정류장(관문시장)",
+      "id" : "d1-009",
+      "name" : "서부정류장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-010",
+      "name" : "대명"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-011",
+      "name" : "안지랑"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-012",
+      "name" : "현충로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-013",
+      "name" : "영대병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-014",
+      "name" : "교대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "명덕(2·28민주운동기념회관)",
+      "id" : "d1-015",
+      "name" : "명덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-016",
+      "name" : "반월당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-017",
+      "name" : "중앙로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-018",
+      "name" : "대구역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-019",
+      "name" : "칠성시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "신천(경북대입구)",
+      "id" : "d1-020",
+      "name" : "신천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-021",
+      "name" : "동대구역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동구청(큰고개)",
+      "id" : "d1-022",
+      "name" : "동구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "아양교(대구국제공항입구)",
+      "id" : "d1-023",
+      "name" : "아양교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "동촌(동촌유원지)",
+      "id" : "d1-024",
+      "name" : "동촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-025",
+      "name" : "해안"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-026",
+      "name" : "방촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-027",
+      "name" : "용계"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-028",
+      "name" : "율하"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-029",
+      "name" : "신기"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-030",
+      "name" : "반야월"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-031",
+      "name" : "각산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "안심(혁신도시·첨복단지)",
+      "id" : "d1-032",
+      "name" : "안심"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d1-033",
+      "name" : "대구한의대병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "부호(경일대·호산대)",
+      "id" : "d1-034",
+      "name" : "부호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "하양(대구가톨릭대)",
+      "id" : "d1-035",
+      "name" : "하양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-001",
+      "name" : "문양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-002",
+      "name" : "다사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-003",
+      "name" : "대실"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-004",
+      "name" : "강창"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-005",
+      "name" : "계명대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-006",
+      "name" : "성서산업단지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-007",
+      "name" : "이곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "용산(서부법원·검찰청입구)",
+      "id" : "d2-008",
+      "name" : "용산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-009",
+      "name" : "죽전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-010",
+      "name" : "감삼"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-011",
+      "name" : "두류"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-012",
+      "name" : "내당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-013",
+      "name" : "반고개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청라언덕(신남)",
+      "id" : "d2-014",
+      "name" : "청라언덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-015",
+      "name" : "반월당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-016",
+      "name" : "경대병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대구은행(대구교육청)",
+      "id" : "d2-017",
+      "name" : "대구은행"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-018",
+      "name" : "범어"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수성구청(KBS)",
+      "id" : "d2-019",
+      "name" : "수성구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-020",
+      "name" : "만촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "담티(수성대·대륜)",
+      "id" : "d2-021",
+      "name" : "담티"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-022",
+      "name" : "연호"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대공원(삼성라이온즈파크)",
+      "id" : "d2-023",
+      "name" : "대공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-024",
+      "name" : "고산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-025",
+      "name" : "신매"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-026",
+      "name" : "사월"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-027",
+      "name" : "정평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-028",
+      "name" : "임당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d2-029",
+      "name" : "영남대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-001",
+      "name" : "칠곡경대병원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-002",
+      "name" : "학정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "팔거(국립농관원·통계청)",
+      "id" : "d3-003",
+      "name" : "팔거"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-004",
+      "name" : "동천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-005",
+      "name" : "칠곡운암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-006",
+      "name" : "구암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-007",
+      "name" : "태전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-008",
+      "name" : "매천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-009",
+      "name" : "매천시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-010",
+      "name" : "팔달"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-011",
+      "name" : "공단"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-012",
+      "name" : "만평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-013",
+      "name" : "팔달시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-014",
+      "name" : "원대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-015",
+      "name" : "북구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-016",
+      "name" : "달성공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "서문시장(동산병원)",
+      "id" : "d3-017",
+      "name" : "서문시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "청라언덕(신남)",
+      "id" : "d3-018",
+      "name" : "청라언덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "남산(계명네거리)",
+      "id" : "d3-019",
+      "name" : "남산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "명덕(2·28민주운동기념회관)",
+      "id" : "d3-020",
+      "name" : "명덕"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-021",
+      "name" : "건들바위"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-022",
+      "name" : "대봉교"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-023",
+      "name" : "수성시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-024",
+      "name" : "수성구민운동장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-025",
+      "name" : "어린이세상"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-026",
+      "name" : "황금"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "수성못(TBC)",
+      "id" : "d3-027",
+      "name" : "수성못"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-028",
+      "name" : "지산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-029",
+      "name" : "범물"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "d3-030",
+      "name" : "용지"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-001",
+      "name" : "녹동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-002",
+      "name" : "소태"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-003",
+      "name" : "학동·증심사입구"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-004",
+      "name" : "남광주"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "문화전당(구도청)",
+      "id" : "g1-005",
+      "name" : "문화전당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-006",
+      "name" : "금남로4가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-007",
+      "name" : "금남로5가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-008",
+      "name" : "양동시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-009",
+      "name" : "돌고개"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-010",
+      "name" : "농성"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-011",
+      "name" : "화정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-012",
+      "name" : "쌍촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-013",
+      "name" : "운천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-014",
+      "name" : "상무"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "김대중컨벤션센터(마륵)",
+      "id" : "g1-015",
+      "name" : "김대중컨벤션센터"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-016",
+      "name" : "공항"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-017",
+      "name" : "송정공원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-018",
+      "name" : "광주송정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-019",
+      "name" : "도산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "g1-020",
+      "name" : "평동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "판암(대전대)",
+      "id" : "dj1-001",
+      "name" : "판암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-002",
+      "name" : "신흥"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "대동(우송대)",
+      "id" : "dj1-003",
+      "name" : "대동"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-004",
+      "name" : "대전역"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-005",
+      "name" : "중앙로"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-006",
+      "name" : "중구청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-007",
+      "name" : "서대전네거리"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-008",
+      "name" : "오룡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-009",
+      "name" : "용문"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-010",
+      "name" : "탄방"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-011",
+      "name" : "시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-012",
+      "name" : "정부청사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-013",
+      "name" : "갈마"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "월평(한국과학기술원)",
+      "id" : "dj1-014",
+      "name" : "월평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-015",
+      "name" : "갑천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "유성온천(충남대·목원대)",
+      "id" : "dj1-016",
+      "name" : "유성온천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-017",
+      "name" : "구암"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "현충원(한밭대)",
+      "id" : "dj1-018",
+      "name" : "현충원"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "월드컵경기장(노은도매시장)",
+      "id" : "dj1-019",
+      "name" : "월드컵경기장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "dj1-020",
+      "name" : "노은"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "지족(침신대)",
+      "id" : "dj1-021",
+      "name" : "지족"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "반석(칠성대)",
+      "id" : "dj1-022",
+      "name" : "반석"
+    }
+  ]
+}
