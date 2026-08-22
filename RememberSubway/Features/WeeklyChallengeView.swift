@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import UIKit
 
 struct WeeklyChallengeHomeView: View {
     @EnvironmentObject private var catalogStore: TransitCatalogStore
@@ -80,10 +81,14 @@ struct WeeklyChallengeHomeView: View {
 
 struct WeeklyChallengePlayView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var gameCenter: GameCenterService
+    @Query private var settings: [AppSettingsRecord]
     @StateObject private var session: WeeklyChallengeSession
     @State private var answer = ""
     @State private var feedback = ""
+    @State private var feedbackKind = WeeklyFeedbackKind.neutral
+    @State private var feedbackColor = Color.secondary
     @State private var didRecord = false
     @State private var resultStatus = WeeklyResultStatus.saving
     @FocusState private var focused: Bool
@@ -128,6 +133,7 @@ struct WeeklyChallengePlayView: View {
                         line: line
                     )
                     .padding(.top, 34)
+                    .padding(.horizontal, 20)
 
                     VStack(spacing: 20) {
                         Text("이 역의 이름은?")
@@ -139,11 +145,7 @@ struct WeeklyChallengePlayView: View {
                                 .accessibilityLabel("초성 힌트 \(session.hint)")
                         }
                         answerField
-                        Text(feedback)
-                            .font(.callout)
-                            .foregroundStyle(feedback.contains("아니") ? .red : .secondary)
-                            .multilineTextAlignment(.center)
-                            .frame(minHeight: 30)
+                        feedbackView
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 48)
@@ -199,12 +201,49 @@ struct WeeklyChallengePlayView: View {
     }
 
     private func submit() {
+        let submittedQuestion = session.current
+        let submittedLine = submittedQuestion.flatMap { catalog.lineByID[$0.lineID] }
         switch session.submit(answer) {
-        case .correct: answer = ""; feedback = "정답!"
-        case .incorrect: feedback = session.isFinished ? "도전 종료" : "아니에요. 목숨이 하나 줄었어요."
+        case .correct:
+            feedback = "\(submittedQuestion?.target.name ?? "역 이름"), 정답이에요!"
+            feedbackKind = .correct
+            feedbackColor = submittedLine?.color ?? .accentColor
+            answer = ""
+            impact(.success)
+        case .incorrect:
+            feedback = session.isFinished ? "목숨을 모두 사용했어요." : "아니에요. 목숨이 하나 줄었어요."
+            feedbackKind = .incorrect
+            feedbackColor = .red
+            impact(.error)
         case .ignored: break
         }
+        UIAccessibility.post(notification: .announcement, argument: feedback)
         restoreAnswerFocus()
+    }
+
+    private var feedbackView: some View {
+        Group {
+            if feedback.isEmpty {
+                Color.clear
+            } else {
+                Text(feedback)
+                    .font(feedbackKind == .correct ? .largeTitle.bold() : .callout)
+                    .foregroundStyle(feedbackColor)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.72)
+                    .id(feedback)
+                    .transition(reduceMotion ? .opacity : .scale(scale: 0.82).combined(with: .opacity))
+            }
+        }
+        .frame(minHeight: feedbackKind == .correct ? 56 : 30)
+        .animation(reduceMotion ? nil : .spring(duration: 0.34, bounce: 0.28), value: feedback)
+    }
+
+    private func impact(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        guard settings.first?.hapticsEnabled ?? true else { return }
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+        generator.notificationOccurred(type)
     }
 
     private func restoreAnswerFocus() {
@@ -284,6 +323,12 @@ enum WeeklyResultStatus: Equatable {
         case .saveFailed: "기록을 기기에 저장하지 못했어요. 다시 도전해 주세요."
         }
     }
+}
+
+private enum WeeklyFeedbackKind {
+    case neutral
+    case correct
+    case incorrect
 }
 
 private struct WeeklyStationClueView: View {
