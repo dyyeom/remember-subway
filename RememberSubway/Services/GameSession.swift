@@ -90,7 +90,7 @@ enum WeeklyChallengeFactory {
         return String(format: "%04d-W%02d", parts.yearForWeekOfYear ?? 0, parts.weekOfYear ?? 0)
     }
 
-    static func questions(catalog: TransitCatalog, weekID: String, regionID: String) -> [WeeklyQuestion] {
+    static func questions(catalog: TransitCatalog, weekID: String, regionID: String, shuffleSeed: UInt64? = nil) -> [WeeklyQuestion] {
         let stations = catalog.stationByID
         let regionLineIDs = Set(catalog.lines.lazy.filter { $0.regionID == regionID }.map(\.id))
         var questions = catalog.routePatterns.filter { regionLineIDs.contains($0.lineID) }.flatMap { pattern -> [WeeklyQuestion] in
@@ -110,7 +110,8 @@ enum WeeklyChallengeFactory {
         }
         let seedText = "\(catalog.challengePoolVersion):\(weekID):\(regionID)"
         let seed = seedText.utf8.reduce(UInt64(14_695_981_039_346_656_037)) { ($0 ^ UInt64($1)) &* 1_099_511_628_211 }
-        var generator = SeededGenerator(seed: seed)
+        let attemptSeed = shuffleSeed ?? UInt64.random(in: UInt64.min...UInt64.max)
+        var generator = SeededGenerator(seed: seed ^ attemptSeed)
         questions.shuffle(using: &generator)
         return questions
     }
@@ -124,7 +125,7 @@ final class WeeklyChallengeSession: ObservableObject {
     @Published private(set) var hintVisible = false
     @Published private(set) var isFinished = false
 
-    let questions: [WeeklyQuestion]
+    @Published private(set) var questions: [WeeklyQuestion]
     init(questions: [WeeklyQuestion]) { self.questions = questions }
 
     var current: WeeklyQuestion? { questions.isEmpty ? nil : questions[index % questions.count] }
@@ -139,6 +140,10 @@ final class WeeklyChallengeSession: ObservableObject {
             score += hintVisible ? 50 : 100
             index += 1
             hintVisible = false
+            if index >= questions.count {
+                questions.shuffle()
+                index = 0
+            }
             return .correct
         }
         lives -= 1
