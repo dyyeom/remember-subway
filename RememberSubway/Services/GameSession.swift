@@ -70,8 +70,6 @@ struct WeeklyQuestion: Hashable, Sendable {
     let previous: Station
     let target: Station
     let next: Station
-
-    var anchor: Station { previous }
 }
 
 struct SeededGenerator: RandomNumberGenerator {
@@ -115,11 +113,6 @@ enum WeeklyChallengeFactory {
         var generator = SeededGenerator(seed: seed)
         questions.shuffle(using: &generator)
         return questions
-    }
-
-    static func questions(catalog: TransitCatalog, weekID: String) -> [WeeklyQuestion] {
-        let firstRegionID = catalog.regions.min { $0.sortOrder < $1.sortOrder }?.id ?? ""
-        return questions(catalog: catalog, weekID: weekID, regionID: firstRegionID)
     }
 }
 

@@ -116,20 +116,20 @@ struct WeeklyChallengePlayView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
 
-                    Text("전국 주간 도전")
+                    Text("\(region.name) 주간 도전")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                         .padding(.top, 30)
 
-                    StationSignView(
-                        station: question.anchor,
-                        stationCode: currentStationCode,
+                    WeeklyStationClueView(
+                        previous: question.previous,
+                        next: question.next,
                         line: line
                     )
                     .padding(.top, 34)
 
                     VStack(spacing: 20) {
-                        Text("다음 역은?")
+                        Text("가운데 역은?")
                             .font(.largeTitle.bold())
                         if session.hintVisible {
                             Text(session.hint)
@@ -166,16 +166,6 @@ struct WeeklyChallengePlayView: View {
 
     private var currentLine: Line? {
         session.current.flatMap { catalog.lineByID[$0.lineID] }
-    }
-
-    private var currentPattern: RoutePattern? {
-        guard let id = session.current?.routePatternID else { return nil }
-        return catalog.routePatterns.first { $0.id == id }
-    }
-
-    private var currentStationCode: String {
-        guard let question = session.current, let line = currentLine else { return "" }
-        return currentPattern?.stationCode(for: question.anchor.id, fallback: line.shortName) ?? line.shortName
     }
 
     private var answerField: some View {
@@ -239,5 +229,57 @@ struct WeeklyChallengePlayView: View {
             }
             .padding(28).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28)).padding()
         }
+    }
+}
+
+private struct WeeklyStationClueView: View {
+    let previous: Station
+    let next: Station
+    let line: Line
+
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(line.color)
+                .frame(height: 82)
+
+            HStack(spacing: 8) {
+                neighborLabel(title: "이전 역", station: previous, arrow: "chevron.left")
+
+                VStack(spacing: 4) {
+                    Text("현재 역")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    Text("?")
+                        .font(.system(size: 46, weight: .bold, design: .rounded))
+                        .foregroundStyle(line.color)
+                }
+                .frame(width: 112, height: 112)
+                .background(.background, in: Capsule())
+                .overlay {
+                    Capsule().stroke(line.color, lineWidth: 5)
+                }
+
+                neighborLabel(title: "다음 역", station: next, arrow: "chevron.right")
+            }
+            .padding(.horizontal, 12)
+        }
+        .frame(minHeight: 124)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("이전 역 \(previous.name), 다음 역 \(next.name). 두 역 사이의 현재 역을 맞혀 보세요.")
+    }
+
+    private func neighborLabel(title: String, station: Station, arrow: String) -> some View {
+        VStack(spacing: 5) {
+            Label(title, systemImage: arrow)
+                .font(.caption2.weight(.semibold))
+            Text(station.name)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.65)
+        }
+        .foregroundStyle(line.colorForeground)
+        .frame(maxWidth: .infinity, minHeight: 72)
     }
 }
