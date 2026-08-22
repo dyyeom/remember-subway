@@ -40,7 +40,7 @@ struct WeeklyChallengeHomeView: View {
                 GroupBox {
                     LabeledContent("이번 주", value: weekID)
                     LabeledContent("내 최고 점수", value: "\(currentBest)점")
-                    LabeledContent("Game Center", value: gameCenter.isAuthenticated ? "연결됨" : "오프라인")
+                    LabeledContent("Game Center", value: gameCenter.isAuthenticated ? "로그인됨" : "로그인 안 됨")
                 }
                 if let selectedRegion {
                     NavigationLink {
@@ -85,6 +85,7 @@ struct WeeklyChallengePlayView: View {
     @State private var answer = ""
     @State private var feedback = ""
     @State private var didRecord = false
+    @State private var resultStatus = WeeklyResultStatus.saving
     @FocusState private var focused: Bool
     let weekID: String
     let poolVersion: String
@@ -208,11 +209,31 @@ struct WeeklyChallengePlayView: View {
     private func finish() {
         guard !didRecord else { return }
         didRecord = true
-        guard let record = try? ProgressStore.recordWeekly(score: session.score, weekID: weekID, poolVersion: poolVersion, context: modelContext), record.pendingSubmission else { return }
+        let update: ProgressStore.WeeklyRecordUpdate
+        do {
+            update = try ProgressStore.recordWeekly(score: session.score, weekID: weekID, poolVersion: poolVersion, context: modelContext)
+        } catch {
+            resultStatus = .saveFailed
+            return
+        }
+
+        guard update.didImproveBest else {
+            resultStatus = session.score == 0 ? .zeroScore : .bestUnchanged
+            return
+        }
+        guard gameCenter.isAuthenticated else {
+            resultStatus = .waitingForGameCenter
+            return
+        }
+
+        resultStatus = .submitting
         Task {
-            if await gameCenter.submitWeekly(score: record.bestScore) {
-                record.pendingSubmission = false
+            if await gameCenter.submitWeekly(score: update.record.bestScore) {
+                update.record.pendingSubmission = false
                 try? modelContext.save()
+                resultStatus = .submitted
+            } else {
+                resultStatus = .submissionFailed
             }
         }
     }
@@ -224,10 +245,34 @@ struct WeeklyChallengePlayView: View {
                 Image(systemName: "trophy.fill").font(.system(size: 54)).foregroundStyle(.yellow)
                 Text("이번 기록").font(.title.bold())
                 Text("\(session.score)점").font(.largeTitle.bold().monospacedDigit())
-                Text(gameCenter.isAuthenticated ? "최고 기록을 Game Center에 전송했어요." : "기록을 저장했어요. 연결되면 전송할게요.")
+                Text(resultStatus.message)
                     .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
             }
             .padding(28).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28)).padding()
+        }
+    }
+}
+
+enum WeeklyResultStatus: Equatable {
+    case saving
+    case zeroScore
+    case bestUnchanged
+    case waitingForGameCenter
+    case submitting
+    case submitted
+    case submissionFailed
+    case saveFailed
+
+    var message: String {
+        switch self {
+        case .saving: "기록을 저장하는 중이에요."
+        case .zeroScore: "이번 점수는 0점이라 Game Center에는 전송하지 않아요."
+        case .bestUnchanged: "기기에 저장된 기존 최고 기록을 유지했어요."
+        case .waitingForGameCenter: "최고 기록을 기기에 저장했어요. Game Center에 로그인하면 전송할게요."
+        case .submitting: "최고 기록을 Game Center에 전송하는 중이에요."
+        case .submitted: "최고 기록을 Game Center에 전송했어요."
+        case .submissionFailed: "Game Center 전송에 실패했어요. 최고 기록은 기기에 저장되어 있어요."
+        case .saveFailed: "기록을 기기에 저장하지 못했어요. 다시 도전해 주세요."
         }
     }
 }

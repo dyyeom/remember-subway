@@ -3,6 +3,11 @@ import SwiftData
 
 @MainActor
 enum ProgressStore {
+    struct WeeklyRecordUpdate {
+        let record: WeeklyBestRecord
+        let didImproveBest: Bool
+    }
+
     static func recordAttempt(segment: Segment, session: GameSession, context: ModelContext) throws {
         let id = segment.id
         let descriptor = FetchDescriptor<SegmentProgressRecord>(predicate: #Predicate { $0.segmentID == id })
@@ -18,18 +23,19 @@ enum ProgressStore {
         try context.save()
     }
 
-    static func recordWeekly(score: Int, weekID: String, poolVersion: String, context: ModelContext) throws -> WeeklyBestRecord {
+    static func recordWeekly(score: Int, weekID: String, poolVersion: String, context: ModelContext) throws -> WeeklyRecordUpdate {
         let key = "\(poolVersion):\(weekID)"
         let descriptor = FetchDescriptor<WeeklyBestRecord>(predicate: #Predicate { $0.key == key })
         let record = try context.fetch(descriptor).first ?? WeeklyBestRecord(weekID: weekID, poolVersion: poolVersion)
         if record.modelContext == nil { context.insert(record) }
-        if score > record.bestScore {
+        let didImproveBest = score > record.bestScore
+        if didImproveBest {
             record.bestScore = score
             record.pendingSubmission = true
             record.updatedAt = .now
         }
         try context.save()
-        return record
+        return WeeklyRecordUpdate(record: record, didImproveBest: didImproveBest)
     }
 
     static func queueAchievement(id: String, context: ModelContext) throws {
