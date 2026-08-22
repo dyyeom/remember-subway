@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import RememberSubway
 
@@ -111,5 +112,32 @@ struct CatalogTests {
             let line = try #require(catalog.lineByID[lineID])
             #expect(Set(catalog.patterns(for: line).map(\.name)) == expectedNames)
         }
+    }
+
+    @Test func weeklyResultMessagesDistinguishLoginAndSubmissionStates() {
+        #expect(WeeklyResultStatus.zeroScore.message.contains("0점"))
+        #expect(WeeklyResultStatus.zeroScore.message.contains("전송하지 않아요"))
+        #expect(WeeklyResultStatus.waitingForGameCenter.message.contains("Game Center에 로그인하면"))
+        #expect(WeeklyResultStatus.submissionFailed.message.contains("전송에 실패"))
+        #expect(WeeklyResultStatus.submitted.message.contains("전송했어요"))
+    }
+
+    @Test func weeklyZeroScoreDoesNotEnterGameCenterSubmissionQueue() throws {
+        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: WeeklyBestRecord.self, configurations: configuration)
+        let context = container.mainContext
+
+        let zero = try ProgressStore.recordWeekly(score: 0, weekID: "2026-W34", poolVersion: "test", context: context)
+        #expect(!zero.didImproveBest)
+        #expect(zero.record.bestScore == 0)
+        #expect(!zero.record.pendingSubmission)
+
+        let best = try ProgressStore.recordWeekly(score: 100, weekID: "2026-W34", poolVersion: "test", context: context)
+        #expect(best.didImproveBest)
+        #expect(best.record.pendingSubmission)
+
+        let lower = try ProgressStore.recordWeekly(score: 50, weekID: "2026-W34", poolVersion: "test", context: context)
+        #expect(!lower.didImproveBest)
+        #expect(lower.record.bestScore == 100)
     }
 }
