@@ -52,6 +52,10 @@ final class MatchCoordinator: ObservableObject {
     private var heartbeatTask: Task<Void, Never>?
     private var reconnectTasks: [UUID: Task<Void, Never>] = [:]
     private var pendingRoom: DiscoveredRoom?
+    private var lastReceivedSequence: [UUID: UInt64] = [:]
+    private var lastMessageAt: [UUID: Date] = [:]
+    private var participantReconnectTask: Task<Void, Never>?
+    private var wasPlayingBeforeReconnect = false
 
     init(catalog: TransitCatalog, service: NearbyMatchService = NearbyMatchService(), localPlayerID: UUID = UUID()) {
         self.catalog = catalog
@@ -172,7 +176,12 @@ final class MatchCoordinator: ObservableObject {
     }
 
     func applicationMovedToBackground() {
-        guard screenState == .playing || screenState == .countdown(1) else { return }
+        let isActiveMatch: Bool
+        switch screenState {
+        case .playing, .countdown, .roundResult: isActiveMatch = true
+        default: isActiveMatch = false
+        }
+        guard isActiveMatch else { return }
         if isHost {
             broadcast(.matchCancelled("방장이 앱을 떠나 경기가 종료됐어요."))
             cancelMatch(reason: "앱을 떠나 경기가 종료됐어요.")
@@ -192,13 +201,25 @@ final class MatchCoordinator: ObservableObject {
     }
 
     private func connectionReady(_ connectionID: UUID) {
+        lastMessageAt[connectionID] = .now
         guard role == .participant else { return }
         hostConnectionID = connectionID
-        send(.joinRequest(JoinRequest(playerID: localPlayerID, nickname: nickname)), to: connectionID)
+        if wasPlayingBeforeReconnect {
+            send(.reconnectRequest(playerID: localPlayerID, nickname: nickname), to: connectionID)
+        } else {
+            send(.joinRequest(JoinRequest(playerID: localPlayerID, nickname: nickname)), to: connectionID)
+        }
     }
 
     private func receive(_ envelope: MultiplayerEnvelope, from connectionID: UUID) {
-        if matchID == nil, let incomingMatchID = envelope.matchID { matchID = incomingMatchID }
+        if let previous = lastReceivedSequence[connectionID], envelope.sequenceNumber <= previous { return }
+        lastReceivedSequence[connectionID] = envelope.sequenceNumber
+        lastMessageAt[connectionID] = .now
+        if case .matchStart = envelope.message {
+            matchID = envelope.matchID
+        } else if matchID == nil, let incomingMatchID = envelope.matchID {
+            matchID = incomingMatchID
+        }
         guard envelope.protocolVersion == MultiplayerEnvelope.currentProtocolVersion,
               envelope.contentVersion == catalog.contentVersion else {
             if isHost {
@@ -215,7 +236,10 @@ final class MatchCoordinator: ObservableObject {
         case .lobbySnapshot(let snapshot):
             configuration = snapshot.configuration
             lobbyPlayers = snapshot.players
-            screenState = .lobby
+            switch screenState {
+            case .browsing, .joining, .lobby: screenState = .lobby
+            default: break
+            }
         case .playerRemoved(let id):
             if id == localPlayerID { cancelMatch(reason: "방장이 참가를 취소했어요.") }
         case .matchStart(let start): receiveMatchStart(start)
@@ -264,6 +288,7 @@ final class MatchCoordinator: ObservableObject {
         playerIDByConnection[connectionID] = request.playerID
         send(.joinResponse(JoinResponse(accepted: true, reason: nil, player: player)), to: connectionID)
         broadcastLobby()
+        sendCurrentMatchStateIfNeeded(to: connectionID)
     }
 
     private func handleJoinResponse(_ response: JoinResponse) {
@@ -271,7 +296,9 @@ final class MatchCoordinator: ObservableObject {
             screenState = .failed(response.reason ?? "방에 들어가지 못했어요.")
             return
         }
-        screenState = .lobby
+        participantReconnectTask?.cancel()
+        if !wasPlayingBeforeReconnect { screenState = .lobby }
+        wasPlayingBeforeReconnect = false
     }
 
     private func uniqueNickname(_ requested: String, excluding playerID: UUID) -> String {
@@ -316,14 +343,23 @@ final class MatchCoordinator: ObservableObject {
         matchPlayers = start.players
         roundIndex = 0
         rematchRequested = false
-        screenState = .countdown(3)
+        roundTask?.cancel()
+        roundTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            for value in stride(from: 3, through: 1, by: -1) {
+                self.screenState = .countdown(value)
+                try? await Task.sleep(for: .seconds(1))
+                if Task.isCancelled { return }
+            }
+        }
     }
 
     private func receiveRoundStart(_ round: RoundStart) {
         roundIndex = round.roundIndex
         resetRoundState()
-        roundStartedAt = round.startsAt
-        startRoundClock(deadline: round.deadline)
+        roundStartedAt = .now
+        let duration = max(0, round.deadline.timeIntervalSince(round.startsAt))
+        startRoundClock(deadline: Date().addingTimeInterval(duration))
     }
 
     private func startRoundClock(deadline: Date) {
@@ -455,7 +491,7 @@ final class MatchCoordinator: ObservableObject {
 
     private func connectionLost(_ connectionID: UUID) {
         if role == .participant, connectionID == hostConnectionID {
-            screenState = .failed("방장과 연결이 끊겼어요.")
+            beginParticipantReconnect()
             return
         }
         guard isHost, let playerID = playerIDByConnection.removeValue(forKey: connectionID) else { return }
@@ -483,6 +519,8 @@ final class MatchCoordinator: ObservableObject {
         heartbeatTask = Task { @MainActor [weak self] in
             while let self, !Task.isCancelled {
                 self.broadcast(.heartbeat(.now))
+                let expired = self.lastMessageAt.filter { Date().timeIntervalSince($0.value) > 6 }.map(\.key)
+                for connectionID in expired { self.service.disconnect(connectionID: connectionID) }
                 try? await Task.sleep(for: .seconds(2))
             }
         }
@@ -518,6 +556,7 @@ final class MatchCoordinator: ObservableObject {
     private func resetSession() {
         roundTask?.cancel()
         heartbeatTask?.cancel()
+        participantReconnectTask?.cancel()
         for task in reconnectTasks.values { task.cancel() }
         reconnectTasks = [:]
         service.stop()
@@ -532,7 +571,63 @@ final class MatchCoordinator: ObservableObject {
         hostConnectionID = nil
         connectionByPlayerID = [:]
         playerIDByConnection = [:]
+        lastReceivedSequence = [:]
+        lastMessageAt = [:]
+        wasPlayingBeforeReconnect = false
         pendingRoom = nil
         resetRoundState()
+    }
+
+    private func beginParticipantReconnect() {
+        guard let pendingRoom else {
+            screenState = .failed("방장과 연결이 끊겼어요.")
+            return
+        }
+        switch screenState {
+        case .playing, .countdown, .roundResult: wasPlayingBeforeReconnect = true
+        default: wasPlayingBeforeReconnect = false
+        }
+        screenState = .joining
+        participantReconnectTask?.cancel()
+        participantReconnectTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            for delay in [1, 3, 5] {
+                try? await Task.sleep(for: .seconds(delay))
+                if Task.isCancelled { return }
+                self.service.join(room: pendingRoom, roomCode: self.roomCode, contentVersion: self.catalog.contentVersion)
+                try? await Task.sleep(for: .seconds(2))
+                if self.service.state == .connected { return }
+            }
+            self.screenState = .failed("15초 안에 방장과 다시 연결하지 못했어요.")
+        }
+    }
+
+    private func sendCurrentMatchStateIfNeeded(to connectionID: UUID) {
+        guard let configuration, let matchID else { return }
+        switch screenState {
+        case .playing, .roundResult, .countdown:
+            self.matchID = matchID
+            send(.matchStart(MatchStart(
+                configuration: configuration,
+                questions: questions,
+                players: matchPlayers,
+                countdownStartedAt: .now
+            )), to: connectionID)
+            if let question = currentQuestion {
+                let deadline = roundStartedAt.addingTimeInterval(configuration.roundDuration)
+                send(.roundStart(RoundStart(
+                    roundIndex: roundIndex,
+                    question: question,
+                    startsAt: roundStartedAt,
+                    deadline: max(deadline, Date().addingTimeInterval(0.5))
+                )), to: connectionID)
+            }
+            if screenState == .roundResult {
+                send(.roundResult(RoundResult(roundIndex: roundIndex, targetStationName: revealedAnswer, players: matchPlayers)), to: connectionID)
+            }
+        case .matchResult:
+            send(.matchResult(MatchResult(players: matchPlayers)), to: connectionID)
+        default: break
+        }
     }
 }

@@ -81,6 +81,7 @@ struct WeeklyChallengeHomeView: View {
 }
 
 struct WeeklyChallengePlayView: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var gameCenter: GameCenterService
@@ -309,9 +310,23 @@ struct WeeklyChallengePlayView: View {
                 Text("\(session.score)점").font(.largeTitle.bold().monospacedDigit())
                 Text(resultStatus.message)
                     .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
+                Button("다시 도전", systemImage: "arrow.clockwise") { restart() }
+                    .buttonStyle(.borderedProminent)
+                Button("끝내기", systemImage: "checkmark") { dismiss() }
+                    .buttonStyle(.bordered)
             }
             .padding(28).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28)).padding()
         }
+    }
+
+    private func restart() {
+        didRecord = false
+        resultStatus = .saving
+        answer = ""
+        feedback = ""
+        feedbackKind = .neutral
+        session.restart()
+        restoreAnswerFocus()
     }
 }
 

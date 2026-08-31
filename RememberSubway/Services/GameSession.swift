@@ -133,6 +133,15 @@ final class WeeklyChallengeSession: ObservableObject {
 
     func useHint() { guard !isFinished else { return }; hintVisible = true }
 
+    func restart() {
+        lives = 3
+        score = 0
+        index = 0
+        hintVisible = false
+        isFinished = false
+        questions.shuffle()
+    }
+
     @discardableResult
     func submit(_ answer: String) -> GameSession.SubmissionResult {
         guard !isFinished, let current else { return .ignored }
