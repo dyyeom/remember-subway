@@ -23,6 +23,52 @@ struct MultiplayerGameTests {
         #expect(score.first?.total == 0)
     }
 
+    @Test func zeroBaseScoreDoesNotConsumeSpeedBonusPosition() {
+        let zero = UUID()
+        let eligible = UUID()
+        let scores = MultiplayerScoring.scores(for: [
+            MultiplayerRoundSubmission(playerID: zero, elapsed: 1, hintUsed: true, wrongAttempts: 3),
+            MultiplayerRoundSubmission(playerID: eligible, elapsed: 2, hintUsed: false, wrongAttempts: 0)
+        ])
+
+        #expect(scores.first { $0.playerID == zero }?.total == 0)
+        #expect(scores.first { $0.playerID == eligible }?.total == 130)
+    }
+
+    @Test func tenPerfectFirstPlaceAnswersReachMaximumScore() {
+        let playerID = UUID()
+        let total = (0..<10).reduce(into: 0) { score, _ in
+            score += MultiplayerScoring.scores(for: [
+                MultiplayerRoundSubmission(playerID: playerID, elapsed: 1, hintUsed: false, wrongAttempts: 0)
+            ]).first?.total ?? 0
+        }
+        #expect(total == 1_300)
+    }
+
+    @Test func protocolEnvelopeRoundTripsRoundStart() throws {
+        let matchID = UUID()
+        let question = MultiplayerQuestion(
+            id: "route:2", lineID: "line", routePatternID: "route",
+            previousStationID: "a", targetStationID: "b", nextStationID: "c"
+        )
+        let envelope = MultiplayerEnvelope(
+            contentVersion: "2026.09", matchID: matchID, sequenceNumber: 42,
+            message: .roundStart(RoundStart(roundIndex: 2, question: question, startsAt: .now, deadline: .now.addingTimeInterval(10)))
+        )
+
+        let decoded = try JSONDecoder().decode(MultiplayerEnvelope.self, from: JSONEncoder().encode(envelope))
+        #expect(decoded.protocolVersion == MultiplayerEnvelope.currentProtocolVersion)
+        #expect(decoded.contentVersion == "2026.09")
+        #expect(decoded.matchID == matchID)
+        #expect(decoded.sequenceNumber == 42)
+        guard case .roundStart(let round) = decoded.message else {
+            Issue.record("roundStart 메시지가 복원되지 않았습니다.")
+            return
+        }
+        #expect(round.roundIndex == 2)
+        #expect(round.question == question)
+    }
+
     @Test func rankingUsesDeclaredTieBreakersAndAllowsSharedRank() {
         let tiedStats = PlayerMatchState(id: UUID(), nickname: "가", score: 500, correctAnswers: 5, hintsUsed: 1, wrongAnswers: 1)
         let players = [

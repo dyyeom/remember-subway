@@ -87,10 +87,17 @@ enum MultiplayerScoring {
                 return $0.elapsed < $1.elapsed
             }
 
-        return valid.enumerated().map { index, submission in
+        var eligibleFinishIndex = 0
+        return valid.map { submission in
             let startingScore = submission.hintUsed ? 50 : 100
             let base = max(0, startingScore - submission.wrongAttempts * 20)
-            let bonus = base > 0 ? [30, 20, 10].dropFirst(index).first ?? 0 : 0
+            let bonus: Int
+            if base > 0 {
+                bonus = [30, 20, 10].dropFirst(eligibleFinishIndex).first ?? 0
+                eligibleFinishIndex += 1
+            } else {
+                bonus = 0
+            }
             return MultiplayerRoundScore(playerID: submission.playerID, baseScore: base, speedBonus: bonus)
         }
     }
