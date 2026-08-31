@@ -12,6 +12,7 @@
 		17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B9FF296A68A9377ED664BC /* SharedViews.swift */; };
 		21D17EFACF2EE668FF1D10C9 /* NearbyMatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E633D6B46F4D11E932F54C /* NearbyMatchService.swift */; };
 		225E5155A0E6B05175618BF6 /* AnswerMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */; };
+		39A2A9575A5A90D7CD21A4A9 /* MatchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B4DD290903968E58EB5DC5 /* MatchCoordinator.swift */; };
 		3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */; };
 		624029F789DE51844FF070CE /* AnswerMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */; };
 		63CA0511F869335F234498E8 /* MultiplayerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F1D6F356F9F9E13C1492BE /* MultiplayerModels.swift */; };
@@ -55,11 +56,13 @@
 		3674DA586C45F9663BBCE3A0 /* MultiplayerGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerGameTests.swift; sourceTree = "<group>"; };
 		3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RememberSubway.entitlements; sourceTree = "<group>"; };
 		39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTests.swift; sourceTree = "<group>"; };
+		3DD9EE9679024A7F872A5283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RememberSubwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChallengeView.swift; sourceTree = "<group>"; };
 		83CF08DE04AC029D7990909F /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		84B9FF296A68A9377ED664BC /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
 		90179A1FA3D64115BF6F8957 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
+		99B4DD290903968E58EB5DC5 /* MatchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCoordinator.swift; sourceTree = "<group>"; };
 		A2E2AA64023123F2BA091EEB /* GameSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionView.swift; sourceTree = "<group>"; };
 		A82C708D56BD0B51F706E83D /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
 		AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcherTests.swift; sourceTree = "<group>"; };
@@ -96,6 +99,7 @@
 		31EA0E1E7DC70E2D7503E4D5 /* RememberSubway */ = {
 			isa = PBXGroup;
 			children = (
+				3DD9EE9679024A7F872A5283 /* Info.plist */,
 				3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */,
 				492773553C2E5FF934137793 /* App */,
 				E1BA05B9CF0A3CA6651E323D /* Features */,
@@ -150,6 +154,7 @@
 				F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */,
 				347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */,
 				1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */,
+				99B4DD290903968E58EB5DC5 /* MatchCoordinator.swift */,
 				C0E633D6B46F4D11E932F54C /* NearbyMatchService.swift */,
 				A82C708D56BD0B51F706E83D /* ProgressStore.swift */,
 				E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */,
@@ -279,6 +284,7 @@
 				3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */,
 				88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */,
 				8F7C763F3BD384B92F2CA16E /* GameSessionView.swift in Sources */,
+				39A2A9575A5A90D7CD21A4A9 /* MatchCoordinator.swift in Sources */,
 				63CA0511F869335F234498E8 /* MultiplayerModels.swift in Sources */,
 				8B91F55975E4233EA7D1D3C8 /* MultiplayerProtocol.swift in Sources */,
 				21D17EFACF2EE668FF1D10C9 /* NearbyMatchService.swift in Sources */,
@@ -458,14 +464,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "역순서";
-				INFOPLIST_KEY_NSBonjourServices = _rsubway._tcp;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RememberSubway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -502,14 +502,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "역순서";
-				INFOPLIST_KEY_NSBonjourServices = _rsubway._tcp;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RememberSubway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

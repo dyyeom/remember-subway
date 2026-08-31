@@ -27,14 +27,8 @@ targets:
         PRODUCT_NAME: "역순서"
         PRODUCT_MODULE_NAME: RememberSubway
         TARGETED_DEVICE_FAMILY: "1"
-        INFOPLIST_KEY_CFBundleDisplayName: "역순서"
-        INFOPLIST_KEY_NSLocalNetworkUsageDescription: "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다."
-        INFOPLIST_KEY_NSBonjourServices: "_rsubway._tcp"
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
-        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: RememberSubway/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
     entitlements:

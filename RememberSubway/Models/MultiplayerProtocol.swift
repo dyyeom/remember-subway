@@ -32,11 +32,13 @@ enum MultiplayerMessage: Codable, Sendable {
     case matchStart(MatchStart)
     case roundStart(RoundStart)
     case answerSubmission(AnswerSubmission)
+    case hintUsed(UUID)
     case answerResult(AnswerResult)
     case roundResult(RoundResult)
     case matchResult(MatchResult)
     case heartbeat(Date)
     case reconnectRequest(playerID: UUID, nickname: String)
+    case rematchRequest(UUID)
     case matchCancelled(String)
 }
 

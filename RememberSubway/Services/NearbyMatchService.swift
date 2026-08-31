@@ -8,6 +8,7 @@ protocol NearbyMatchServing: AnyObject {
     var discoveredRooms: [DiscoveredRoom] { get }
     var messageHandler: ((UUID, MultiplayerEnvelope) -> Void)? { get set }
     var disconnectHandler: ((UUID) -> Void)? { get set }
+    var connectionReadyHandler: ((UUID) -> Void)? { get set }
 
     func startHosting(roomName: String, roomCode: String, contentVersion: String)
     func startBrowsing()
@@ -35,6 +36,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
     @Published private(set) var discoveredRooms: [DiscoveredRoom] = []
     var messageHandler: ((UUID, MultiplayerEnvelope) -> Void)?
     var disconnectHandler: ((UUID) -> Void)?
+    var connectionReadyHandler: ((UUID) -> Void)?
 
     private var listener: NWListener?
     private var browser: NWBrowser?
@@ -145,6 +147,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
             Task { @MainActor in
                 guard let self else { return }
                 if id == self.pendingJoinConnectionID { self.state = .connected }
+                self.connectionReadyHandler?(id)
             }
         }
         secureConnection.messageHandler = { [weak self, weak secureConnection] envelope in
