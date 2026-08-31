@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C708D56BD0B51F706E83D /* ProgressStore.swift */; };
 		0262D6614B01E4D6CDC5E17A /* ProgressMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */; };
+		104679C274E591FB759E4E14 /* MultiplayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */; };
 		17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B9FF296A68A9377ED664BC /* SharedViews.swift */; };
 		21D17EFACF2EE668FF1D10C9 /* NearbyMatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E633D6B46F4D11E932F54C /* NearbyMatchService.swift */; };
 		225E5155A0E6B05175618BF6 /* AnswerMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */; };
@@ -68,6 +69,7 @@
 		AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcherTests.swift; sourceTree = "<group>"; };
 		C0E633D6B46F4D11E932F54C /* NearbyMatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyMatchService.swift; sourceTree = "<group>"; };
 		E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitModels.swift; sourceTree = "<group>"; };
+		E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerView.swift; sourceTree = "<group>"; };
 		E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitCatalogStore.swift; sourceTree = "<group>"; };
 		E8E6757CD7409BE2D14B126F /* RememberSubway.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RememberSubway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECB6CD7BC4366C400BEC9137 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				A2E2AA64023123F2BA091EEB /* GameSessionView.swift */,
+				E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */,
 				90179A1FA3D64115BF6F8957 /* RegionsView.swift */,
 				83CF08DE04AC029D7990909F /* RootTabView.swift */,
 				84B9FF296A68A9377ED664BC /* SharedViews.swift */,
@@ -287,6 +290,7 @@
 				39A2A9575A5A90D7CD21A4A9 /* MatchCoordinator.swift in Sources */,
 				63CA0511F869335F234498E8 /* MultiplayerModels.swift in Sources */,
 				8B91F55975E4233EA7D1D3C8 /* MultiplayerProtocol.swift in Sources */,
+				104679C274E591FB759E4E14 /* MultiplayerView.swift in Sources */,
 				21D17EFACF2EE668FF1D10C9 /* NearbyMatchService.swift in Sources */,
 				F7D8E992F1333953D2CF4BDA /* PersistenceModels.swift in Sources */,
 				004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */,

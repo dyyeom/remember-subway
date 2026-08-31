@@ -67,6 +67,7 @@ final class MatchCoordinator: ObservableObject {
     }
 
     var localPlayer: PlayerMatchState? { matchPlayers.first { $0.id == localPlayerID } }
+    var currentMatchID: UUID? { matchID }
     var isHost: Bool { role == .host }
     var canStart: Bool { isHost && lobbyPlayers.filter { $0.connectionState == .connected }.count >= 2 }
 
@@ -197,6 +198,7 @@ final class MatchCoordinator: ObservableObject {
     }
 
     private func receive(_ envelope: MultiplayerEnvelope, from connectionID: UUID) {
+        if matchID == nil, let incomingMatchID = envelope.matchID { matchID = incomingMatchID }
         guard envelope.protocolVersion == MultiplayerEnvelope.currentProtocolVersion,
               envelope.contentVersion == catalog.contentVersion else {
             if isHost {
@@ -225,7 +227,8 @@ final class MatchCoordinator: ObservableObject {
             guard isHost, playerIDByConnection[connectionID] == playerID else { return }
             roundHints.insert(playerID)
         case .answerResult(let result):
-            feedback = result.isCorrect ? "정답이에요!" : "아니에요. 다시 입력해 보세요."
+            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name } ?? "역 이름"
+            feedback = result.isCorrect ? "\(targetName), 정답이에요!" : "아니에요. 다시 입력해 보세요."
             localAnswerLocked = result.isLocked
         case .roundResult(let result): receiveRoundResult(result)
         case .matchResult(let result): receiveMatchResult(result)
@@ -378,7 +381,8 @@ final class MatchCoordinator: ObservableObject {
 
     private func respond(_ result: AnswerResult, playerID: UUID, connectionID: UUID?) {
         if playerID == localPlayerID {
-            feedback = result.isCorrect ? "정답이에요!" : "아니에요. 다시 입력해 보세요."
+            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name } ?? "역 이름"
+            feedback = result.isCorrect ? "\(targetName), 정답이에요!" : "아니에요. 다시 입력해 보세요."
             localAnswerLocked = result.isLocked
         } else if let connectionID {
             send(.answerResult(result), to: connectionID)

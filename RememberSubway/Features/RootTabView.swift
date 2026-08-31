@@ -9,6 +9,8 @@ struct RootTabView: View {
     @Query private var pendingAchievements: [PendingAchievementRecord]
     @Query private var weeklyRecords: [WeeklyBestRecord]
     @State private var showSettings = false
+    @State private var showStats = false
+    @State private var showTutorial = false
 
     var body: some View {
         Group {
@@ -16,14 +18,17 @@ struct RootTabView: View {
                 EmptyStateView(title: "노선 데이터를 열 수 없어요", message: error, symbol: "exclamationmark.triangle")
             } else {
                 TabView {
-                    Tab("노선", systemImage: "tram.fill") {
-                        NavigationStack { RegionsView(showSettings: $showSettings) }
+                    Tab("싱글플레이", systemImage: "person.fill") {
+                        NavigationStack {
+                            WeeklyChallengeHomeView(showSettings: $showSettings, showStats: $showStats)
+                        }
                     }
-                    Tab("주간 도전", systemImage: "trophy.fill") {
-                        NavigationStack { WeeklyChallengeHomeView(showSettings: $showSettings) }
-                    }
-                    Tab("기록", systemImage: "chart.bar.fill") {
-                        NavigationStack { StatsView(showSettings: $showSettings) }
+                    Tab("멀티플레이", systemImage: "person.3.fill") {
+                        MultiplayerContainerView(
+                            catalog: catalogStore.catalog,
+                            showSettings: $showSettings,
+                            showStats: $showStats
+                        )
                     }
                 }
             }
@@ -36,6 +41,16 @@ struct RootTabView: View {
             if authenticated { Task { await syncGameCenterQueue() } }
         }
         .sheet(isPresented: $showSettings) { SettingsView() }
+        .sheet(isPresented: $showStats) { NavigationStack { StatsView() } }
+        .fullScreenCover(isPresented: $showTutorial) {
+            TutorialView {
+                let record = settings.first ?? AppSettingsRecord()
+                if record.modelContext == nil { modelContext.insert(record) }
+                record.hasCompletedTutorial = true
+                try? modelContext.save()
+                showTutorial = false
+            }
+        }
     }
 
     private func prepareSettings() {
@@ -47,6 +62,7 @@ struct RootTabView: View {
             modelContext.insert(record)
         }
         try? ProgressStore.removeLegacyProgressIfNeeded(settings: record, context: modelContext)
+        showTutorial = !record.hasCompletedTutorial
     }
 
     private func syncGameCenterQueue() async {
@@ -71,6 +87,18 @@ struct SettingsButton: ToolbarContent {
     }
 }
 
+struct AppToolbar: ToolbarContent {
+    @Binding var showStats: Bool
+    @Binding var showSettings: Bool
+
+    var body: some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            Button("기록", systemImage: "chart.bar.fill") { showStats = true }
+            Button("설정", systemImage: "gearshape") { showSettings = true }
+        }
+    }
+}
+
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var catalogStore: TransitCatalogStore
@@ -89,6 +117,9 @@ struct SettingsView: View {
                 }
                 Section("게임") {
                     Toggle("촉각 피드백", isOn: hapticsBinding)
+                    TextField("멀티플레이 닉네임", text: nicknameBinding)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                 }
                 Section("노선 데이터") {
                     LabeledContent("콘텐츠 버전", value: catalogStore.catalog.contentVersion)
@@ -116,6 +147,18 @@ struct SettingsView: View {
                 let record = settings.first ?? AppSettingsRecord()
                 if record.modelContext == nil { modelContext.insert(record) }
                 record.hapticsEnabled = value
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private var nicknameBinding: Binding<String> {
+        Binding(
+            get: { settings.first?.multiplayerNickname ?? "" },
+            set: { value in
+                let record = settings.first ?? AppSettingsRecord()
+                if record.modelContext == nil { modelContext.insert(record) }
+                record.multiplayerNickname = String(value.prefix(10))
                 try? modelContext.save()
             }
         )

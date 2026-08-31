@@ -7,6 +7,7 @@ struct WeeklyChallengeHomeView: View {
     @EnvironmentObject private var gameCenter: GameCenterService
     @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var bestRecords: [WeeklyBestRecord]
     @Binding var showSettings: Bool
+    @Binding var showStats: Bool
     @State private var selectedRegionID: String?
 
     private var weekID: String { WeeklyChallengeFactory.weekID() }
@@ -59,8 +60,8 @@ struct WeeklyChallengeHomeView: View {
             }
             .padding()
         }
-        .navigationTitle("주간 도전")
-        .toolbar { SettingsButton(isPresented: $showSettings) }
+        .navigationTitle("싱글플레이")
+        .toolbar { AppToolbar(showStats: $showStats, showSettings: $showSettings) }
         .task {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
@@ -128,7 +129,7 @@ struct WeeklyChallengePlayView: View {
                         .foregroundStyle(.secondary)
                         .padding(.top, layout.contextTop)
 
-                    WeeklyStationClueView(
+                    NeighborStationSignView(
                         previous: question.previous,
                         next: question.next,
                         line: line,
@@ -342,57 +343,4 @@ private enum WeeklyFeedbackKind {
     case neutral
     case correct
     case incorrect
-}
-
-private struct WeeklyStationClueView: View {
-    let previous: Station
-    let next: Station
-    let line: Line
-    var compact = false
-
-    var body: some View {
-        ZStack {
-            Capsule()
-                .fill(line.color)
-                .frame(height: compact ? 68 : 82)
-
-            HStack(spacing: 8) {
-                neighborLabel(title: "이전 역", station: previous, arrow: "chevron.left")
-
-                VStack(spacing: 4) {
-                    Text("현재 역")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    Text("?")
-                        .font(.system(size: compact ? 38 : 46, weight: .bold, design: .rounded))
-                        .foregroundStyle(line.color)
-                }
-                .frame(width: compact ? 96 : 112, height: compact ? 96 : 112)
-                .background(.background, in: Capsule())
-                .overlay {
-                    Capsule().stroke(line.color, lineWidth: 5)
-                }
-
-                neighborLabel(title: "다음 역", station: next, arrow: "chevron.right")
-            }
-            .padding(.horizontal, 12)
-        }
-        .frame(minHeight: compact ? 106 : 124)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("이전 역 \(previous.name), 다음 역 \(next.name). 두 역 사이의 현재 역을 맞혀 보세요.")
-    }
-
-    private func neighborLabel(title: String, station: Station, arrow: String) -> some View {
-        VStack(spacing: 5) {
-            Label(title, systemImage: arrow)
-                .font(.caption2.weight(.semibold))
-            Text(station.name)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.65)
-        }
-        .foregroundStyle(line.colorForeground)
-        .frame(maxWidth: .infinity, minHeight: 72)
-    }
 }

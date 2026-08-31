@@ -343,7 +343,7 @@ private enum FeedbackKind {
     case incorrect
 }
 
-private struct CelebrationFireworksView: View {
+struct CelebrationFireworksView: View {
     @State private var exploded = false
     let color: Color
     let reduceMotion: Bool

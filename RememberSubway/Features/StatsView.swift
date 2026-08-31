@@ -2,53 +2,56 @@ import SwiftData
 import SwiftUI
 
 struct StatsView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var catalogStore: TransitCatalogStore
-    @Query private var progress: [SegmentProgressRecord]
     @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var weekly: [WeeklyBestRecord]
-    @Binding var showSettings: Bool
+    @Query private var multiplayerProfiles: [MultiplayerProfileRecord]
+    @Query(sort: \MultiplayerMatchRecord.playedAt, order: .reverse) private var multiplayerHistory: [MultiplayerMatchRecord]
 
     var body: some View {
         List {
-            Section("전체 기록") {
-                LabeledContent("완료한 구간", value: "\(completedSegments)/\(totalSegments)")
-                LabeledContent("획득한 별", value: "\(progress.reduce(0) { $0 + $1.bestStars })개")
-                LabeledContent("총 도전", value: "\(progress.reduce(0) { $0 + $1.attempts })회")
-                LabeledContent("오답", value: "\(progress.reduce(0) { $0 + $1.wrongAnswers })회")
-            }
-            Section("지역별 진행률") {
-                ForEach(catalogStore.catalog.regions.sorted { $0.sortOrder < $1.sortOrder }) { region in
-                    let counts = regionCounts(region)
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack { Text(region.name); Spacer(); Text("\(counts.done)/\(counts.total)").foregroundStyle(.secondary) }
-                        ProgressView(value: counts.total == 0 ? 0 : Double(counts.done) / Double(counts.total))
-                    }
-                    .padding(.vertical, 4)
-                }
+            Section("멀티플레이 전적") {
+                LabeledContent("경기", value: "\(profile?.matches ?? 0)회")
+                LabeledContent("승리", value: "\(profile?.wins ?? 0)회")
+                LabeledContent("3위 이내", value: "\(profile?.podiums ?? 0)회")
+                LabeledContent("정답률", value: correctRate)
+                LabeledContent("최고 점수", value: "\(profile?.bestScore ?? 0)점")
             }
             if !weekly.isEmpty {
-                Section("최근 주간 기록") {
+                Section("최근 싱글플레이") {
                     ForEach(weekly.prefix(5)) { record in
                         LabeledContent(record.weekID, value: "\(record.bestScore)점")
                     }
                 }
             }
+            if !multiplayerHistory.isEmpty {
+                Section("최근 멀티플레이") {
+                    ForEach(multiplayerHistory.prefix(20)) { record in
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack {
+                                Text(catalogStore.catalog.lineByID[record.lineID]?.name ?? "노선").font(.headline)
+                                Spacer()
+                                Text("\(record.rank)위 · \(record.score)점")
+                            }
+                            Text("\(record.playerCount)명 · 정답 \(record.correctAnswers)개")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
         }
         .navigationTitle("기록")
-        .toolbar { SettingsButton(isPresented: $showSettings) }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) { Button("완료") { dismiss() } }
+        }
     }
 
-    private var allSegments: [Segment] {
-        catalogStore.catalog.routePatterns.flatMap { catalogStore.catalog.segments(for: $0) }
-    }
-    private var totalSegments: Int { allSegments.count }
-    private var completedSegments: Int { progress.filter { $0.completions > 0 }.count }
+    private var profile: MultiplayerProfileRecord? { multiplayerProfiles.first }
 
-    private func regionCounts(_ region: Region) -> (done: Int, total: Int) {
-        let lineIDs = Set(catalogStore.catalog.lines(in: region).map(\.id))
-        let patternIDs = Set(catalogStore.catalog.routePatterns.filter { lineIDs.contains($0.lineID) }.map(\.id))
-        let segments = allSegments.filter { patternIDs.contains($0.routePatternID) }
-        let completed = Set(progress.filter { $0.completions > 0 }.map(\.segmentID))
-        return (segments.filter { completed.contains($0.id) }.count, segments.count)
+    private var correctRate: String {
+        guard let profile, profile.totalQuestions > 0 else { return "0%" }
+        let percentage = Double(profile.correctAnswers) / Double(profile.totalQuestions) * 100
+        return "\(Int(percentage.rounded()))%"
     }
 }
-
