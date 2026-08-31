@@ -30,6 +30,7 @@ struct WeeklyChallengeHomeView: View {
                         .font(.headline)
                     Spacer()
                     Picker("도전 지역", selection: $selectedRegionID) {
+                        Text("지역 선택").tag(Optional<String>.none)
                         ForEach(regions) { region in
                             Text(region.name).tag(Optional(region.id))
                         }
