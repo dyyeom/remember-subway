@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C708D56BD0B51F706E83D /* ProgressStore.swift */; };
+		0262D6614B01E4D6CDC5E17A /* ProgressMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */; };
 		17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B9FF296A68A9377ED664BC /* SharedViews.swift */; };
 		225E5155A0E6B05175618BF6 /* AnswerMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */; };
 		3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */; };
@@ -46,6 +47,7 @@
 		1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
 		1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
 		223B67012D64E7A51047F971 /* transit_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transit_data.json; sourceTree = "<group>"; };
+		31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressMigrationTests.swift; sourceTree = "<group>"; };
 		347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterService.swift; sourceTree = "<group>"; };
 		3674DA586C45F9663BBCE3A0 /* MultiplayerGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerGameTests.swift; sourceTree = "<group>"; };
 		3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RememberSubway.entitlements; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */,
 				0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */,
 				3674DA586C45F9663BBCE3A0 /* MultiplayerGameTests.swift */,
+				31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */,
 			);
 			path = RememberSubwayTests;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */,
 				D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */,
 				EF471FF0E34D19F9C4D64796 /* MultiplayerGameTests.swift in Sources */,
+				0262D6614B01E4D6CDC5E17A /* ProgressMigrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

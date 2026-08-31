@@ -11,7 +11,9 @@ struct RememberSubwayApp: App {
             SegmentProgressRecord.self,
             WeeklyBestRecord.self,
             AppSettingsRecord.self,
-            PendingAchievementRecord.self
+            PendingAchievementRecord.self,
+            MultiplayerProfileRecord.self,
+            MultiplayerMatchRecord.self
         ])
         do { return try ModelContainer(for: schema) }
         catch { fatalError("로컬 저장소를 만들 수 없습니다: \(error)") }

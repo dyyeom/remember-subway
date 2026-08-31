@@ -39,11 +39,14 @@ struct RootTabView: View {
     }
 
     private func prepareSettings() {
-        if settings.isEmpty {
-            let record = AppSettingsRecord()
+        let record: AppSettingsRecord
+        if let existing = settings.first {
+            record = existing
+        } else {
+            record = AppSettingsRecord()
             modelContext.insert(record)
-            try? modelContext.save()
         }
+        try? ProgressStore.removeLegacyProgressIfNeeded(settings: record, context: modelContext)
     }
 
     private func syncGameCenterQueue() async {

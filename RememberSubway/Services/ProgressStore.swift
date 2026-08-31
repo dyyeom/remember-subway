@@ -3,6 +3,8 @@ import SwiftData
 
 @MainActor
 enum ProgressStore {
+    private static let retiredAchievementIDs = ["first_segment", "perfect_segment", "first_line", "first_region", "all_regions"]
+
     struct WeeklyRecordUpdate {
         let record: WeeklyBestRecord
         let didImproveBest: Bool
@@ -42,6 +44,56 @@ enum ProgressStore {
         let descriptor = FetchDescriptor<PendingAchievementRecord>(predicate: #Predicate { $0.achievementID == id })
         guard try context.fetch(descriptor).isEmpty else { return }
         context.insert(PendingAchievementRecord(achievementID: id))
+        try context.save()
+    }
+
+    static func removeLegacyProgressIfNeeded(settings: AppSettingsRecord, context: ModelContext) throws {
+        guard !settings.didRemoveLegacyProgress else { return }
+        for record in try context.fetch(FetchDescriptor<SegmentProgressRecord>()) {
+            context.delete(record)
+        }
+        for record in try context.fetch(FetchDescriptor<PendingAchievementRecord>())
+            where retiredAchievementIDs.contains(record.achievementID) {
+            context.delete(record)
+        }
+        settings.didRemoveLegacyProgress = true
+        try context.save()
+    }
+
+    static func recordMultiplayerMatch(
+        regionID: String,
+        lineID: String,
+        player: PlayerMatchState,
+        playerCount: Int,
+        context: ModelContext
+    ) throws {
+        let descriptor = FetchDescriptor<MultiplayerProfileRecord>(predicate: #Predicate { $0.key == "multiplayer-profile" })
+        let profile = try context.fetch(descriptor).first ?? MultiplayerProfileRecord()
+        if profile.modelContext == nil { context.insert(profile) }
+        profile.matches += 1
+        if player.rank == 1 { profile.wins += 1 }
+        if player.rank <= 3 { profile.podiums += 1 }
+        profile.correctAnswers += player.correctAnswers
+        profile.totalQuestions += MultiplayerRoomConfiguration.defaultQuestionCount
+        profile.bestScore = max(profile.bestScore, player.score)
+        profile.updatedAt = .now
+
+        context.insert(MultiplayerMatchRecord(
+            regionID: regionID,
+            lineID: lineID,
+            score: player.score,
+            rank: player.rank,
+            playerCount: playerCount,
+            correctAnswers: player.correctAnswers,
+            hintsUsed: player.hintsUsed,
+            wrongAnswers: player.wrongAnswers
+        ))
+
+        var history = try context.fetch(FetchDescriptor<MultiplayerMatchRecord>(sortBy: [SortDescriptor(\.playedAt, order: .reverse)]))
+        if history.count > 20 {
+            for record in history.dropFirst(20) { context.delete(record) }
+            history.removeLast(history.count - 20)
+        }
         try context.save()
     }
 
