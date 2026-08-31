@@ -9,6 +9,7 @@ protocol NearbyMatchServing: AnyObject {
     var messageHandler: ((UUID, MultiplayerEnvelope) -> Void)? { get set }
     var disconnectHandler: ((UUID) -> Void)? { get set }
     var connectionReadyHandler: ((UUID) -> Void)? { get set }
+    var failureHandler: ((String) -> Void)? { get set }
 
     func startHosting(roomName: String, roomCode: String, contentVersion: String)
     func startBrowsing()
@@ -37,6 +38,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
     var messageHandler: ((UUID, MultiplayerEnvelope) -> Void)?
     var disconnectHandler: ((UUID) -> Void)?
     var connectionReadyHandler: ((UUID) -> Void)?
+    var failureHandler: ((String) -> Void)?
 
     private var listener: NWListener?
     private var browser: NWBrowser?
@@ -65,7 +67,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
             self.listener = listener
             listener.start(queue: Self.queue)
         } catch {
-            state = .failed(error.localizedDescription)
+            fail(error.localizedDescription)
         }
     }
 
@@ -81,7 +83,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
         }
         browser.stateUpdateHandler = { [weak self] newState in
             guard case .failed(let error) = newState else { return }
-            Task { @MainActor in self?.state = .failed(error.localizedDescription) }
+            Task { @MainActor in self?.fail(error.localizedDescription) }
         }
         self.browser = browser
         browser.start(queue: Self.queue)
@@ -89,7 +91,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
 
     func join(room: DiscoveredRoom, roomCode: String, contentVersion: String) {
         guard let endpoint = room.endpoint.base as? NWEndpoint else {
-            state = .failed("선택한 방에 연결할 수 없어요.")
+            fail("선택한 방에 연결할 수 없어요.")
             return
         }
         browser?.cancel()
@@ -161,7 +163,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
                 self.connections.removeValue(forKey: id)
                 self.disconnectHandler?(id)
                 if id == self.pendingJoinConnectionID, let error {
-                    self.state = .failed(error)
+                    self.fail(error)
                 }
             }
         }
@@ -171,9 +173,14 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
     private func handle(listenerState: NWListener.State, code: String) {
         switch listenerState {
         case .ready: state = .hosting(code: code)
-        case .failed(let error): state = .failed(error.localizedDescription)
+        case .failed(let error): fail(error.localizedDescription)
         default: break
         }
+    }
+
+    private func fail(_ message: String) {
+        state = .failed(message)
+        failureHandler?(message)
     }
 
     nonisolated private static func room(from result: NWBrowser.Result) -> DiscoveredRoom? {

@@ -90,12 +90,14 @@ struct MultiplayerContainerView: View {
                     Divider().padding(.leading, 52)
                     selectionRow("지역", systemImage: "map") {
                         Picker("지역", selection: $selectedRegionID) {
+                            Text("지역 선택").tag(Optional<String>.none)
                             ForEach(regions) { Text($0.name).tag(Optional($0.id)) }
                         }.labelsHidden()
                     }
                     Divider().padding(.leading, 52)
                     selectionRow("노선", systemImage: "tram.fill") {
                         Picker("노선", selection: $selectedLineID) {
+                            Text("노선 선택").tag(Optional<String>.none)
                             ForEach(lines) { Text($0.name).tag(Optional($0.id)) }
                         }.labelsHidden()
                     }
@@ -222,8 +224,14 @@ struct MultiplayerContainerView: View {
         } description: {
             Text(message)
         } actions: {
-            Button("멀티플레이 홈으로") { coordinator.leave() }
+            VStack(spacing: 12) {
+                Button("설정 열기") {
+                    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                    UIApplication.shared.open(url)
+                }
                 .buttonStyle(.borderedProminent)
+                Button("멀티플레이 홈으로") { coordinator.leave() }
+            }
         }
     }
 

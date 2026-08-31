@@ -64,6 +64,7 @@ final class MatchCoordinator: ObservableObject {
         service.messageHandler = { [weak self] connectionID, envelope in self?.receive(envelope, from: connectionID) }
         service.disconnectHandler = { [weak self] connectionID in self?.connectionLost(connectionID) }
         service.connectionReadyHandler = { [weak self] connectionID in self?.connectionReady(connectionID) }
+        service.failureHandler = { [weak self] message in self?.networkFailed(message) }
     }
 
     var currentQuestion: MultiplayerQuestion? {
@@ -551,6 +552,16 @@ final class MatchCoordinator: ObservableObject {
     private func cancelMatch(reason: String) {
         roundTask?.cancel()
         screenState = .cancelled(reason)
+    }
+
+    private func networkFailed(_ underlyingMessage: String) {
+        let message: String
+        if role == .participant, screenState == .joining {
+            message = "참가 코드가 맞는지 확인하고 다시 시도해 주세요.\n\(underlyingMessage)"
+        } else {
+            message = "로컬 네트워크 접근을 확인해 주세요.\n\(underlyingMessage)"
+        }
+        screenState = .failed(message)
     }
 
     private func resetSession() {
