@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TutorialView: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var answer = ""
     @State private var hintVisible = false
     @State private var completed = false
@@ -20,7 +21,6 @@ struct TutorialView: View {
                     Text("역순서에 오신 것을 환영해요").font(.title2.bold())
                     Text("두 역 사이에 있는 현재 역을 맞혀 보세요.").foregroundStyle(.secondary)
                     NeighborStationSignView(previous: previous, next: next, line: line)
-                        .padding(.horizontal, 20)
                     Text("이 역의 이름은?").font(.largeTitle.bold())
                     if hintVisible {
                         Text(AnswerMatcher.initialConsonants(of: target.name))
@@ -42,8 +42,8 @@ struct TutorialView: View {
                         .multilineTextAlignment(.center)
                         .frame(minHeight: 44)
                 }
-                .padding(.top, 20)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, AppLayout.pageHorizontal)
+                .padding(.vertical, AppLayout.pageVertical)
             }
             .safeAreaInset(edge: .bottom) {
                 if completed {
@@ -65,9 +65,13 @@ struct TutorialView: View {
             }
             .navigationTitle("빠른 시작")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("닫기", systemImage: "xmark") { dismiss() }
+                }
+            }
             .task { focused = true }
         }
-        .interactiveDismissDisabled()
     }
 
     private func submit() {

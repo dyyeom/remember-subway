@@ -9,6 +9,7 @@ struct MultiplayerContainerView: View {
     @StateObject private var coordinator: MatchCoordinator
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
+    @Binding var showTutorial: Bool
     @State private var nickname = ""
     @State private var selectedRegionID: String?
     @State private var selectedLineID: String?
@@ -17,11 +18,17 @@ struct MultiplayerContainerView: View {
     @State private var recordedMatchIDs = Set<UUID>()
     let catalog: TransitCatalog
 
-    init(catalog: TransitCatalog, showSettings: Binding<Bool>, showStats: Binding<Bool>) {
+    init(
+        catalog: TransitCatalog,
+        showSettings: Binding<Bool>,
+        showStats: Binding<Bool>,
+        showTutorial: Binding<Bool>
+    ) {
         self.catalog = catalog
         _coordinator = StateObject(wrappedValue: MatchCoordinator(catalog: catalog))
         _showSettings = showSettings
         _showStats = showStats
+        _showTutorial = showTutorial
     }
 
     var body: some View {
@@ -29,7 +36,13 @@ struct MultiplayerContainerView: View {
             content
                 .navigationTitle(navigationTitle)
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar { AppToolbar(showStats: $showStats, showSettings: $showSettings) }
+                .toolbar {
+                    AppToolbar(
+                        showStats: $showStats,
+                        showSettings: $showSettings,
+                        showTutorial: $showTutorial
+                    )
+                }
         }
         .task { initialize() }
         .onChange(of: selectedRegionID) { _, _ in selectedLineID = selectedRegion.flatMap { catalog.lines(in: $0).first?.id } }
@@ -139,7 +152,8 @@ struct MultiplayerContainerView: View {
                 }
                 .controlSize(.large)
             }
-            .padding(20)
+            .padding(.horizontal, AppLayout.pageHorizontal)
+            .padding(.vertical, AppLayout.pageVertical)
         }
     }
 
@@ -206,7 +220,8 @@ struct MultiplayerContainerView: View {
 
                 Button("방 나가기", role: .destructive) { coordinator.leave() }
             }
-            .padding(20)
+            .padding(.horizontal, AppLayout.pageHorizontal)
+            .padding(.vertical, AppLayout.pageVertical)
         }
     }
 

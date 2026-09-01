@@ -20,14 +20,19 @@ struct RootTabView: View {
                 TabView {
                     Tab("싱글플레이", systemImage: "person.fill") {
                         NavigationStack {
-                            WeeklyChallengeHomeView(showSettings: $showSettings, showStats: $showStats)
+                            WeeklyChallengeHomeView(
+                                showSettings: $showSettings,
+                                showStats: $showStats,
+                                showTutorial: $showTutorial
+                            )
                         }
                     }
                     Tab("멀티플레이", systemImage: "person.3.fill") {
                         MultiplayerContainerView(
                             catalog: catalogStore.catalog,
                             showSettings: $showSettings,
-                            showStats: $showStats
+                            showStats: $showStats,
+                            showTutorial: $showTutorial
                         )
                     }
                 }
@@ -62,7 +67,6 @@ struct RootTabView: View {
             modelContext.insert(record)
         }
         try? ProgressStore.removeLegacyProgressIfNeeded(settings: record, context: modelContext)
-        showTutorial = !record.hasCompletedTutorial
     }
 
     private func syncGameCenterQueue() async {
@@ -90,8 +94,12 @@ struct SettingsButton: ToolbarContent {
 struct AppToolbar: ToolbarContent {
     @Binding var showStats: Bool
     @Binding var showSettings: Bool
+    @Binding var showTutorial: Bool
 
     var body: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("게임 방법", systemImage: "questionmark.circle") { showTutorial = true }
+        }
         ToolbarItemGroup(placement: .topBarTrailing) {
             Button("기록", systemImage: "chart.bar.fill") { showStats = true }
             Button("설정", systemImage: "gearshape") { showSettings = true }

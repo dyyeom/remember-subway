@@ -1,5 +1,10 @@
 import SwiftUI
 
+enum AppLayout {
+    static let pageHorizontal: CGFloat = 20
+    static let pageVertical: CGFloat = 16
+}
+
 struct GamePlayLayoutMetrics: Equatable {
     let statusTop: CGFloat
     let contextTop: CGFloat
@@ -260,7 +265,7 @@ struct GameGlassActionBar: View {
             }
         }
         .controlSize(.large)
-        .padding(.horizontal, 16)
+        .padding(.horizontal, AppLayout.pageHorizontal)
         .padding(.vertical, 12)
     }
 }

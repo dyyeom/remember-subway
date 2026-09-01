@@ -8,6 +8,7 @@ struct WeeklyChallengeHomeView: View {
     @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var bestRecords: [WeeklyBestRecord]
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
+    @Binding var showTutorial: Bool
     @State private var selectedRegionID: String?
 
     private var weekID: String { WeeklyChallengeFactory.weekID() }
@@ -59,10 +60,17 @@ struct WeeklyChallengeHomeView: View {
                         .buttonStyle(.bordered)
                 }
             }
-            .padding()
+            .padding(.horizontal, AppLayout.pageHorizontal)
+            .padding(.vertical, AppLayout.pageVertical)
         }
         .navigationTitle("싱글플레이")
-        .toolbar { AppToolbar(showStats: $showStats, showSettings: $showSettings) }
+        .toolbar {
+            AppToolbar(
+                showStats: $showStats,
+                showSettings: $showSettings,
+                showTutorial: $showTutorial
+            )
+        }
         .task {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
