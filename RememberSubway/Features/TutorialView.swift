@@ -5,7 +5,7 @@ struct TutorialView: View {
     @State private var answer = ""
     @State private var hintVisible = false
     @State private var completed = false
-    @State private var message = "이전 역과 다음 역 사이의 역 이름을 입력해 보세요."
+    @State private var message = AppLocalization.text("tutorial.instruction")
     @FocusState private var focused: Bool
     let onComplete: () -> Void
 
@@ -18,16 +18,16 @@ struct TutorialView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 22) {
-                    Text("역순서에 오신 것을 환영해요").font(.title2.bold())
-                    Text("두 역 사이에 있는 현재 역을 맞혀 보세요.").foregroundStyle(.secondary)
+                    Text(AppLocalization.text("tutorial.welcome")).font(.title2.bold())
+                    Text(AppLocalization.text("tutorial.description")).foregroundStyle(.secondary)
                     NeighborStationSignView(previous: previous, next: next, line: line)
-                    Text("이 역의 이름은?").font(.largeTitle.bold())
+                    Text(AppLocalization.text("game.stationQuestion")).font(.largeTitle.bold())
                     if hintVisible {
                         Text(AnswerMatcher.initialConsonants(of: target.name))
                             .font(.title2.monospaced().bold())
                             .foregroundStyle(line.color)
                     }
-                    TextField("역 이름 입력", text: $answer)
+                    TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
                         .font(.title3)
                         .padding(.horizontal, 20)
                         .frame(minHeight: 64)
@@ -47,7 +47,7 @@ struct TutorialView: View {
             }
             .safeAreaInset(edge: .bottom) {
                 if completed {
-                    Button("시작하기", systemImage: "arrow.right", action: onComplete)
+                    Button(AppLocalization.text("tutorial.getStarted"), systemImage: "arrow.right", action: onComplete)
                         .buttonStyle(.glassProminent)
                         .tint(line.color)
                         .controlSize(.large)
@@ -55,19 +55,19 @@ struct TutorialView: View {
                 } else {
                     GameGlassActionBar(
                         color: line.color,
-                        hintTitle: "초성 힌트",
+                        hintTitle: AppLocalization.text("game.initialHint"),
                         hintDisabled: hintVisible,
                         confirmDisabled: AnswerMatcher.normalize(answer).isEmpty,
-                        onHint: { hintVisible = true; message = "힌트를 쓰면 싱글 점수는 50점이에요." },
+                        onHint: { hintVisible = true; message = AppLocalization.text("tutorial.hintMessage") },
                         onConfirm: submit
                     )
                 }
             }
-            .navigationTitle("빠른 시작")
+            .navigationTitle(AppLocalization.text("tutorial.quickStart"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("닫기", systemImage: "xmark") { dismiss() }
+                    Button(AppLocalization.text("common.close"), systemImage: "xmark") { dismiss() }
                 }
             }
             .task { focused = true }
@@ -77,10 +77,10 @@ struct TutorialView: View {
     private func submit() {
         if AnswerMatcher.matches(answer, station: target) {
             completed = true
-            message = "시청, 정답이에요! 이제 준비됐어요."
+            message = AppLocalization.format("tutorial.correct.format", target.name)
             focused = false
         } else {
-            message = "아니에요. 다시 생각해 보세요."
+            message = AppLocalization.text("game.incorrectTryAgain")
             focused = true
         }
     }

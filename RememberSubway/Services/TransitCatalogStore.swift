@@ -31,8 +31,8 @@ enum CatalogError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .missingResource: "노선 데이터 파일을 찾을 수 없습니다."
-        case .invalid(let errors): "노선 데이터가 올바르지 않습니다: \(errors.joined(separator: ", "))"
+        case .missingResource: AppLocalization.text("catalog.error.missingResource")
+        case .invalid(let errors): AppLocalization.format("catalog.error.invalid.format", errors.joined(separator: ", "))
         }
     }
 }
@@ -45,31 +45,31 @@ enum CatalogValidator {
             return Set(values.filter { !seen.insert($0).inserted })
         }
 
-        if catalog.schemaVersion != 1 { errors.append("지원하지 않는 schemaVersion") }
-        if !duplicates(catalog.regions.map(\.id)).isEmpty { errors.append("중복 지역 ID") }
-        if !duplicates(catalog.operators.map(\.id)).isEmpty { errors.append("중복 운영기관 ID") }
-        if !duplicates(catalog.stations.map(\.id)).isEmpty { errors.append("중복 역 ID") }
-        if !duplicates(catalog.lines.map(\.id)).isEmpty { errors.append("중복 노선 ID") }
-        if !duplicates(catalog.routePatterns.map(\.id)).isEmpty { errors.append("중복 계통 ID") }
+        if catalog.schemaVersion != 1 { errors.append(AppLocalization.text("catalog.validation.unsupportedSchema")) }
+        if !duplicates(catalog.regions.map(\.id)).isEmpty { errors.append(AppLocalization.text("catalog.validation.duplicateRegionID")) }
+        if !duplicates(catalog.operators.map(\.id)).isEmpty { errors.append(AppLocalization.text("catalog.validation.duplicateOperatorID")) }
+        if !duplicates(catalog.stations.map(\.id)).isEmpty { errors.append(AppLocalization.text("catalog.validation.duplicateStationID")) }
+        if !duplicates(catalog.lines.map(\.id)).isEmpty { errors.append(AppLocalization.text("catalog.validation.duplicateLineID")) }
+        if !duplicates(catalog.routePatterns.map(\.id)).isEmpty { errors.append(AppLocalization.text("catalog.validation.duplicateRoutePatternID")) }
 
         let regionIDs = Set(catalog.regions.map(\.id))
         let operatorIDs = Set(catalog.operators.map(\.id))
         let lineIDs = Set(catalog.lines.map(\.id))
         let stationIDs = Set(catalog.stations.map(\.id))
         for line in catalog.lines {
-            if !regionIDs.contains(line.regionID) { errors.append("\(line.id)의 지역 누락") }
-            if !operatorIDs.contains(line.operatorID) { errors.append("\(line.id)의 운영기관 누락") }
+            if !regionIDs.contains(line.regionID) { errors.append(AppLocalization.format("catalog.validation.missingRegion.format", line.id)) }
+            if !operatorIDs.contains(line.operatorID) { errors.append(AppLocalization.format("catalog.validation.missingOperator.format", line.id)) }
             if !line.colorHex.allSatisfy(\.isHexDigit) || line.colorHex.count != 6 {
-                errors.append("\(line.id)의 노선색 오류")
+                errors.append(AppLocalization.format("catalog.validation.invalidLineColor.format", line.id))
             }
         }
         for pattern in catalog.routePatterns {
-            if !lineIDs.contains(pattern.lineID) { errors.append("\(pattern.id)의 노선 누락") }
-            if pattern.stationIDs.count < 2 { errors.append("\(pattern.id)의 역 부족") }
-            if pattern.stationIDs.contains(where: { !stationIDs.contains($0) }) { errors.append("\(pattern.id)의 역 참조 누락") }
-            if zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains(where: ==) { errors.append("\(pattern.id)의 연속 중복 역") }
+            if !lineIDs.contains(pattern.lineID) { errors.append(AppLocalization.format("catalog.validation.missingLine.format", pattern.id)) }
+            if pattern.stationIDs.count < 2 { errors.append(AppLocalization.format("catalog.validation.insufficientStations.format", pattern.id)) }
+            if pattern.stationIDs.contains(where: { !stationIDs.contains($0) }) { errors.append(AppLocalization.format("catalog.validation.missingStationReference.format", pattern.id)) }
+            if zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains(where: ==) { errors.append(AppLocalization.format("catalog.validation.consecutiveDuplicateStation.format", pattern.id)) }
             if pattern.stationCodes?.keys.contains(where: { !pattern.stationIDs.contains($0) }) == true {
-                errors.append("\(pattern.id)의 역 번호 참조 오류")
+                errors.append(AppLocalization.format("catalog.validation.invalidStationCodeReference.format", pattern.id))
             }
         }
         for line in catalog.lines {
@@ -77,7 +77,7 @@ enum CatalogValidator {
             for pattern in mainPatterns where mainPatterns.contains(where: {
                 $0.id != pattern.id && contains(pattern.stationIDs, asContiguousSubsequenceOf: $0.stationIDs)
             }) {
-                errors.append("\(pattern.id)의 중복 부분 계통")
+                errors.append(AppLocalization.format("catalog.validation.duplicateSubroute.format", pattern.id))
             }
         }
         return errors

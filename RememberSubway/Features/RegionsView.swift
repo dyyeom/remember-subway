@@ -12,17 +12,17 @@ struct RegionsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("어느 노선에\n도전할까요?")
+                    Text(AppLocalization.text("legacy.lines.title"))
                         .font(.largeTitle.bold())
-                    Text("지역과 노선을 고르면 이어서 학습할 구간을 찾아드려요.")
+                    Text(AppLocalization.text("legacy.lines.description"))
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }
 
                 VStack(spacing: 0) {
-                    selectionRow(title: "지역", systemImage: "map") {
-                        Picker("지역", selection: $selectedRegionID) {
-                            Text("지역 선택").tag(Optional<String>.none)
+                    selectionRow(title: AppLocalization.text("common.region"), systemImage: "map") {
+                        Picker(AppLocalization.text("common.region"), selection: $selectedRegionID) {
+                            Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
                             ForEach(regions) { region in
                                 Text(region.name).tag(Optional(region.id))
                             }
@@ -32,9 +32,9 @@ struct RegionsView: View {
 
                     Divider().padding(.leading, 52)
 
-                    selectionRow(title: "노선", systemImage: "tram.fill") {
-                        Picker("노선", selection: $selectedLineID) {
-                            Text("노선 선택").tag(Optional<String>.none)
+                    selectionRow(title: AppLocalization.text("common.line"), systemImage: "tram.fill") {
+                        Picker(AppLocalization.text("common.line"), selection: $selectedLineID) {
+                            Text(AppLocalization.text("common.selectLine")).tag(Optional<String>.none)
                             ForEach(linesForSelectedRegion) { line in
                                 Text(line.name).tag(Optional(line.id))
                             }
@@ -49,13 +49,17 @@ struct RegionsView: View {
                     selectedLineCard(line)
                     startActions(line)
                 } else {
-                    ContentUnavailableView("노선이 없어요", systemImage: "tram", description: Text("다른 지역을 선택해 주세요."))
+                    ContentUnavailableView(
+                        AppLocalization.text("legacy.lines.empty.title"),
+                        systemImage: "tram",
+                        description: Text(AppLocalization.text("legacy.lines.empty.message"))
+                    )
                 }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
         }
-        .navigationTitle("노선")
+        .navigationTitle(AppLocalization.text("common.line"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: Line.self) { line in LineDetailView(line: line) }
         .toolbar { SettingsButton(isPresented: $showSettings) }
@@ -127,7 +131,7 @@ struct RegionsView: View {
             if let segment = nextSegment(for: line) {
                 Divider()
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("다음 도전 · \(segment.index + 1)구간")
+                    Text(AppLocalization.format("legacy.nextChallenge.format", segment.index + 1))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(line.color)
                     Text(stationRange(segment))
@@ -152,7 +156,7 @@ struct RegionsView: View {
                 NavigationLink {
                     GameSessionView(segment: segment, line: line, catalog: catalogStore.catalog)
                 } label: {
-                    Label("게임 시작", systemImage: "play.fill")
+                    Label(AppLocalization.text("common.startGame"), systemImage: "play.fill")
                         .frame(maxWidth: .infinity, minHeight: 52)
                 }
                 .buttonStyle(.glassProminent)
@@ -161,7 +165,7 @@ struct RegionsView: View {
             }
 
             NavigationLink(value: line) {
-                Label("구간 둘러보기", systemImage: "list.bullet")
+                Label(AppLocalization.text("legacy.browseSegments"), systemImage: "list.bullet")
                     .frame(minHeight: 44)
             }
             .buttonStyle(.plain)
@@ -195,7 +199,11 @@ struct RegionsView: View {
     private func lineProgress(_ line: Line) -> String {
         let segments = catalogStore.catalog.patterns(for: line).flatMap { catalogStore.catalog.segments(for: $0) }
         let completed = Set(progress.filter { $0.completions > 0 }.map(\.segmentID))
-        return "\(segments.filter { completed.contains($0.id) }.count)/\(segments.count)구간 완료"
+        return AppLocalization.format(
+            "legacy.segmentsCompleted.format",
+            segments.filter { completed.contains($0.id) }.count,
+            segments.count
+        )
     }
 }
 
@@ -251,7 +259,7 @@ private struct SegmentRow: View {
                 .frame(width: 30)
                 .foregroundStyle(isLocked ? Color.secondary : line.color)
             VStack(alignment: .leading) {
-                Text("\(segment.index + 1)구간")
+                Text(AppLocalization.format("legacy.segmentNumber.format", segment.index + 1))
                     .font(.headline)
                 Text(stationRange)
                     .font(.caption)

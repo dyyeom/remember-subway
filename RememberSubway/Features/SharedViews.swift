@@ -74,7 +74,7 @@ struct LineBadge: View {
             .frame(minWidth: 44, minHeight: 44)
             .padding(.horizontal, 4)
             .background(Color(hex: line.colorHex), in: Circle())
-            .accessibilityLabel("\(line.name) 노선")
+            .accessibilityLabel(AppLocalization.format("accessibility.line.format", line.name))
     }
 }
 
@@ -89,7 +89,7 @@ struct LivesView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("남은 목숨 \(lives)개")
+        .accessibilityLabel(AppLocalization.format("accessibility.lives.format", lives))
     }
 }
 
@@ -194,7 +194,11 @@ struct StationSignView: View {
             .padding(.horizontal, 20)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("현재 역, \(station.fullName ?? station.name), 역 번호 \(stationCode)")
+        .accessibilityLabel(AppLocalization.format(
+            "accessibility.currentStation.format",
+            station.fullName ?? station.name,
+            stationCode
+        ))
     }
 }
 
@@ -208,9 +212,9 @@ struct NeighborStationSignView: View {
         ZStack {
             Capsule().fill(line.color).frame(height: compact ? 68 : 82)
             HStack(spacing: 8) {
-                neighborLabel(title: "이전 역", station: previous, arrow: "chevron.left")
+                neighborLabel(title: AppLocalization.text("station.previous"), station: previous, arrow: "chevron.left")
                 VStack(spacing: 4) {
-                    Text("현재 역").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                    Text(AppLocalization.text("station.current")).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
                     Text("?")
                         .font(.system(size: compact ? 38 : 46, weight: .bold, design: .rounded))
                         .foregroundStyle(line.color)
@@ -218,13 +222,13 @@ struct NeighborStationSignView: View {
                 .frame(width: compact ? 96 : 112, height: compact ? 96 : 112)
                 .background(.background, in: Capsule())
                 .overlay { Capsule().stroke(line.color, lineWidth: 5) }
-                neighborLabel(title: "다음 역", station: next, arrow: "chevron.right")
+                neighborLabel(title: AppLocalization.text("station.next"), station: next, arrow: "chevron.right")
             }
             .padding(.horizontal, 12)
         }
         .frame(minHeight: compact ? 106 : 124)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("이전 역 \(previous.name), 다음 역 \(next.name). 이 역의 이름을 맞혀 보세요.")
+        .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous.name, next.name))
     }
 
     private func neighborLabel(title: String, station: Station, arrow: String) -> some View {
@@ -257,7 +261,7 @@ struct GameGlassActionBar: View {
                     .disabled(hintDisabled)
                     .frame(maxWidth: .infinity, minHeight: 52)
 
-                Button("정답 확인", systemImage: "checkmark.circle", action: onConfirm)
+                Button(AppLocalization.text("game.checkAnswer"), systemImage: "checkmark.circle", action: onConfirm)
                     .buttonStyle(.glassProminent)
                     .tint(color)
                     .disabled(confirmDisabled)
@@ -280,7 +284,7 @@ struct StarsView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("별 \(stars)개")
+        .accessibilityLabel(AppLocalization.format("accessibility.stars.format", stars))
     }
 }
 

@@ -10,30 +10,30 @@ struct StatsView: View {
 
     var body: some View {
         List {
-            Section("멀티플레이 전적") {
-                LabeledContent("경기", value: "\(profile?.matches ?? 0)회")
-                LabeledContent("승리", value: "\(profile?.wins ?? 0)회")
-                LabeledContent("3위 이내", value: "\(profile?.podiums ?? 0)회")
-                LabeledContent("정답률", value: correctRate)
-                LabeledContent("최고 점수", value: "\(profile?.bestScore ?? 0)점")
+            Section(AppLocalization.text("stats.multiplayer.section")) {
+                LabeledContent(AppLocalization.text("stats.matches"), value: AppLocalization.format("count.times.format", profile?.matches ?? 0))
+                LabeledContent(AppLocalization.text("stats.wins"), value: AppLocalization.format("count.times.format", profile?.wins ?? 0))
+                LabeledContent(AppLocalization.text("stats.podiums"), value: AppLocalization.format("count.times.format", profile?.podiums ?? 0))
+                LabeledContent(AppLocalization.text("stats.accuracy"), value: correctRate)
+                LabeledContent(AppLocalization.text("stats.bestScore"), value: AppLocalization.format("score.points.format", profile?.bestScore ?? 0))
             }
             if !weekly.isEmpty {
-                Section("최근 싱글플레이") {
+                Section(AppLocalization.text("stats.recentSingle.section")) {
                     ForEach(weekly.prefix(10)) { record in
-                        LabeledContent("\(weeklyScopeName(record)) · \(record.weekID)", value: "\(record.bestScore)점")
+                        LabeledContent("\(weeklyScopeName(record)) · \(record.weekID)", value: AppLocalization.format("score.points.format", record.bestScore))
                     }
                 }
             }
             if !multiplayerHistory.isEmpty {
-                Section("최근 멀티플레이") {
+                Section(AppLocalization.text("stats.recentMultiplayer.section")) {
                     ForEach(multiplayerHistory.prefix(20)) { record in
                         VStack(alignment: .leading, spacing: 5) {
                             HStack {
-                                Text(catalogStore.catalog.lineByID[record.lineID]?.name ?? "노선").font(.headline)
+                                Text(catalogStore.catalog.lineByID[record.lineID]?.name ?? AppLocalization.text("common.line")).font(.headline)
                                 Spacer()
-                                Text("\(record.rank)위 · \(record.score)점")
+                                Text(AppLocalization.format("stats.rankAndScore.format", record.rank, record.score))
                             }
-                            Text("\(record.playerCount)명 · 정답 \(record.correctAnswers)개")
+                            Text(AppLocalization.format("stats.playersAndCorrect.format", record.playerCount, record.correctAnswers))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -41,9 +41,9 @@ struct StatsView: View {
                 }
             }
         }
-        .navigationTitle("기록")
+        .navigationTitle(AppLocalization.text("common.records"))
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) { Button("완료") { dismiss() } }
+            ToolbarItem(placement: .confirmationAction) { Button(AppLocalization.text("common.done")) { dismiss() } }
         }
     }
 
@@ -52,14 +52,14 @@ struct StatsView: View {
     private func weeklyScopeName(_ record: WeeklyBestRecord) -> String {
         if record.scopeID.hasPrefix("line:") {
             let lineID = String(record.scopeID.dropFirst("line:".count))
-            return catalogStore.catalog.lineByID[lineID]?.name ?? "노선"
+            return catalogStore.catalog.lineByID[lineID]?.name ?? AppLocalization.text("common.line")
         }
         if record.scopeID.hasPrefix("region:") {
             let regionID = String(record.scopeID.dropFirst("region:".count))
-            let name = catalogStore.catalog.regions.first { $0.id == regionID }?.name ?? "지역"
-            return "\(name) 전체"
+            let name = catalogStore.catalog.regions.first { $0.id == regionID }?.name ?? AppLocalization.text("common.region")
+            return AppLocalization.format("single.regionAll.format", name)
         }
-        return "이전 기록"
+        return AppLocalization.text("stats.legacyRecord")
     }
 
     private var correctRate: String {

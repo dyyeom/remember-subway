@@ -44,7 +44,7 @@ struct GameSessionView: View {
                 .padding(.top, layout.signTop)
 
                 VStack(spacing: layout.promptSpacing) {
-                    Text("다음 역은?")
+                    Text(AppLocalization.text("legacy.nextStationQuestion"))
                         .font(.largeTitle.bold())
                         .multilineTextAlignment(.center)
 
@@ -52,7 +52,7 @@ struct GameSessionView: View {
                         Text(session.hint ?? "")
                             .font(.title2.monospaced().bold())
                             .foregroundStyle(line.color)
-                            .accessibilityLabel("초성 힌트 \(session.hint ?? "")")
+                            .accessibilityLabel(AppLocalization.format("accessibility.initialHint.format", session.hint ?? ""))
                     }
 
                     answerField
@@ -67,7 +67,7 @@ struct GameSessionView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .navigationTitle("\(session.segment.index + 1)구간")
+        .navigationTitle(AppLocalization.format("legacy.segmentNumber.format", session.segment.index + 1))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isCompleted)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
@@ -103,9 +103,11 @@ struct GameSessionView: View {
         guard let pattern = routePattern,
               let terminalID = session.isReversed ? pattern.stationIDs.first : pattern.stationIDs.last,
               let terminal = catalog.stationByID[terminalID] else {
-            return session.isReversed ? "역방향" : "정방향"
+            return session.isReversed
+                ? AppLocalization.text("legacy.direction.reverse")
+                : AppLocalization.text("legacy.direction.forward")
         }
-        return "\(terminal.name) 방면"
+        return AppLocalization.format("legacy.towardStation.format", terminal.name)
     }
 
     private var statusRow: some View {
@@ -115,18 +117,22 @@ struct GameSessionView: View {
                 Spacer()
                 Text("\(session.currentIndex - 1) / \(max(session.stations.count - 1, 1))")
                     .font(.headline.monospacedDigit())
-                    .accessibilityLabel("진행 \(session.currentIndex - 1), 전체 \(max(session.stations.count - 1, 1))")
+                    .accessibilityLabel(AppLocalization.format(
+                        "accessibility.progress.format",
+                        session.currentIndex - 1,
+                        max(session.stations.count - 1, 1)
+                    ))
                 Spacer()
                 LivesView(lives: session.lives)
             }
             ProgressView(value: session.progress)
                 .tint(line.color)
-                .accessibilityLabel("구간 진행률")
+                .accessibilityLabel(AppLocalization.text("accessibility.segmentProgress"))
         }
     }
 
     private var answerField: some View {
-        TextField("역 이름 입력", text: $answer)
+        TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
             .font(.title3)
             .padding(.horizontal, 20)
             .frame(minHeight: 64)
@@ -140,18 +146,18 @@ struct GameSessionView: View {
             .submitLabel(.next)
             .focused($answerFocused)
             .onSubmit(submit)
-            .accessibilityLabel("역 이름 입력")
+            .accessibilityLabel(AppLocalization.text("game.answer.placeholder"))
     }
 
     private var actionBar: some View {
         GameGlassActionBar(
             color: line.color,
-            hintTitle: "초성 힌트",
+            hintTitle: AppLocalization.text("game.initialHint"),
             hintDisabled: session.hintUsedForCurrentStation,
             confirmDisabled: AnswerMatcher.normalize(answer).isEmpty,
             onHint: {
                 session.useHint()
-                feedback = "초성 힌트를 사용했어요."
+                feedback = AppLocalization.text("game.hintUsed")
                 feedbackKind = .neutral
                 restoreAnswerFocus()
             },
@@ -163,12 +169,17 @@ struct GameSessionView: View {
         let submittedStationName = session.target?.name
         switch session.submit(answer) {
         case .correct:
-            feedback = "\(submittedStationName ?? "역 이름"), 정답이에요!"
+            feedback = AppLocalization.format(
+                "game.correct.format",
+                submittedStationName ?? AppLocalization.text("station.nameFallback")
+            )
             feedbackKind = .correct
             answer = ""
             impact(.success)
         case .incorrect:
-            feedback = session.lives > 0 ? "아니에요. 다시 생각해 보세요." : "목숨을 모두 사용했어요."
+            feedback = session.lives > 0
+                ? AppLocalization.text("game.incorrectThinkAgain")
+                : AppLocalization.text("game.noLives")
             feedbackKind = .incorrect
             impact(.error)
         case .ignored: break
@@ -219,7 +230,11 @@ struct GameSessionView: View {
         if case .completed(let stars) = outcome {
             UIAccessibility.post(
                 notification: .announcement,
-                argument: "축하해요. \(line.name) \(session.segment.index + 1)구간의 모든 역을 맞혔어요."
+                argument: AppLocalization.format(
+                    "legacy.completionAnnouncement.format",
+                    line.name,
+                    session.segment.index + 1
+                )
             )
             let achievementIDs = (try? ProgressStore.earnedAchievementIDs(after: session.segment, stars: stars, catalog: catalog, context: modelContext)) ?? []
             for id in achievementIDs { try? ProgressStore.queueAchievement(id: id, context: modelContext) }
@@ -252,13 +267,13 @@ struct GameSessionView: View {
                     Image(systemName: "heart.slash.fill")
                         .font(.system(size: 56))
                         .foregroundStyle(.red)
-                    Text("다시 도전해 볼까요?")
+                    Text(AppLocalization.text("legacy.failure.tryAgain"))
                         .font(.title2.bold())
                     if let target = session.currentTarget {
-                        Text("이번 정답: \(target.name)")
+                        Text(AppLocalization.format("legacy.failure.answer.format", target.name))
                             .foregroundStyle(.secondary)
                     }
-                    Button("즉시 재도전") {
+                    Button(AppLocalization.text("legacy.retryNow")) {
                         didRecord = false
                         answer = ""
                         feedback = ""
@@ -298,11 +313,11 @@ struct GameSessionView: View {
                     .foregroundStyle(line.color)
                     .accessibilityHidden(true)
 
-                Text("축하해요!")
+                Text(AppLocalization.text("legacy.completion.congratulations"))
                     .font(.largeTitle.bold())
                     .padding(.top, 24)
 
-                Text("\(line.name) \(session.segment.index + 1)구간의\n모든 역을 맞혔어요.")
+                Text(AppLocalization.format("legacy.completion.message.format", line.name, session.segment.index + 1))
                     .font(.title3)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -311,7 +326,10 @@ struct GameSessionView: View {
                 VStack(spacing: 16) {
                     StarsView(stars: stars)
                     Divider()
-                    LabeledContent("오답", value: "\(session.wrongAnswers)회")
+                    LabeledContent(
+                        AppLocalization.text("game.wrongAnswers"),
+                        value: AppLocalization.format("count.times.format", session.wrongAnswers)
+                    )
                 }
                 .padding(22)
                 .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
@@ -322,13 +340,13 @@ struct GameSessionView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Label("끝내기", systemImage: "checkmark")
+                    Label(AppLocalization.text("common.finish"), systemImage: "checkmark")
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: 54)
                 }
                 .buttonStyle(.glassProminent)
                 .tint(line.color)
-                .accessibilityHint("완료 화면을 닫고 노선 화면으로 이동합니다")
+                .accessibilityHint(AppLocalization.text("legacy.completion.finishHint"))
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 20)

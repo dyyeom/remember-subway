@@ -16,7 +16,7 @@ struct RememberSubwayApp: App {
             MultiplayerMatchRecord.self
         ])
         do { return try ModelContainer(for: schema) }
-        catch { fatalError("로컬 저장소를 만들 수 없습니다: \(error)") }
+        catch { fatalError(AppLocalization.format("storage.error.create.format", String(describing: error))) }
     }()
 
     var body: some Scene {

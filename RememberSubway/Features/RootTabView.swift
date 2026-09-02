@@ -15,10 +15,10 @@ struct RootTabView: View {
     var body: some View {
         Group {
             if let error = catalogStore.loadingError {
-                EmptyStateView(title: "노선 데이터를 열 수 없어요", message: error, symbol: "exclamationmark.triangle")
+                EmptyStateView(title: AppLocalization.text("catalog.error.open.title"), message: error, symbol: "exclamationmark.triangle")
             } else {
                 TabView {
-                    Tab("싱글플레이", systemImage: "person.fill") {
+                    Tab(AppLocalization.text("tab.singlePlayer"), systemImage: "person.fill") {
                         NavigationStack {
                             WeeklyChallengeHomeView(
                                 showSettings: $showSettings,
@@ -27,7 +27,7 @@ struct RootTabView: View {
                             )
                         }
                     }
-                    Tab("멀티플레이", systemImage: "person.3.fill") {
+                    Tab(AppLocalization.text("tab.multiplayer"), systemImage: "person.3.fill") {
                         MultiplayerContainerView(
                             catalog: catalogStore.catalog,
                             showSettings: $showSettings,
@@ -88,7 +88,7 @@ struct SettingsButton: ToolbarContent {
     @Binding var isPresented: Bool
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button("설정", systemImage: "gearshape") { isPresented = true }
+            Button(AppLocalization.text("common.settings"), systemImage: "gearshape") { isPresented = true }
         }
     }
 }
@@ -100,11 +100,11 @@ struct AppToolbar: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
-            Button("게임 방법", systemImage: "questionmark.circle") { showTutorial = true }
+            Button(AppLocalization.text("common.howToPlay"), systemImage: "questionmark.circle") { showTutorial = true }
         }
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button("기록", systemImage: "chart.bar.fill") { showStats = true }
-            Button("설정", systemImage: "gearshape") { showSettings = true }
+            Button(AppLocalization.text("common.records"), systemImage: "chart.bar.fill") { showStats = true }
+            Button(AppLocalization.text("common.settings"), systemImage: "gearshape") { showSettings = true }
         }
     }
 }
@@ -119,33 +119,43 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Game Center") {
-                    LabeledContent("상태", value: gameCenter.isAuthenticated ? "로그인됨" : "로그인 안 됨")
-                    Button(gameCenter.isAuthenticated ? "대시보드 열기" : "로그인하기") {
+                Section(AppLocalization.text("settings.gameCenter.section")) {
+                    LabeledContent(
+                        AppLocalization.text("common.status"),
+                        value: gameCenter.isAuthenticated
+                            ? AppLocalization.text("gameCenter.signedIn")
+                            : AppLocalization.text("gameCenter.signedOut")
+                    )
+                    Button(gameCenter.isAuthenticated
+                        ? AppLocalization.text("gameCenter.openDashboard")
+                        : AppLocalization.text("gameCenter.signIn")) {
                         gameCenter.isAuthenticated ? gameCenter.showDashboard() : gameCenter.authenticate()
                     }
                 }
-                Section("게임") {
-                    Toggle("촉각 피드백", isOn: hapticsBinding)
-                    TextField("멀티플레이 닉네임", text: nicknameBinding)
+                Section(AppLocalization.text("settings.game.section")) {
+                    Toggle(AppLocalization.text("settings.haptics"), isOn: hapticsBinding)
+                    TextField(AppLocalization.text("settings.multiplayerNickname"), text: nicknameBinding)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                 }
-                Section("노선 데이터") {
-                    LabeledContent("콘텐츠 버전", value: catalogStore.catalog.contentVersion)
-                    LabeledContent("기준일", value: catalogStore.catalog.dataAsOf)
+                Section(AppLocalization.text("settings.transitData.section")) {
+                    LabeledContent(AppLocalization.text("settings.contentVersion"), value: catalogStore.catalog.contentVersion)
+                    LabeledContent(AppLocalization.text("settings.dataAsOf"), value: catalogStore.catalog.dataAsOf)
                     ForEach(catalogStore.catalog.sources, id: \.self) { source in
                         Link(source.title, destination: source.url)
                     }
                 }
-                Section("앱 정보") {
-                    LabeledContent("개인정보", value: "별도 수집 없음")
-                    Text("역순서 · 무료 · 광고 없음")
+                Section(AppLocalization.text("settings.appInfo.section")) {
+                    LabeledContent(
+                        AppLocalization.text("settings.privacy"),
+                        value: AppLocalization.text("settings.privacy.none")
+                    )
+                    Text(AppLocalization.text("settings.appSummary"))
                 }
             }
-            .navigationTitle("설정")
+            .navigationTitle(AppLocalization.text("common.settings"))
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) { Button("완료") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) { Button(AppLocalization.text("common.done")) { dismiss() } }
             }
         }
     }
