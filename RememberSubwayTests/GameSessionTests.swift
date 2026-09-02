@@ -67,6 +67,39 @@ struct GameSessionTests {
         #expect(session.score == 255)
     }
 
+    @Test func weeklyTimeScoreIsFullForFirstFiveSecondsThenDropsLinearly() {
+        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 15) == 500)
+        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 10) == 500)
+        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 9) == 450)
+        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 5) == 250)
+        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 0) == 0)
+    }
+
+    @Test func weeklyTimeScoreAppliesHintReductionBeforeTimeReduction() {
+        let question = WeeklyQuestion(
+            lineID: "line", routePatternID: "route",
+            previous: stations[0], target: stations[1], next: stations[2]
+        )
+        let session = WeeklyChallengeSession(questions: [question], pointsPerCorrectAnswer: 510)
+
+        session.useHint()
+        #expect(session.submit("나역", remainingTime: 8) == .correct)
+        #expect(session.score == 204)
+    }
+
+    @Test func weeklyTimeoutLosesLifeAndRevealsAnswer() {
+        let question = WeeklyQuestion(
+            lineID: "line", routePatternID: "route",
+            previous: stations[0], target: stations[1], next: stations[2]
+        )
+        let session = WeeklyChallengeSession(questions: [question])
+
+        #expect(session.expireCurrentQuestion() == .incorrect)
+        #expect(session.lives == 2)
+        #expect(session.isRevealingIncorrectAnswer)
+        #expect(session.current?.target.name == "나역")
+    }
+
     @Test func incorrectAnswerWaitsForRevealThenAdvances() {
         let questions = [
             WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),

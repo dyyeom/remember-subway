@@ -133,6 +133,9 @@ enum WeeklyChallengeFactory {
 
 @MainActor
 final class WeeklyChallengeSession: ObservableObject {
+    static let roundDuration: TimeInterval = 15
+    static let fullScoreRemainingTime: TimeInterval = 10
+
     @Published private(set) var lives = 3
     @Published private(set) var score = 0
     @Published private(set) var index = 0
@@ -167,16 +170,36 @@ final class WeeklyChallengeSession: ObservableObject {
     }
 
     @discardableResult
-    func submit(_ answer: String) -> GameSession.SubmissionResult {
+    func submit(
+        _ answer: String,
+        remainingTime: TimeInterval = WeeklyChallengeSession.roundDuration
+    ) -> GameSession.SubmissionResult {
         guard !isFinished, !isRevealingIncorrectAnswer, let current else { return .ignored }
         if AnswerMatcher.matches(answer, station: current.target) {
-            score += hintVisible ? pointsPerCorrectAnswer / 2 : pointsPerCorrectAnswer
+            score += Self.points(
+                basePoints: pointsPerCorrectAnswer,
+                hintUsed: hintVisible,
+                remainingTime: remainingTime
+            )
             advanceQuestion()
             return .correct
         }
+        return expireCurrentQuestion()
+    }
+
+    @discardableResult
+    func expireCurrentQuestion() -> GameSession.SubmissionResult {
+        guard !isFinished, !isRevealingIncorrectAnswer, current != nil else { return .ignored }
         lives -= 1
         isRevealingIncorrectAnswer = true
         return .incorrect
+    }
+
+    static func points(basePoints: Int, hintUsed: Bool, remainingTime: TimeInterval) -> Int {
+        let hintAdjustedPoints = hintUsed ? basePoints / 2 : basePoints
+        let clampedTime = min(max(remainingTime, 0), fullScoreRemainingTime)
+        let multiplier = clampedTime / fullScoreRemainingTime
+        return Int((Double(hintAdjustedPoints) * multiplier).rounded(.down))
     }
 
     func continueAfterIncorrectAnswer() {
