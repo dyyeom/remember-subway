@@ -19,8 +19,8 @@ struct StatsView: View {
             }
             if !weekly.isEmpty {
                 Section("최근 싱글플레이") {
-                    ForEach(weekly.prefix(5)) { record in
-                        LabeledContent(record.weekID, value: "\(record.bestScore)점")
+                    ForEach(weekly.prefix(10)) { record in
+                        LabeledContent("\(weeklyScopeName(record)) · \(record.weekID)", value: "\(record.bestScore)점")
                     }
                 }
             }
@@ -48,6 +48,19 @@ struct StatsView: View {
     }
 
     private var profile: MultiplayerProfileRecord? { multiplayerProfiles.first }
+
+    private func weeklyScopeName(_ record: WeeklyBestRecord) -> String {
+        if record.scopeID.hasPrefix("line:") {
+            let lineID = String(record.scopeID.dropFirst("line:".count))
+            return catalogStore.catalog.lineByID[lineID]?.name ?? "노선"
+        }
+        if record.scopeID.hasPrefix("region:") {
+            let regionID = String(record.scopeID.dropFirst("region:".count))
+            let name = catalogStore.catalog.regions.first { $0.id == regionID }?.name ?? "지역"
+            return "\(name) 전체"
+        }
+        return "이전 기록"
+    }
 
     private var correctRate: String {
         guard let profile, profile.totalQuestions > 0 else { return "0%" }

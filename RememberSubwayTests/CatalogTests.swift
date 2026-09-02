@@ -62,7 +62,8 @@ struct CatalogTests {
         #expect(!questions.isEmpty)
         #expect(questions.allSatisfy { $0.lineID == "seoul-4" })
         let stationCount = Set(catalog.patterns(for: catalog.lineByID["seoul-4"]!).flatMap(\.stationIDs)).count
-        #expect(stationCount * 10 == 510)
+        #expect(WeeklyChallengeFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: "seoul-4") == stationCount * 10)
+        #expect(WeeklyChallengeFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: nil) == 100)
     }
 
     @Test func bundledCatalogCoversAllOperatingUrbanRailLines() throws {

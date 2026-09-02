@@ -3,7 +3,7 @@ import GameKit
 import UIKit
 
 @MainActor
-final class GameCenterService: NSObject, ObservableObject, GKGameCenterControllerDelegate {
+final class GameCenterService: NSObject, ObservableObject, @preconcurrency GKGameCenterControllerDelegate {
     static let shared = GameCenterService()
 
     @Published private(set) var isAuthenticated = GKLocalPlayer.local.isAuthenticated

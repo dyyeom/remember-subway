@@ -10,6 +10,7 @@ struct WeeklyChallengeHomeView: View {
     @Binding var showStats: Bool
     @Binding var showTutorial: Bool
     @State private var selectedRegionID: String?
+    @State private var selectedLineID: String?
 
     private var weekID: String { WeeklyChallengeFactory.weekID() }
 
@@ -20,25 +21,43 @@ struct WeeklyChallengeHomeView: View {
                     .font(.system(size: 64))
                     .foregroundStyle(.yellow)
                     .accessibilityHidden(true)
-                Text("어느 지역에 도전할까요?")
+                Text("어디에 도전할까요?")
                     .font(.title2.bold())
                     .multilineTextAlignment(.center)
-                Text("이전 역과 다음 역 사이의 역을 맞혀 보세요.\n힌트 없이 100점 · 힌트 사용 시 50점")
+                Text(scoreDescription)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                HStack {
-                    Label("도전 지역", systemImage: "map")
-                        .font(.headline)
-                    Spacer()
-                    Picker("도전 지역", selection: $selectedRegionID) {
-                        Text("지역 선택").tag(Optional<String>.none)
-                        ForEach(regions) { region in
-                            Text(region.name).tag(Optional(region.id))
+                VStack(spacing: 0) {
+                    HStack {
+                        Label("도전 지역", systemImage: "map")
+                            .font(.headline)
+                        Spacer()
+                        Picker("도전 지역", selection: $selectedRegionID) {
+                            Text("지역 선택").tag(Optional<String>.none)
+                            ForEach(regions) { region in
+                                Text(region.name).tag(Optional(region.id))
+                            }
                         }
+                        .pickerStyle(.menu)
                     }
-                    .pickerStyle(.menu)
+                    .frame(minHeight: 56)
+
+                    Divider().padding(.leading, 36)
+
+                    HStack {
+                        Label("도전 노선", systemImage: "tram.fill")
+                            .font(.headline)
+                        Spacer()
+                        Picker("도전 노선", selection: $selectedLineID) {
+                            Text("전체 노선").tag(Optional<String>.none)
+                            ForEach(lines) { line in
+                                Text(line.name).tag(Optional(line.id))
+                            }
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    .frame(minHeight: 56)
                 }
-                .frame(minHeight: 56)
                 .padding(.horizontal, 18)
                 .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 GroupBox {
@@ -48,15 +67,22 @@ struct WeeklyChallengeHomeView: View {
                 }
                 if let selectedRegion {
                     NavigationLink {
-                        WeeklyChallengePlayView(catalog: catalogStore.catalog, weekID: weekID, region: selectedRegion)
+                        WeeklyChallengePlayView(
+                            catalog: catalogStore.catalog,
+                            weekID: weekID,
+                            region: selectedRegion,
+                            challengeLine: selectedLine
+                        )
                     } label: {
-                        Label("\(selectedRegion.name) 도전 시작", systemImage: "play.fill")
+                        Label("\(challengeName) 도전 시작", systemImage: "play.fill")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.borderedProminent)
                 }
                 if gameCenter.isAuthenticated {
-                    Button("주간 순위 보기", systemImage: "list.number") { gameCenter.showDashboard() }
+                    Button("\(challengeName) 주간 순위", systemImage: "list.number") {
+                        gameCenter.showLeaderboard(id: leaderboardID)
+                    }
                         .buttonStyle(.bordered)
                 }
             }
@@ -74,6 +100,7 @@ struct WeeklyChallengeHomeView: View {
         .task {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
+        .onChange(of: selectedRegionID) { _, _ in selectedLineID = nil }
     }
 
     private var regions: [Region] {
@@ -84,8 +111,43 @@ struct WeeklyChallengeHomeView: View {
         regions.first { $0.id == selectedRegionID }
     }
 
+    private var lines: [Line] {
+        selectedRegion.map { catalogStore.catalog.lines(in: $0) } ?? []
+    }
+
+    private var selectedLine: Line? {
+        catalogStore.catalog.lineByID[selectedLineID ?? ""]
+    }
+
+    private var scopeID: String {
+        selectedLineID.map { "line:\($0)" } ?? "region:\(selectedRegionID ?? "unknown")"
+    }
+
+    private var leaderboardID: String {
+        GameCenterService.weeklyLeaderboardID(regionID: selectedRegionID ?? "unknown", lineID: selectedLineID)
+    }
+
+    private var challengeName: String {
+        selectedLine?.name ?? selectedRegion.map { "\($0.name) 전체" } ?? "전체 노선"
+    }
+
+    private var pointsPerCorrectAnswer: Int {
+        WeeklyChallengeFactory.pointsPerCorrectAnswer(
+            catalog: catalogStore.catalog,
+            lineID: selectedLineID
+        )
+    }
+
+    private var scoreDescription: String {
+        "이전 역과 다음 역 사이의 역을 맞혀 보세요.\n정답 \(pointsPerCorrectAnswer)점 · 초성 힌트 사용 시 \(pointsPerCorrectAnswer / 2)점"
+    }
+
     private var currentBest: Int {
-        bestRecords.first { $0.weekID == weekID && $0.poolVersion == catalogStore.catalog.challengePoolVersion }?.bestScore ?? 0
+        bestRecords.first {
+            $0.weekID == weekID
+                && $0.poolVersion == catalogStore.catalog.challengePoolVersion
+                && $0.scopeID == scopeID
+        }?.bestScore ?? 0
     }
 }
 
@@ -103,19 +165,36 @@ struct WeeklyChallengePlayView: View {
     @State private var didRecord = false
     @State private var resultStatus = WeeklyResultStatus.saving
     @State private var keyboardPresented = false
+    @State private var revealTask: Task<Void, Never>?
     @FocusState private var focused: Bool
     let weekID: String
     let poolVersion: String
     let catalog: TransitCatalog
     let region: Region
+    let challengeLine: Line?
+    let scopeID: String
+    let leaderboardID: String
 
-    init(catalog: TransitCatalog, weekID: String, region: Region) {
+    init(catalog: TransitCatalog, weekID: String, region: Region, challengeLine: Line? = nil) {
         self.catalog = catalog
         self.weekID = weekID
         self.region = region
+        self.challengeLine = challengeLine
+        scopeID = challengeLine.map { "line:\($0.id)" } ?? "region:\(region.id)"
+        leaderboardID = GameCenterService.weeklyLeaderboardID(regionID: region.id, lineID: challengeLine?.id)
         poolVersion = catalog.challengePoolVersion
+        let points = WeeklyChallengeFactory.pointsPerCorrectAnswer(
+            catalog: catalog,
+            lineID: challengeLine?.id
+        )
         _session = StateObject(wrappedValue: WeeklyChallengeSession(
-            questions: WeeklyChallengeFactory.questions(catalog: catalog, weekID: weekID, regionID: region.id)
+            questions: WeeklyChallengeFactory.questions(
+                catalog: catalog,
+                weekID: weekID,
+                regionID: region.id,
+                lineID: challengeLine?.id
+            ),
+            pointsPerCorrectAnswer: points
         ))
     }
 
@@ -134,7 +213,7 @@ struct WeeklyChallengePlayView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, layout.statusTop)
 
-                    Text("\(region.name) 주간 도전")
+                    Text("\(challengeLine?.name ?? "\(region.name) 전체") 주간 도전")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.secondary)
                         .padding(.top, layout.contextTop)
@@ -184,6 +263,7 @@ struct WeeklyChallengePlayView: View {
             keyboardPresented = false
         }
         .onChange(of: session.isFinished) { _, finished in if finished { finish() } }
+        .onDisappear { revealTask?.cancel() }
         .overlay { if session.isFinished { resultOverlay } }
     }
 
@@ -208,6 +288,7 @@ struct WeeklyChallengePlayView: View {
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .focused($focused)
+            .disabled(session.isRevealingIncorrectAnswer)
             .submitLabel(.next)
             .onSubmit(submit)
             .accessibilityLabel("역 이름 입력")
@@ -217,8 +298,8 @@ struct WeeklyChallengePlayView: View {
         GameGlassActionBar(
             color: currentLine?.color ?? .accentColor,
             hintTitle: "초성 힌트",
-            hintDisabled: session.hintVisible || session.isFinished,
-            confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished,
+            hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer,
+            confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished || session.isRevealingIncorrectAnswer,
             onHint: { session.useHint() },
             onConfirm: submit
         )
@@ -235,14 +316,24 @@ struct WeeklyChallengePlayView: View {
             answer = ""
             impact(.success)
         case .incorrect:
-            feedback = session.isFinished ? "목숨을 모두 사용했어요." : "아니에요. 목숨이 하나 줄었어요."
+            feedback = "정답은 \(submittedQuestion?.target.name ?? "역 이름")이에요."
             feedbackKind = .incorrect
             feedbackColor = .red
+            answer = ""
+            focused = false
             impact(.error)
+            revealTask?.cancel()
+            revealTask = Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(1_500))
+                guard !Task.isCancelled else { return }
+                session.continueAfterIncorrectAnswer()
+                feedback = ""
+                if !session.isFinished { restoreAnswerFocus() }
+            }
         case .ignored: break
         }
         UIAccessibility.post(notification: .announcement, argument: feedback)
-        restoreAnswerFocus()
+        if !session.isRevealingIncorrectAnswer { restoreAnswerFocus() }
     }
 
     private var feedbackView: some View {
@@ -251,7 +342,7 @@ struct WeeklyChallengePlayView: View {
                 Color.clear
             } else {
                 Text(feedback)
-                    .font(feedbackKind == .correct ? .largeTitle.bold() : .callout)
+                    .font(feedbackKind == .correct ? .largeTitle.bold() : .title2.bold())
                     .foregroundStyle(feedbackColor)
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.72)
@@ -271,7 +362,7 @@ struct WeeklyChallengePlayView: View {
     }
 
     private func restoreAnswerFocus() {
-        guard !session.isFinished else { return }
+        guard !session.isFinished, !session.isRevealingIncorrectAnswer else { return }
         Task { @MainActor in
             await Task.yield()
             focused = true
@@ -283,7 +374,14 @@ struct WeeklyChallengePlayView: View {
         didRecord = true
         let update: ProgressStore.WeeklyRecordUpdate
         do {
-            update = try ProgressStore.recordWeekly(score: session.score, weekID: weekID, poolVersion: poolVersion, context: modelContext)
+            update = try ProgressStore.recordWeekly(
+                score: session.score,
+                weekID: weekID,
+                poolVersion: poolVersion,
+                scopeID: scopeID,
+                leaderboardID: leaderboardID,
+                context: modelContext
+            )
         } catch {
             resultStatus = .saveFailed
             return
@@ -300,7 +398,7 @@ struct WeeklyChallengePlayView: View {
 
         resultStatus = .submitting
         Task {
-            if await gameCenter.submitWeekly(score: update.record.bestScore) {
+            if await gameCenter.submitWeekly(score: update.record.bestScore, leaderboardID: leaderboardID) {
                 update.record.pendingSubmission = false
                 try? modelContext.save()
                 resultStatus = .submitted
@@ -329,6 +427,7 @@ struct WeeklyChallengePlayView: View {
     }
 
     private func restart() {
+        revealTask?.cancel()
         didRecord = false
         resultStatus = .saving
         answer = ""

@@ -85,6 +85,12 @@ struct SeededGenerator: RandomNumberGenerator {
 }
 
 enum WeeklyChallengeFactory {
+    static func pointsPerCorrectAnswer(catalog: TransitCatalog, lineID: String?) -> Int {
+        guard let lineID, let line = catalog.lineByID[lineID] else { return 100 }
+        let stationCount = Set(catalog.patterns(for: line).flatMap(\.stationIDs)).count
+        return stationCount * 10
+    }
+
     static func weekID(for date: Date = .now, calendar: Calendar = Calendar(identifier: .iso8601)) -> String {
         let parts = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
         return String(format: "%04d-W%02d", parts.yearForWeekOfYear ?? 0, parts.weekOfYear ?? 0)

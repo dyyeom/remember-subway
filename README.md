@@ -2,7 +2,7 @@
 
 대한민국 도시철도 역 이름을 외우고 가까운 사람들과 대결하는 iOS 26+ SwiftUI 게임입니다.
 
-- `싱글플레이`: 이전 역과 다음 역을 보고 가운데 역을 맞히는 지역별 주간 도전
+- `싱글플레이`: 지역 전체 또는 노선을 선택해 이전 역과 다음 역 사이의 역을 맞히는 주간 도전
 - `멀티플레이`: 근처의 iPhone 2~8대가 같은 10문제를 푸는 실시간 점수전
 
 ## 실행
@@ -35,5 +35,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
 
 App Store Connect에서 다음 식별자를 생성해야 실제 제출이 활성화됩니다.
 
-- 7일 반복 리더보드: `kr.co.remembersubway.weekly.v1`
+- 지역 전체 7일 반복 리더보드: `kr.co.remembersubway.weekly.region.{region_id}.v1`
+- 노선별 7일 반복 리더보드: `kr.co.remembersubway.weekly.line.{line_id}.v1`
+
+리더보드 ID의 하이픈은 밑줄로 변환합니다. 예를 들어 서울 4호선은 `kr.co.remembersubway.weekly.line.seoul_4.v1`입니다. 앱에 포함된 모든 지역과 노선 ID를 App Store Connect에 7일 반복 리더보드로 등록해야 실제 순위 제출과 조회가 동작합니다.
+
 인증이나 네트워크가 실패해도 싱글플레이는 계속되며 주간 최고 점수는 SwiftData에 제출 대기 상태로 저장됩니다. 제거된 일반 학습 모드의 업적은 더 이상 제출하지 않습니다.
