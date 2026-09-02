@@ -76,7 +76,9 @@ struct RootTabView: View {
             }
         }
         for record in weeklyRecords where record.pendingSubmission {
-            if await gameCenter.submitWeekly(score: record.bestScore) { record.pendingSubmission = false }
+            if await gameCenter.submitWeekly(score: record.bestScore, leaderboardID: record.leaderboardID) {
+                record.pendingSubmission = false
+            }
         }
         try? modelContext.save()
     }

@@ -25,10 +25,22 @@ enum ProgressStore {
         try context.save()
     }
 
-    static func recordWeekly(score: Int, weekID: String, poolVersion: String, context: ModelContext) throws -> WeeklyRecordUpdate {
-        let key = "\(poolVersion):\(weekID)"
+    static func recordWeekly(
+        score: Int,
+        weekID: String,
+        poolVersion: String,
+        scopeID: String = "legacy",
+        leaderboardID: String = GameCenterService.weeklyLeaderboardID,
+        context: ModelContext
+    ) throws -> WeeklyRecordUpdate {
+        let key = "\(poolVersion):\(weekID):\(scopeID)"
         let descriptor = FetchDescriptor<WeeklyBestRecord>(predicate: #Predicate { $0.key == key })
-        let record = try context.fetch(descriptor).first ?? WeeklyBestRecord(weekID: weekID, poolVersion: poolVersion)
+        let record = try context.fetch(descriptor).first ?? WeeklyBestRecord(
+            weekID: weekID,
+            poolVersion: poolVersion,
+            scopeID: scopeID,
+            leaderboardID: leaderboardID
+        )
         if record.modelContext == nil { context.insert(record) }
         let didImproveBest = score > record.bestScore
         if didImproveBest {

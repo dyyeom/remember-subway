@@ -3,13 +3,19 @@ import GameKit
 import UIKit
 
 @MainActor
-final class GameCenterService: NSObject, ObservableObject {
+final class GameCenterService: NSObject, ObservableObject, GKGameCenterControllerDelegate {
     static let shared = GameCenterService()
 
     @Published private(set) var isAuthenticated = GKLocalPlayer.local.isAuthenticated
     @Published private(set) var lastError: String?
 
     static let weeklyLeaderboardID = "kr.co.remembersubway.weekly.v1"
+
+    static func weeklyLeaderboardID(regionID: String, lineID: String?) -> String {
+        let scope = lineID.map { "line.\(leaderboardComponent($0))" }
+            ?? "region.\(leaderboardComponent(regionID))"
+        return "kr.co.remembersubway.weekly.\(scope).v1"
+    }
 
     func authenticate() {
         GKAccessPoint.shared.isActive = false
@@ -22,14 +28,14 @@ final class GameCenterService: NSObject, ObservableObject {
         }
     }
 
-    func submitWeekly(score: Int) async -> Bool {
+    func submitWeekly(score: Int, leaderboardID: String = weeklyLeaderboardID) async -> Bool {
         guard isAuthenticated else { return false }
         do {
             try await GKLeaderboard.submitScore(
                 score,
                 context: 1,
                 player: GKLocalPlayer.local,
-                leaderboardIDs: [Self.weeklyLeaderboardID]
+                leaderboardIDs: [leaderboardID]
             )
             return true
         } catch {
@@ -50,6 +56,25 @@ final class GameCenterService: NSObject, ObservableObject {
     func showDashboard() {
         guard isAuthenticated else { return }
         GKAccessPoint.shared.trigger(state: .dashboard) {}
+    }
+
+    func showLeaderboard(id: String) {
+        guard isAuthenticated, let topViewController else { return }
+        let controller = GKGameCenterViewController(
+            leaderboardID: id,
+            playerScope: .global,
+            timeScope: .allTime
+        )
+        controller.gameCenterDelegate = self
+        topViewController.present(controller, animated: true)
+    }
+
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true)
+    }
+
+    private static func leaderboardComponent(_ value: String) -> String {
+        value.map { $0.isLetter || $0.isNumber ? String($0).lowercased() : "_" }.joined()
     }
 
     private var topViewController: UIViewController? {

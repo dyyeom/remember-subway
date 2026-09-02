@@ -159,4 +159,26 @@ struct CatalogTests {
         #expect(!lower.didImproveBest)
         #expect(lower.record.bestScore == 100)
     }
+
+    @Test func weeklyRecordsAndLeaderboardsAreSeparatedByScope() throws {
+        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: WeeklyBestRecord.self, configurations: configuration)
+        let context = container.mainContext
+        let regionLeaderboard = GameCenterService.weeklyLeaderboardID(regionID: "capital", lineID: nil)
+        let lineLeaderboard = GameCenterService.weeklyLeaderboardID(regionID: "capital", lineID: "seoul-4")
+
+        _ = try ProgressStore.recordWeekly(
+            score: 100, weekID: "2026-W36", poolVersion: "test",
+            scopeID: "region:capital", leaderboardID: regionLeaderboard, context: context
+        )
+        _ = try ProgressStore.recordWeekly(
+            score: 510, weekID: "2026-W36", poolVersion: "test",
+            scopeID: "line:seoul-4", leaderboardID: lineLeaderboard, context: context
+        )
+
+        let records = try context.fetch(FetchDescriptor<WeeklyBestRecord>())
+        #expect(records.count == 2)
+        #expect(Set(records.map(\.leaderboardID)) == Set([regionLeaderboard, lineLeaderboard]))
+        #expect(lineLeaderboard.hasSuffix("line.seoul_4.v1"))
+    }
 }
