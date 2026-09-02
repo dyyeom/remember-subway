@@ -1,0 +1,18 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "localizations" : {
+        "en" : {"stringUnit" : {"state" : "translated", "value" : "RememberSubway"}},
+        "ko" : {"stringUnit" : {"state" : "translated", "value" : "역순서"}}
+      }
+    },
+    "NSLocalNetworkUsageDescription" : {
+      "localizations" : {
+        "en" : {"stringUnit" : {"state" : "translated", "value" : "RememberSubway uses your local network to connect nearby friends for station-name matches."}},
+        "ko" : {"stringUnit" : {"state" : "translated", "value" : "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다."}}
+      }
+    }
+  },
+  "version" : "1.0"
+}

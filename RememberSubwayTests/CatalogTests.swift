@@ -135,11 +135,38 @@ struct CatalogTests {
     }
 
     @Test func weeklyResultMessagesDistinguishLoginAndSubmissionStates() {
-        #expect(WeeklyResultStatus.zeroScore.message.contains("0점"))
-        #expect(WeeklyResultStatus.zeroScore.message.contains("전송하지 않아요"))
-        #expect(WeeklyResultStatus.waitingForGameCenter.message.contains("Game Center에 로그인하면"))
-        #expect(WeeklyResultStatus.submissionFailed.message.contains("전송에 실패"))
-        #expect(WeeklyResultStatus.submitted.message.contains("전송했어요"))
+        let messages = [
+            WeeklyResultStatus.zeroScore.message,
+            WeeklyResultStatus.bestUnchanged.message,
+            WeeklyResultStatus.waitingForGameCenter.message,
+            WeeklyResultStatus.submissionFailed.message,
+            WeeklyResultStatus.submitted.message
+        ]
+        #expect(messages.allSatisfy { !$0.isEmpty })
+        #expect(Set(messages).count == messages.count)
+        #expect(WeeklyResultStatus.zeroScore.message.contains("0"))
+        #expect(WeeklyResultStatus.zeroScore.message.contains("Game Center"))
+    }
+
+    @Test func appBundleContainsEnglishAndKoreanLocalizations() throws {
+        let englishPath = try #require(Bundle.main.path(forResource: "en", ofType: "lproj"))
+        let koreanPath = try #require(Bundle.main.path(forResource: "ko", ofType: "lproj"))
+        let english = try #require(Bundle(path: englishPath))
+        let korean = try #require(Bundle(path: koreanPath))
+
+        #expect(english.localizedString(forKey: "tab.singlePlayer", value: nil, table: nil) == "Single Player")
+        #expect(korean.localizedString(forKey: "tab.singlePlayer", value: nil, table: nil) == "싱글플레이")
+
+        let englishInfo = try localizedInfo(at: englishPath)
+        let koreanInfo = try localizedInfo(at: koreanPath)
+        #expect(englishInfo["CFBundleDisplayName"] as? String == "RememberSubway")
+        #expect(koreanInfo["CFBundleDisplayName"] as? String == "역순서")
+    }
+
+    private func localizedInfo(at localizationPath: String) throws -> [String: Any] {
+        let url = URL(fileURLWithPath: localizationPath).appendingPathComponent("InfoPlist.strings")
+        let data = try Data(contentsOf: url)
+        return try #require(PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any])
     }
 
     @Test func weeklyZeroScoreDoesNotEnterGameCenterSubmissionQueue() throws {

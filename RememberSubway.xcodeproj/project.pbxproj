@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10000000000000000000001 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* AppLocalization.swift */; };
+		A10000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* Localizable.xcstrings */; };
+		A10000000000000000000003 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* InfoPlist.xcstrings */; };
 		004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C708D56BD0B51F706E83D /* ProgressStore.swift */; };
 		0262D6614B01E4D6CDC5E17A /* ProgressMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */; };
 		104679C274E591FB759E4E14 /* MultiplayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */; };
@@ -46,6 +49,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A10000000000000000000011 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
+		A10000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A10000000000000000000013 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionTests.swift; sourceTree = "<group>"; };
 		0792A75284D8DF80362680B7 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
@@ -93,6 +99,8 @@
 		029756A7C68E65134E7B7658 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A10000000000000000000013 /* InfoPlist.xcstrings */,
+				A10000000000000000000012 /* Localizable.xcstrings */,
 				223B67012D64E7A51047F971 /* transit_data.json */,
 			);
 			path = Resources;
@@ -153,6 +161,7 @@
 		D84C723F1A2DF62C6B8F2A40 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A10000000000000000000011 /* AppLocalization.swift */,
 				F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */,
 				347FB19EBA98B42B4A0BCDB4 /* GameCenterService.swift */,
 				1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */,
@@ -241,6 +250,7 @@
 			knownRegions = (
 				Base,
 				en,
+				ko,
 			);
 			mainGroup = 4449E804849AD43621CEB224;
 			minimizedProjectReferenceProxies = 1;
@@ -260,6 +270,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000003 /* InfoPlist.xcstrings in Resources */,
+				A10000000000000000000002 /* Localizable.xcstrings in Resources */,
 				B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000001 /* AppLocalization.swift in Sources */,
 				624029F789DE51844FF070CE /* AnswerMatcher.swift in Sources */,
 				3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */,
 				88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */,
