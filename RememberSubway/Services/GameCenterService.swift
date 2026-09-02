@@ -12,13 +12,13 @@ final class GameCenterService: NSObject, ObservableObject {
     static let weeklyLeaderboardID = "kr.co.remembersubway.weekly.v1"
 
     func authenticate() {
+        GKAccessPoint.shared.isActive = false
         GKLocalPlayer.local.authenticateHandler = { [weak self] viewController, error in
             guard let self else { return }
             if let viewController { self.topViewController?.present(viewController, animated: true) }
             self.isAuthenticated = GKLocalPlayer.local.isAuthenticated
             self.lastError = error?.localizedDescription
-            GKAccessPoint.shared.location = .topTrailing
-            GKAccessPoint.shared.isActive = self.isAuthenticated
+            GKAccessPoint.shared.isActive = false
         }
     }
 
