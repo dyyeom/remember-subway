@@ -16,6 +16,7 @@ struct MultiplayerContainerView: View {
     @State private var selectedRoom: DiscoveredRoom?
     @State private var roomCodeEntry = ""
     @State private var recordedMatchIDs = Set<UUID>()
+    @FocusState private var nicknameFocused: Bool
     let catalog: TransitCatalog
 
     init(
@@ -66,7 +67,11 @@ struct MultiplayerContainerView: View {
         case .home:
             home
         case .browsing:
-            RoomBrowserView(service: coordinator.service) { selectedRoom = $0 }
+            RoomBrowserView(
+                service: coordinator.service,
+                select: { selectedRoom = $0 },
+                exit: { coordinator.leave() }
+            )
         case .joining:
             progress(title: "방에 연결하는 중이에요", message: "참가 코드와 보안 연결을 확인하고 있어요.")
         case .lobby:
@@ -98,6 +103,9 @@ struct MultiplayerContainerView: View {
                     selectionRow("내 이름", systemImage: "person.fill") {
                         TextField("닉네임", text: $nickname)
                             .multilineTextAlignment(.trailing)
+                            .focused($nicknameFocused)
+                            .submitLabel(.done)
+                            .onSubmit { nicknameFocused = false }
                             .onChange(of: nickname) { _, value in saveNickname(value) }
                     }
                     Divider().padding(.leading, 52)
@@ -154,6 +162,10 @@ struct MultiplayerContainerView: View {
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
             .padding(.vertical, AppLayout.pageVertical)
+        }
+        .scrollDismissesKeyboard(.immediately)
+        .onScrollPhaseChange { _, phase in
+            if phase.isScrolling { nicknameFocused = false }
         }
     }
 
@@ -329,6 +341,7 @@ struct MultiplayerContainerView: View {
 private struct RoomBrowserView: View {
     @ObservedObject var service: NearbyMatchService
     let select: (DiscoveredRoom) -> Void
+    let exit: () -> Void
 
     var body: some View {
         Group {
@@ -352,6 +365,14 @@ private struct RoomBrowserView: View {
                     .buttonStyle(.plain)
                 }
             }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button("멀티플레이 홈으로", systemImage: "chevron.backward", action: exit)
+                .buttonStyle(.glass)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .padding(.horizontal, AppLayout.pageHorizontal)
+                .padding(.vertical, 12)
         }
     }
 }
