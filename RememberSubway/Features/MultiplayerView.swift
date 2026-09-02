@@ -73,7 +73,10 @@ struct MultiplayerContainerView: View {
                 exit: { coordinator.leave() }
             )
         case .joining:
-            progress(title: "방에 연결하는 중이에요", message: "참가 코드와 보안 연결을 확인하고 있어요.")
+            progress(
+                title: AppLocalization.text("multiplayer.joining.title"),
+                message: AppLocalization.text("multiplayer.joining.message")
+            )
         case .lobby:
             lobby
         case .countdown(let value):
@@ -93,15 +96,15 @@ struct MultiplayerContainerView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("친구들과\n같이 맞혀 보세요")
+                    Text(AppLocalization.text("multiplayer.home.title"))
                         .font(.largeTitle.bold())
-                    Text("근처의 iPhone 2~8대가 같은 역 문제를 동시에 풉니다.")
+                    Text(AppLocalization.text("multiplayer.home.description"))
                         .foregroundStyle(.secondary)
                 }
 
                 VStack(spacing: 0) {
-                    selectionRow("내 이름", systemImage: "person.fill") {
-                        TextField("닉네임", text: $nickname)
+                    selectionRow(AppLocalization.text("multiplayer.nickname.label"), systemImage: "person.fill") {
+                        TextField(AppLocalization.text("multiplayer.nickname.placeholder"), text: $nickname)
                             .multilineTextAlignment(.trailing)
                             .focused($nicknameFocused)
                             .submitLabel(.done)
@@ -109,16 +112,16 @@ struct MultiplayerContainerView: View {
                             .onChange(of: nickname) { _, value in saveNickname(value) }
                     }
                     Divider().padding(.leading, 52)
-                    selectionRow("지역", systemImage: "map") {
-                        Picker("지역", selection: $selectedRegionID) {
-                            Text("지역 선택").tag(Optional<String>.none)
+                    selectionRow(AppLocalization.text("common.region"), systemImage: "map") {
+                        Picker(AppLocalization.text("common.region"), selection: $selectedRegionID) {
+                            Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
                             ForEach(regions) { Text($0.name).tag(Optional($0.id)) }
                         }.labelsHidden()
                     }
                     Divider().padding(.leading, 52)
-                    selectionRow("노선", systemImage: "tram.fill") {
-                        Picker("노선", selection: $selectedLineID) {
-                            Text("노선 선택").tag(Optional<String>.none)
+                    selectionRow(AppLocalization.text("common.line"), systemImage: "tram.fill") {
+                        Picker(AppLocalization.text("common.line"), selection: $selectedLineID) {
+                            Text(AppLocalization.text("common.selectLine")).tag(Optional<String>.none)
                             ForEach(lines) { Text($0.name).tag(Optional($0.id)) }
                         }.labelsHidden()
                     }
@@ -127,11 +130,11 @@ struct MultiplayerContainerView: View {
                 .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
 
                 GroupBox {
-                    LabeledContent("문제", value: "10개")
-                    LabeledContent("제한 시간", value: "문제당 10초")
-                    LabeledContent("참가 인원", value: "2~8명")
+                    LabeledContent(AppLocalization.text("multiplayer.questions"), value: AppLocalization.text("multiplayer.tenQuestions"))
+                    LabeledContent(AppLocalization.text("multiplayer.timeLimit"), value: AppLocalization.text("multiplayer.tenSecondsEach"))
+                    LabeledContent(AppLocalization.text("multiplayer.players"), value: AppLocalization.text("multiplayer.twoToEightPlayers"))
                 } label: {
-                    Label("동시 점수전", systemImage: "timer")
+                    Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
                 }
 
                 VStack(spacing: 12) {
@@ -142,7 +145,7 @@ struct MultiplayerContainerView: View {
                             nickname: validNickname
                         )
                     } label: {
-                        Label("방 만들기", systemImage: "plus.circle.fill")
+                        Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.glassProminent)
@@ -152,7 +155,7 @@ struct MultiplayerContainerView: View {
                     Button {
                         coordinator.browse(nickname: validNickname)
                     } label: {
-                        Label("근처 방 찾기", systemImage: "dot.radiowaves.left.and.right")
+                        Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.glass)
@@ -174,11 +177,11 @@ struct MultiplayerContainerView: View {
             VStack(spacing: 24) {
                 if coordinator.isHost {
                     VStack(spacing: 6) {
-                        Text("참가 코드").font(.headline).foregroundStyle(.secondary)
+                        Text(AppLocalization.text("multiplayer.joinCode")).font(.headline).foregroundStyle(.secondary)
                         Text(coordinator.roomCode)
                             .font(.system(size: 48, weight: .bold, design: .rounded).monospacedDigit())
                             .textSelection(.enabled)
-                        Text("이 코드를 함께 플레이할 사람에게 알려주세요.")
+                        Text(AppLocalization.text("multiplayer.shareCodeMessage"))
                             .font(.callout).foregroundStyle(.secondary)
                     }
                     .padding(24)
@@ -191,7 +194,7 @@ struct MultiplayerContainerView: View {
                     HStack {
                         LineIdentityLabel(line: line)
                         Spacer()
-                        Text("10문제 · 10초").foregroundStyle(.secondary)
+                        Text(AppLocalization.text("multiplayer.matchSummary")).foregroundStyle(.secondary)
                     }
                 }
 
@@ -205,7 +208,7 @@ struct MultiplayerContainerView: View {
                             Spacer()
                             Text(connectionLabel(player.connectionState)).font(.caption).foregroundStyle(.secondary)
                             if coordinator.isHost && !player.isHost {
-                                Button("내보내기", systemImage: "xmark.circle") { coordinator.remove(playerID: player.id) }
+                                Button(AppLocalization.text("multiplayer.removePlayer"), systemImage: "xmark.circle") { coordinator.remove(playerID: player.id) }
                                     .labelStyle(.iconOnly)
                                     .foregroundStyle(.red)
                             }
@@ -221,16 +224,16 @@ struct MultiplayerContainerView: View {
                     Button {
                         coordinator.startMatch()
                     } label: {
-                        Label("게임 시작", systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 52)
+                        Label(AppLocalization.text("common.startGame"), systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.glassProminent)
                     .disabled(!coordinator.canStart)
                 } else {
-                    Label("방장이 시작하기를 기다리고 있어요", systemImage: "hourglass")
+                    Label(AppLocalization.text("multiplayer.waitingForHost"), systemImage: "hourglass")
                         .foregroundStyle(.secondary)
                 }
 
-                Button("방 나가기", role: .destructive) { coordinator.leave() }
+                Button(AppLocalization.text("multiplayer.leaveRoom"), role: .destructive) { coordinator.leave() }
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
             .padding(.vertical, AppLayout.pageVertical)
@@ -247,17 +250,17 @@ struct MultiplayerContainerView: View {
 
     private func failure(_ message: String) -> some View {
         ContentUnavailableView {
-            Label("대전을 계속할 수 없어요", systemImage: "wifi.exclamationmark")
+            Label(AppLocalization.text("multiplayer.failure.title"), systemImage: "wifi.exclamationmark")
         } description: {
             Text(message)
         } actions: {
             VStack(spacing: 12) {
-                Button("설정 열기") {
+                Button(AppLocalization.text("common.openSettings")) {
                     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                     UIApplication.shared.open(url)
                 }
                 .buttonStyle(.borderedProminent)
-                Button("멀티플레이 홈으로") { coordinator.leave() }
+                Button(AppLocalization.text("multiplayer.backHome")) { coordinator.leave() }
             }
         }
     }
@@ -267,7 +270,7 @@ struct MultiplayerContainerView: View {
             ProgressView().controlSize(.large)
             Text(title).font(.title2.bold())
             Text(message).foregroundStyle(.secondary).multilineTextAlignment(.center)
-            Button("취소", role: .cancel) { coordinator.leave() }
+            Button(AppLocalization.text("common.cancel"), role: .cancel) { coordinator.leave() }
         }
         .padding()
     }
@@ -291,11 +294,11 @@ struct MultiplayerContainerView: View {
 
     private var navigationTitle: String {
         switch coordinator.screenState {
-        case .home: "멀티플레이"
-        case .browsing: "근처 방"
-        case .lobby: "대기실"
-        case .matchResult: "경기 결과"
-        default: "근처 대전"
+        case .home: AppLocalization.text("tab.multiplayer")
+        case .browsing: AppLocalization.text("multiplayer.nearbyRooms")
+        case .lobby: AppLocalization.text("multiplayer.lobby")
+        case .matchResult: AppLocalization.text("multiplayer.result.title")
+        default: AppLocalization.text("multiplayer.nearbyMatch")
         }
     }
 
@@ -331,9 +334,9 @@ struct MultiplayerContainerView: View {
 
     private func connectionLabel(_ state: NearbyPlayer.ConnectionState) -> String {
         switch state {
-        case .connected: "연결됨"
-        case .reconnecting: "재연결 중"
-        case .forfeited: "기권"
+        case .connected: AppLocalization.text("connection.connected")
+        case .reconnecting: AppLocalization.text("connection.reconnecting")
+        case .forfeited: AppLocalization.text("connection.forfeited")
         }
     }
 }
@@ -347,9 +350,9 @@ private struct RoomBrowserView: View {
         Group {
             if service.discoveredRooms.isEmpty {
                 ContentUnavailableView {
-                    Label("근처 방을 찾고 있어요", systemImage: "dot.radiowaves.left.and.right")
+                    Label(AppLocalization.text("multiplayer.searching.title"), systemImage: "dot.radiowaves.left.and.right")
                 } description: {
-                    Text("방을 만든 사람과 가까이 있는지 확인해 주세요.")
+                    Text(AppLocalization.text("multiplayer.searching.message"))
                 }
             } else {
                 List(service.discoveredRooms) { room in
@@ -367,7 +370,7 @@ private struct RoomBrowserView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button("멀티플레이 홈으로", systemImage: "chevron.backward", action: exit)
+            Button(AppLocalization.text("multiplayer.backHome"), systemImage: "chevron.backward", action: exit)
                 .buttonStyle(.glass)
                 .controlSize(.large)
                 .frame(maxWidth: .infinity, minHeight: 52)
@@ -388,21 +391,21 @@ private struct JoinCodeView: View {
             VStack(spacing: 24) {
                 Image(systemName: "lock.fill").font(.system(size: 46)).foregroundStyle(.tint)
                 Text(room.name).font(.title2.bold())
-                TextField("4자리 참가 코드", text: $code)
+                TextField(AppLocalization.text("multiplayer.joinCode.placeholder"), text: $code)
                     .font(.largeTitle.bold().monospacedDigit())
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                     .padding()
                     .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
                     .onChange(of: code) { _, value in code = String(value.filter(\.isNumber).prefix(4)) }
-                Button("참가하기", action: join)
+                Button(AppLocalization.text("multiplayer.join"), action: join)
                     .buttonStyle(.glassProminent)
                     .controlSize(.large)
                     .disabled(code.count != 4)
             }
             .padding(24)
-            .navigationTitle("참가 코드")
-            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("취소") { dismiss() } } }
+            .navigationTitle(AppLocalization.text("multiplayer.joinCode"))
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button(AppLocalization.text("common.cancel")) { dismiss() } } }
         }
         .presentationDetents([.medium])
     }
@@ -430,16 +433,20 @@ private struct MultiplayerPlayView: View {
                         Spacer()
                         Text("\(coordinator.roundIndex + 1)/\(coordinator.questions.count)").font(.headline.monospacedDigit())
                         Spacer()
-                        Button("순위", systemImage: "list.number") { showRanking = true }
+                        Button(AppLocalization.text("common.ranking"), systemImage: "list.number") { showRanking = true }
                             .labelStyle(.iconOnly)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, keyboardPresented ? 4 : 12)
 
                     HStack {
-                        Label("\(Int(ceil(coordinator.timeRemaining)))초", systemImage: "timer")
+                        Label(AppLocalization.format("time.seconds.format", Int(ceil(coordinator.timeRemaining))), systemImage: "timer")
                         Spacer()
-                        Text("\(coordinator.localPlayer?.score ?? 0)점 · \(coordinator.localPlayer?.rank ?? 1)위")
+                        Text(AppLocalization.format(
+                            "score.pointsAndRank.format",
+                            coordinator.localPlayer?.score ?? 0,
+                            coordinator.localPlayer?.rank ?? 1
+                        ))
                             .font(.headline.monospacedDigit())
                     }
                     .padding(.horizontal, 24)
@@ -455,13 +462,13 @@ private struct MultiplayerPlayView: View {
                         .padding(.top, keyboardPresented ? 8 : 28)
 
                     VStack(spacing: keyboardPresented ? 10 : 18) {
-                        Text("이 역의 이름은?").font(.largeTitle.bold())
+                        Text(AppLocalization.text("game.stationQuestion")).font(.largeTitle.bold())
                         if coordinator.hintVisible {
                             Text(AnswerMatcher.initialConsonants(of: catalog.stationByID[question.targetStationID]?.name ?? ""))
                                 .font(.title2.monospaced().bold())
                                 .foregroundStyle(line.color)
                         }
-                        TextField("역 이름 입력", text: $answer)
+                        TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
                             .font(.title3)
                             .padding(.horizontal, 20)
                             .frame(minHeight: 60)
@@ -471,7 +478,7 @@ private struct MultiplayerPlayView: View {
                             .submitLabel(.done)
                             .onSubmit(submit)
                         Text(feedbackText)
-                            .font(coordinator.feedback.contains("정답이에요") ? .largeTitle.bold() : .callout)
+                            .font(coordinator.feedbackIsCorrect ? .largeTitle.bold() : .callout)
                             .foregroundStyle(feedbackColor(line))
                             .multilineTextAlignment(.center)
                             .frame(minHeight: 38)
@@ -495,18 +502,20 @@ private struct MultiplayerPlayView: View {
     }
 
     private var feedbackText: String {
-        coordinator.screenState == .roundResult ? "정답은 \(coordinator.revealedAnswer)이에요." : coordinator.feedback
+        coordinator.screenState == .roundResult
+            ? AppLocalization.format("game.incorrectReveal.format", coordinator.revealedAnswer)
+            : coordinator.feedback
     }
 
     private func feedbackColor(_ line: Line) -> Color {
-        coordinator.feedback.contains("정답이에요") || coordinator.screenState == .roundResult ? line.color : .secondary
+        coordinator.feedbackIsCorrect || coordinator.screenState == .roundResult ? line.color : .secondary
     }
 
     @ViewBuilder private var actionBar: some View {
         if let line = coordinator.currentQuestion.flatMap({ catalog.lineByID[$0.lineID] }) {
             GameGlassActionBar(
                 color: line.color,
-                hintTitle: "초성 힌트",
+                hintTitle: AppLocalization.text("game.initialHint"),
                 hintDisabled: coordinator.hintVisible || coordinator.localAnswerLocked || coordinator.screenState != .playing,
                 confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || coordinator.localAnswerLocked || coordinator.screenState != .playing,
                 onHint: { coordinator.useHint(); restoreFocus() },
@@ -551,11 +560,11 @@ private struct RankingSheet: View {
                     Text("\(player.rank)").font(.title2.bold().monospacedDigit()).frame(width: 36)
                     Text(player.nickname).font(.headline)
                     Spacer()
-                    Text("\(player.score)점").monospacedDigit()
+                    Text(AppLocalization.format("score.points.format", player.score)).monospacedDigit()
                 }
             }
-            .navigationTitle("현재 순위")
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button("완료") { dismiss() } } }
+            .navigationTitle(AppLocalization.text("multiplayer.currentRanking"))
+            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(AppLocalization.text("common.done")) { dismiss() } } }
         }
         .presentationDetents([.medium, .large])
     }
@@ -578,23 +587,25 @@ private struct MultiplayerResultView: View {
                     Image(systemName: coordinator.localPlayer?.rank == 1 ? "trophy.fill" : "flag.checkered")
                         .font(.system(size: 64))
                         .foregroundStyle(coordinator.localPlayer?.rank == 1 ? Color.yellow : Color.accentColor)
-                    Text(coordinator.localPlayer?.rank == 1 ? "우승했어요!" : "경기가 끝났어요")
+                    Text(coordinator.localPlayer?.rank == 1
+                        ? AppLocalization.text("multiplayer.result.winner")
+                        : AppLocalization.text("multiplayer.result.finished"))
                         .font(.largeTitle.bold())
                     if let player = coordinator.localPlayer {
-                        Text("\(player.rank)위 · \(player.score)점").font(.title2.bold().monospacedDigit())
+                        Text(AppLocalization.format("stats.rankAndScore.format", player.rank, player.score)).font(.title2.bold().monospacedDigit())
                         GroupBox {
-                            LabeledContent("정답", value: "\(player.correctAnswers)개")
-                            LabeledContent("힌트", value: "\(player.hintsUsed)회")
-                            LabeledContent("오답", value: "\(player.wrongAnswers)회")
+                            LabeledContent(AppLocalization.text("game.correctAnswers"), value: AppLocalization.format("count.items.format", player.correctAnswers))
+                            LabeledContent(AppLocalization.text("game.hints"), value: AppLocalization.format("count.times.format", player.hintsUsed))
+                            LabeledContent(AppLocalization.text("game.wrongAnswers"), value: AppLocalization.format("count.times.format", player.wrongAnswers))
                         }
                     }
                     VStack(spacing: 12) {
                         ForEach(MultiplayerScoring.ranked(coordinator.matchPlayers)) { player in
                             HStack {
-                                Text("\(player.rank)위").font(.headline).frame(width: 48, alignment: .leading)
+                                Text(AppLocalization.format("rank.position.format", player.rank)).font(.headline).frame(width: 48, alignment: .leading)
                                 Text(player.nickname)
                                 Spacer()
-                                Text("\(player.score)점").monospacedDigit()
+                                Text(AppLocalization.format("score.points.format", player.score)).monospacedDigit()
                             }
                         }
                     }
@@ -604,13 +615,15 @@ private struct MultiplayerResultView: View {
                     Button {
                         coordinator.requestRematch()
                     } label: {
-                        Label(coordinator.isHost ? "같은 방에서 다시 하기" : "다시 하기 요청", systemImage: "arrow.clockwise")
+                        Label(coordinator.isHost
+                            ? AppLocalization.text("multiplayer.rematch.sameRoom")
+                            : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.glassProminent)
                     .disabled(coordinator.rematchRequested && !coordinator.isHost)
 
-                    Button("나가기") { coordinator.leave() }.buttonStyle(.glass)
+                    Button(AppLocalization.text("common.leave")) { coordinator.leave() }.buttonStyle(.glass)
                 }
                 .padding(24)
             }

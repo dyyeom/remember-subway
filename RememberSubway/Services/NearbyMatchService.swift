@@ -91,7 +91,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
 
     func join(room: DiscoveredRoom, roomCode: String, contentVersion: String) {
         guard let endpoint = room.endpoint.base as? NWEndpoint else {
-            fail("선택한 방에 연결할 수 없어요.")
+            fail(AppLocalization.text("network.error.cannotConnectRoom"))
             return
         }
         browser?.cancel()
@@ -245,7 +245,10 @@ private final class SecurePeerConnection: @unchecked Sendable {
                 return
             }
             let length = data.reduce(UInt32(0)) { ($0 << 8) | UInt32($1) }
-            guard length > 1, length <= 65_536 else { self.finish("잘못된 네트워크 메시지예요."); return }
+            guard length > 1, length <= 65_536 else {
+                self.finish(AppLocalization.text("network.error.invalidMessage"))
+                return
+            }
             self.receiveBody(length: Int(length))
         }
     }
@@ -254,7 +257,10 @@ private final class SecurePeerConnection: @unchecked Sendable {
         connection.receive(minimumIncompleteLength: length, maximumLength: length) { [weak self] data, _, _, error in
             guard let self else { return }
             if let error { self.finish(error.localizedDescription); return }
-            guard let data, data.count == length, let flag = data.first else { self.finish("메시지가 완전하지 않아요."); return }
+            guard let data, data.count == length, let flag = data.first else {
+                self.finish(AppLocalization.text("network.error.incompleteMessage"))
+                return
+            }
             self.handle(payload: data.dropFirst(), encrypted: flag == 1)
             self.receiveHeader()
         }
@@ -265,7 +271,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
             guard symmetricKey == nil,
                   let remoteKey = try? P256.KeyAgreement.PublicKey(rawRepresentation: Data(payload)),
                   let sharedSecret = try? privateKey.sharedSecretFromKeyAgreement(with: remoteKey) else {
-                finish("보안 연결을 만들지 못했어요.")
+                finish(AppLocalization.text("network.error.secureConnection"))
                 return
             }
             symmetricKey = sharedSecret.hkdfDerivedSymmetricKey(
@@ -282,7 +288,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
               let box = try? AES.GCM.SealedBox(combined: Data(payload)),
               let opened = try? AES.GCM.open(box, using: symmetricKey),
               let envelope = try? decoder.decode(MultiplayerEnvelope.self, from: opened) else {
-            finish("참가 코드를 확인해 주세요.")
+            finish(AppLocalization.text("network.error.checkJoinCode"))
             return
         }
         messageHandler?(envelope)

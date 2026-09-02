@@ -28,6 +28,7 @@ final class MatchCoordinator: ObservableObject {
     @Published private(set) var hintVisible = false
     @Published private(set) var localAnswerLocked = false
     @Published private(set) var feedback = ""
+    @Published private(set) var feedbackIsCorrect = false
     @Published private(set) var revealedAnswer = ""
     @Published private(set) var rematchRequested = false
 
@@ -84,7 +85,11 @@ final class MatchCoordinator: ObservableObject {
         roomCode = String(format: "%04d", Int.random(in: 0...9_999))
         lobbyPlayers = [NearbyPlayer(id: localPlayerID, nickname: nickname, isHost: true, connectionState: .connected)]
         screenState = .lobby
-        service.startHosting(roomName: "\(nickname)님의 방", roomCode: roomCode, contentVersion: catalog.contentVersion)
+        service.startHosting(
+            roomName: AppLocalization.format("multiplayer.roomName.format", nickname),
+            roomCode: roomCode,
+            contentVersion: catalog.contentVersion
+        )
         startHeartbeat()
     }
 
@@ -113,7 +118,7 @@ final class MatchCoordinator: ObservableObject {
             seed: UInt64.random(in: .min ... .max)
         )
         guard generated.count == configuration.numberOfQuestions else {
-            screenState = .failed("이 노선에는 출제할 수 있는 역이 부족해요.")
+            screenState = .failed(AppLocalization.text("multiplayer.error.insufficientStations"))
             return
         }
         questions = generated
@@ -184,17 +189,18 @@ final class MatchCoordinator: ObservableObject {
         }
         guard isActiveMatch else { return }
         if isHost {
-            broadcast(.matchCancelled("방장이 앱을 떠나 경기가 종료됐어요."))
-            cancelMatch(reason: "앱을 떠나 경기가 종료됐어요.")
+            broadcast(.matchCancelled(AppLocalization.text("multiplayer.error.hostLeftApp")))
+            cancelMatch(reason: AppLocalization.text("multiplayer.error.matchEndedAfterLeavingApp"))
         } else {
             localAnswerLocked = true
-            feedback = "앱을 떠나 이번 문제는 0점 처리됐어요."
+            feedback = AppLocalization.text("multiplayer.feedback.backgroundZero")
+            feedbackIsCorrect = false
         }
     }
 
     func leave() {
         if isHost, screenState != .home {
-            broadcast(.matchCancelled("방장이 방을 닫았어요."))
+            broadcast(.matchCancelled(AppLocalization.text("multiplayer.error.hostClosedRoom")))
         }
         resetSession()
         role = nil
@@ -224,9 +230,13 @@ final class MatchCoordinator: ObservableObject {
         guard envelope.protocolVersion == MultiplayerEnvelope.currentProtocolVersion,
               envelope.contentVersion == catalog.contentVersion else {
             if isHost {
-                send(.joinResponse(JoinResponse(accepted: false, reason: "앱 또는 노선 데이터 버전이 달라요.", player: nil)), to: connectionID)
+                send(.joinResponse(JoinResponse(
+                    accepted: false,
+                    reason: AppLocalization.text("multiplayer.error.versionMismatch"),
+                    player: nil
+                )), to: connectionID)
             } else {
-                screenState = .failed("방장과 앱 버전이 달라요. 앱을 업데이트해 주세요.")
+                screenState = .failed(AppLocalization.text("multiplayer.error.updateRequired"))
             }
             return
         }
@@ -242,7 +252,7 @@ final class MatchCoordinator: ObservableObject {
             default: break
             }
         case .playerRemoved(let id):
-            if id == localPlayerID { cancelMatch(reason: "방장이 참가를 취소했어요.") }
+            if id == localPlayerID { cancelMatch(reason: AppLocalization.text("multiplayer.error.removedByHost")) }
         case .matchStart(let start): receiveMatchStart(start)
         case .roundStart(let round): receiveRoundStart(round)
         case .answerSubmission(let submission):
@@ -252,8 +262,12 @@ final class MatchCoordinator: ObservableObject {
             guard isHost, playerIDByConnection[connectionID] == playerID else { return }
             roundHints.insert(playerID)
         case .answerResult(let result):
-            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name } ?? "역 이름"
-            feedback = result.isCorrect ? "\(targetName), 정답이에요!" : "아니에요. 다시 입력해 보세요."
+            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name }
+                ?? AppLocalization.text("station.nameFallback")
+            feedback = result.isCorrect
+                ? AppLocalization.format("game.correct.format", targetName)
+                : AppLocalization.text("game.incorrectTryAgain")
+            feedbackIsCorrect = result.isCorrect
             localAnswerLocked = result.isLocked
         case .roundResult(let result): receiveRoundResult(result)
         case .matchResult(let result): receiveMatchResult(result)
@@ -269,11 +283,11 @@ final class MatchCoordinator: ObservableObject {
     private func handleJoin(_ request: JoinRequest, connectionID: UUID) {
         guard isHost, let configuration else { return }
         guard screenState == .lobby || lobbyPlayers.contains(where: { $0.id == request.playerID }) else {
-            send(.joinResponse(JoinResponse(accepted: false, reason: "이미 경기가 시작됐어요.", player: nil)), to: connectionID)
+            send(.joinResponse(JoinResponse(accepted: false, reason: AppLocalization.text("multiplayer.error.alreadyStarted"), player: nil)), to: connectionID)
             return
         }
         guard lobbyPlayers.count < configuration.maximumPlayers || lobbyPlayers.contains(where: { $0.id == request.playerID }) else {
-            send(.joinResponse(JoinResponse(accepted: false, reason: "방이 가득 찼어요.", player: nil)), to: connectionID)
+            send(.joinResponse(JoinResponse(accepted: false, reason: AppLocalization.text("multiplayer.error.roomFull"), player: nil)), to: connectionID)
             return
         }
 
@@ -294,7 +308,7 @@ final class MatchCoordinator: ObservableObject {
 
     private func handleJoinResponse(_ response: JoinResponse) {
         guard response.accepted else {
-            screenState = .failed(response.reason ?? "방에 들어가지 못했어요.")
+            screenState = .failed(response.reason ?? AppLocalization.text("multiplayer.error.joinFailed"))
             return
         }
         participantReconnectTask?.cancel()
@@ -418,8 +432,12 @@ final class MatchCoordinator: ObservableObject {
 
     private func respond(_ result: AnswerResult, playerID: UUID, connectionID: UUID?) {
         if playerID == localPlayerID {
-            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name } ?? "역 이름"
-            feedback = result.isCorrect ? "\(targetName), 정답이에요!" : "아니에요. 다시 입력해 보세요."
+            let targetName = currentQuestion.flatMap { catalog.stationByID[$0.targetStationID]?.name }
+                ?? AppLocalization.text("station.nameFallback")
+            feedback = result.isCorrect
+                ? AppLocalization.format("game.correct.format", targetName)
+                : AppLocalization.text("game.incorrectTryAgain")
+            feedbackIsCorrect = result.isCorrect
             localAnswerLocked = result.isLocked
         } else if let connectionID {
             send(.answerResult(result), to: connectionID)
@@ -487,6 +505,7 @@ final class MatchCoordinator: ObservableObject {
         hintVisible = false
         localAnswerLocked = false
         feedback = ""
+        feedbackIsCorrect = false
         revealedAnswer = ""
     }
 
@@ -557,9 +576,9 @@ final class MatchCoordinator: ObservableObject {
     private func networkFailed(_ underlyingMessage: String) {
         let message: String
         if role == .participant, screenState == .joining {
-            message = "참가 코드가 맞는지 확인하고 다시 시도해 주세요.\n\(underlyingMessage)"
+            message = AppLocalization.format("multiplayer.error.joinNetwork.format", underlyingMessage)
         } else {
-            message = "로컬 네트워크 접근을 확인해 주세요.\n\(underlyingMessage)"
+            message = AppLocalization.format("multiplayer.error.localNetwork.format", underlyingMessage)
         }
         screenState = .failed(message)
     }
@@ -591,7 +610,7 @@ final class MatchCoordinator: ObservableObject {
 
     private func beginParticipantReconnect() {
         guard let pendingRoom else {
-            screenState = .failed("방장과 연결이 끊겼어요.")
+            screenState = .failed(AppLocalization.text("multiplayer.error.hostDisconnected"))
             return
         }
         switch screenState {
@@ -609,7 +628,7 @@ final class MatchCoordinator: ObservableObject {
                 try? await Task.sleep(for: .seconds(2))
                 if self.service.state == .connected { return }
             }
-            self.screenState = .failed("15초 안에 방장과 다시 연결하지 못했어요.")
+            self.screenState = .failed(AppLocalization.text("multiplayer.error.reconnectTimedOut"))
         }
     }
 
