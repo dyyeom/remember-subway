@@ -180,6 +180,8 @@ struct WeeklyChallengePlayView: View {
     @State private var resultStatus = WeeklyResultStatus.saving
     @State private var keyboardPresented = false
     @State private var revealTask: Task<Void, Never>?
+    @State private var timerTask: Task<Void, Never>?
+    @State private var timeRemaining = WeeklyChallengeSession.roundDuration
     @FocusState private var focused: Bool
     let weekID: String
     let poolVersion: String
@@ -235,6 +237,24 @@ struct WeeklyChallengePlayView: View {
                         .foregroundStyle(.secondary)
                         .padding(.top, layout.contextTop)
 
+                    HStack(spacing: 12) {
+                        Label(
+                            AppLocalization.format("time.secondsPrecise.format", timeRemaining),
+                            systemImage: "timer"
+                        )
+                        .font(.headline.monospacedDigit())
+                        .foregroundStyle(timeRemaining <= 5 ? .red : .primary)
+
+                        ProgressView(
+                            value: timeRemaining,
+                            total: WeeklyChallengeSession.roundDuration
+                        )
+                        .tint(timeRemaining <= 5 ? .red : line.color)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, keyboardPresented ? 6 : 12)
+                    .accessibilityElement(children: .combine)
+
                     NeighborStationSignView(
                         previous: question.previous,
                         next: question.next,
@@ -276,7 +296,10 @@ struct WeeklyChallengePlayView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
-        .task { focused = true }
+        .task {
+            focused = true
+            startQuestionTimer()
+        }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
             keyboardPresented = true
         }
@@ -284,7 +307,10 @@ struct WeeklyChallengePlayView: View {
             keyboardPresented = false
         }
         .onChange(of: session.isFinished) { _, finished in if finished { finish() } }
-        .onDisappear { revealTask?.cancel() }
+        .onDisappear {
+            revealTask?.cancel()
+            timerTask?.cancel()
+        }
         .overlay { if session.isFinished { resultOverlay } }
     }
 
@@ -329,7 +355,10 @@ struct WeeklyChallengePlayView: View {
     private func submit() {
         let submittedQuestion = session.current
         let submittedLine = submittedQuestion.flatMap { catalog.lineByID[$0.lineID] }
-        switch session.submit(answer) {
+        let result = session.submit(answer, remainingTime: timeRemaining)
+        guard result != .ignored else { return }
+        timerTask?.cancel()
+        switch result {
         case .correct:
             feedback = AppLocalization.format(
                 "game.correct.format",
@@ -339,24 +368,9 @@ struct WeeklyChallengePlayView: View {
             feedbackColor = submittedLine?.color ?? .accentColor
             answer = ""
             impact(.success)
+            startQuestionTimer()
         case .incorrect:
-            feedback = AppLocalization.format(
-                "game.incorrectReveal.format",
-                submittedQuestion?.target.name ?? AppLocalization.text("station.nameFallback")
-            )
-            feedbackKind = .incorrect
-            feedbackColor = .red
-            answer = ""
-            focused = false
-            impact(.error)
-            revealTask?.cancel()
-            revealTask = Task { @MainActor in
-                try? await Task.sleep(for: .milliseconds(1_500))
-                guard !Task.isCancelled else { return }
-                session.continueAfterIncorrectAnswer()
-                feedback = ""
-                if !session.isFinished { restoreAnswerFocus() }
-            }
+            revealIncorrectAnswer(submittedQuestion, timedOut: false)
         case .ignored: break
         }
         UIAccessibility.post(notification: .announcement, argument: feedback)
@@ -393,6 +407,55 @@ struct WeeklyChallengePlayView: View {
         Task { @MainActor in
             await Task.yield()
             focused = true
+        }
+    }
+
+    private func startQuestionTimer() {
+        timerTask?.cancel()
+        guard session.current != nil, !session.isFinished, !session.isRevealingIncorrectAnswer else { return }
+        timeRemaining = WeeklyChallengeSession.roundDuration
+        let deadline = Date().addingTimeInterval(WeeklyChallengeSession.roundDuration)
+        timerTask = Task { @MainActor in
+            while !Task.isCancelled {
+                timeRemaining = max(0, deadline.timeIntervalSinceNow)
+                if timeRemaining <= 0 {
+                    timeRemaining = 0
+                    timeExpired()
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+        }
+    }
+
+    private func timeExpired() {
+        let expiredQuestion = session.current
+        guard session.expireCurrentQuestion() == .incorrect else { return }
+        revealIncorrectAnswer(expiredQuestion, timedOut: true)
+        UIAccessibility.post(notification: .announcement, argument: feedback)
+    }
+
+    private func revealIncorrectAnswer(_ question: WeeklyQuestion?, timedOut: Bool) {
+        timerTask?.cancel()
+        let targetName = question?.target.name ?? AppLocalization.text("station.nameFallback")
+        feedback = timedOut
+            ? AppLocalization.format("game.timeoutReveal.format", targetName)
+            : AppLocalization.format("game.incorrectReveal.format", targetName)
+        feedbackKind = .incorrect
+        feedbackColor = .red
+        answer = ""
+        focused = false
+        impact(.error)
+        revealTask?.cancel()
+        revealTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(1_500))
+            guard !Task.isCancelled else { return }
+            session.continueAfterIncorrectAnswer()
+            feedback = ""
+            if !session.isFinished {
+                startQuestionTimer()
+                restoreAnswerFocus()
+            }
         }
     }
 
@@ -455,12 +518,14 @@ struct WeeklyChallengePlayView: View {
 
     private func restart() {
         revealTask?.cancel()
+        timerTask?.cancel()
         didRecord = false
         resultStatus = .saving
         answer = ""
         feedback = ""
         feedbackKind = .neutral
         session.restart()
+        startQuestionTimer()
         restoreAnswerFocus()
     }
 }
