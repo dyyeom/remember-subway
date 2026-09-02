@@ -86,9 +86,8 @@ struct SeededGenerator: RandomNumberGenerator {
 
 enum WeeklyChallengeFactory {
     static func pointsPerCorrectAnswer(catalog: TransitCatalog, lineID: String?) -> Int {
-        guard let lineID, let line = catalog.lineByID[lineID] else { return 100 }
-        let stationCount = Set(catalog.patterns(for: line).flatMap(\.stationIDs)).count
-        return stationCount * 10
+        // 싱글플레이는 노선 길이와 관계없이 모든 문제를 100점 기준으로 계산한다.
+        return 100
     }
 
     static func weekID(for date: Date = .now, calendar: Calendar = Calendar(identifier: .iso8601)) -> String {
