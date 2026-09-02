@@ -49,6 +49,22 @@ struct CatalogTests {
         }
     }
 
+    @Test func weeklyLineQuestionsStayInsideSelectedLine() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let questions = WeeklyChallengeFactory.questions(
+            catalog: catalog,
+            weekID: "2026-W33",
+            regionID: "capital",
+            lineID: "seoul-4",
+            shuffleSeed: 1
+        )
+
+        #expect(!questions.isEmpty)
+        #expect(questions.allSatisfy { $0.lineID == "seoul-4" })
+        let stationCount = Set(catalog.patterns(for: catalog.lineByID["seoul-4"]!).flatMap(\.stationIDs)).count
+        #expect(stationCount * 10 == 510)
+    }
+
     @Test func bundledCatalogCoversAllOperatingUrbanRailLines() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         let expectedStationCounts = [

@@ -55,6 +55,51 @@ struct GameSessionTests {
         #expect(!session.isFinished)
     }
 
+    @Test func lineScoreUsesConfiguredPointsAndHintAwardsHalf() {
+        let questions = [WeeklyQuestion(
+            lineID: "line", routePatternID: "route",
+            previous: stations[0], target: stations[1], next: stations[2]
+        )]
+        let session = WeeklyChallengeSession(questions: questions, pointsPerCorrectAnswer: 510)
+
+        session.useHint()
+        #expect(session.submit("나역") == .correct)
+        #expect(session.score == 255)
+    }
+
+    @Test func incorrectAnswerWaitsForRevealThenAdvances() {
+        let questions = [
+            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
+            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
+        ]
+        let session = WeeklyChallengeSession(questions: questions)
+
+        #expect(session.submit("오답") == .incorrect)
+        #expect(session.current?.target.name == "나역")
+        #expect(session.isRevealingIncorrectAnswer)
+        #expect(session.submit("나역") == .ignored)
+        session.continueAfterIncorrectAnswer()
+        #expect(session.current?.target.name == "다역")
+        #expect(!session.isRevealingIncorrectAnswer)
+    }
+
+    @Test func lastLifeFinishesAfterIncorrectAnswerReveal() {
+        let question = WeeklyQuestion(
+            lineID: "line", routePatternID: "route",
+            previous: stations[0], target: stations[1], next: stations[2]
+        )
+        let session = WeeklyChallengeSession(questions: [question])
+
+        for _ in 0..<2 {
+            #expect(session.submit("오답") == .incorrect)
+            session.continueAfterIncorrectAnswer()
+        }
+        #expect(session.submit("오답") == .incorrect)
+        #expect(!session.isFinished)
+        session.continueAfterIncorrectAnswer()
+        #expect(session.isFinished)
+    }
+
     @Test func keyboardLayoutReducesOnlyVerticalSpacing() {
         let regular = GamePlayLayoutMetrics.regular
         let compact = GamePlayLayoutMetrics.keyboardPresented

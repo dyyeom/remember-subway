@@ -90,10 +90,18 @@ enum WeeklyChallengeFactory {
         return String(format: "%04d-W%02d", parts.yearForWeekOfYear ?? 0, parts.weekOfYear ?? 0)
     }
 
-    static func questions(catalog: TransitCatalog, weekID: String, regionID: String, shuffleSeed: UInt64? = nil) -> [WeeklyQuestion] {
+    static func questions(
+        catalog: TransitCatalog,
+        weekID: String,
+        regionID: String,
+        lineID: String? = nil,
+        shuffleSeed: UInt64? = nil
+    ) -> [WeeklyQuestion] {
         let stations = catalog.stationByID
         let regionLineIDs = Set(catalog.lines.lazy.filter { $0.regionID == regionID }.map(\.id))
-        var questions = catalog.routePatterns.filter { regionLineIDs.contains($0.lineID) }.flatMap { pattern -> [WeeklyQuestion] in
+        var questions = catalog.routePatterns.filter {
+            regionLineIDs.contains($0.lineID) && (lineID == nil || $0.lineID == lineID)
+        }.flatMap { pattern -> [WeeklyQuestion] in
             guard pattern.stationIDs.count >= 3 else { return [] }
             return (1..<(pattern.stationIDs.count - 1)).compactMap { index in
                 guard let previous = stations[pattern.stationIDs[index - 1]],
@@ -108,7 +116,7 @@ enum WeeklyChallengeFactory {
                 )
             }
         }
-        let seedText = "\(catalog.challengePoolVersion):\(weekID):\(regionID)"
+        let seedText = "\(catalog.challengePoolVersion):\(weekID):\(regionID):\(lineID ?? "all")"
         let seed = seedText.utf8.reduce(UInt64(14_695_981_039_346_656_037)) { ($0 ^ UInt64($1)) &* 1_099_511_628_211 }
         let attemptSeed = shuffleSeed ?? UInt64.random(in: UInt64.min...UInt64.max)
         var generator = SeededGenerator(seed: seed ^ attemptSeed)
@@ -124,14 +132,23 @@ final class WeeklyChallengeSession: ObservableObject {
     @Published private(set) var index = 0
     @Published private(set) var hintVisible = false
     @Published private(set) var isFinished = false
+    @Published private(set) var isRevealingIncorrectAnswer = false
 
     @Published private(set) var questions: [WeeklyQuestion]
-    init(questions: [WeeklyQuestion]) { self.questions = questions }
+    let pointsPerCorrectAnswer: Int
+
+    init(questions: [WeeklyQuestion], pointsPerCorrectAnswer: Int = 100) {
+        self.questions = questions
+        self.pointsPerCorrectAnswer = pointsPerCorrectAnswer
+    }
 
     var current: WeeklyQuestion? { questions.isEmpty ? nil : questions[index % questions.count] }
     var hint: String { current.map { AnswerMatcher.initialConsonants(of: $0.target.name) } ?? "" }
 
-    func useHint() { guard !isFinished else { return }; hintVisible = true }
+    func useHint() {
+        guard !isFinished, !isRevealingIncorrectAnswer else { return }
+        hintVisible = true
+    }
 
     func restart() {
         lives = 3
@@ -139,24 +156,39 @@ final class WeeklyChallengeSession: ObservableObject {
         index = 0
         hintVisible = false
         isFinished = false
+        isRevealingIncorrectAnswer = false
         questions.shuffle()
     }
 
     @discardableResult
     func submit(_ answer: String) -> GameSession.SubmissionResult {
-        guard !isFinished, let current else { return .ignored }
+        guard !isFinished, !isRevealingIncorrectAnswer, let current else { return .ignored }
         if AnswerMatcher.matches(answer, station: current.target) {
-            score += hintVisible ? 50 : 100
-            index += 1
-            hintVisible = false
-            if index >= questions.count {
-                questions.shuffle()
-                index = 0
-            }
+            score += hintVisible ? pointsPerCorrectAnswer / 2 : pointsPerCorrectAnswer
+            advanceQuestion()
             return .correct
         }
         lives -= 1
-        if lives == 0 { isFinished = true }
+        isRevealingIncorrectAnswer = true
         return .incorrect
+    }
+
+    func continueAfterIncorrectAnswer() {
+        guard isRevealingIncorrectAnswer else { return }
+        isRevealingIncorrectAnswer = false
+        if lives == 0 {
+            isFinished = true
+        } else {
+            advanceQuestion()
+        }
+    }
+
+    private func advanceQuestion() {
+        index += 1
+        hintVisible = false
+        if index >= questions.count {
+            questions.shuffle()
+            index = 0
+        }
     }
 }
