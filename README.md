@@ -43,3 +43,23 @@ App Store Connect에서 다음 식별자를 생성해야 실제 제출이 활성
 리더보드 ID의 하이픈은 밑줄로 변환합니다. 예를 들어 서울 4호선은 `kr.co.remembersubway.single.line.seoul_4.v1`입니다. 앱에 포함된 모든 지역과 노선 ID를 App Store Connect에 상시 리더보드로 등록해야 실제 순위 제출과 조회가 동작합니다. 기본 호환 ID는 `kr.co.remembersubway.single.v1`입니다.
 
 인증이나 네트워크가 실패해도 싱글플레이는 계속되며 최고 점수는 SwiftData에 제출 대기 상태로 저장됩니다. 제거된 일반 학습 모드의 업적은 더 이상 제출하지 않습니다.
+
+### 리더보드 API 일괄 등록
+
+`Tools/register_game_center_leaderboards.py`는 위의 지역·노선 목록을 읽어 App Store Connect API에 일괄 등록합니다. 기본 실행은 미리보기이며, 실제 등록에는 API 키와 Game Center detail ID가 필요합니다.
+
+```bash
+python3 -m pip install cryptography
+export ASC_ISSUER_ID="App Store Connect Issuer ID"
+export ASC_KEY_ID="API Key ID"
+export ASC_PRIVATE_KEY_PATH="/안전한/경로/AuthKey_XXXXXXXXXX.p8"
+export ASC_GAME_CENTER_DETAIL_ID="Game Center detail resource ID"
+
+# 등록 목록만 확인
+python3 Tools/register_game_center_leaderboards.py
+
+# 실제 생성 요청(37개)
+python3 Tools/register_game_center_leaderboards.py --apply
+```
+
+기본적으로 현재 사용하는 지역·노선별 37개(지역 5개 + 노선 32개)를 등록하며, 이전 버전 호환용 전체 ID까지 필요하면 `--include-fallback`을 추가합니다. API 키 파일은 저장소에 커밋하거나 채팅으로 공유하지 마세요. 생성 요청은 Apple의 [`POST /v2/gameCenterLeaderboards`](https://developer.apple.com/documentation/appstoreconnectapi/post-v2-gamecenterleaderboards)를 사용하고, 이미 존재하는 ID(409)는 건너뜁니다.
