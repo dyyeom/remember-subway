@@ -30,7 +30,7 @@
 		97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB6CD7BC4366C400BEC9137 /* StatsView.swift */; };
 		B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 223B67012D64E7A51047F971 /* transit_data.json */; };
 		D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */; };
-		ED8077749B53C14C73D5ADCF /* WeeklyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */; };
+		ED8077749B53C14C73D5ADCF /* SinglePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */; };
 		EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792A75284D8DF80362680B7 /* TutorialView.swift */; };
 		EF471FF0E34D19F9C4D64796 /* MultiplayerGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3674DA586C45F9663BBCE3A0 /* MultiplayerGameTests.swift */; };
 		F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */; };
@@ -67,7 +67,7 @@
 		39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTests.swift; sourceTree = "<group>"; };
 		3DD9EE9679024A7F872A5283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RememberSubwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChallengeView.swift; sourceTree = "<group>"; };
+		7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlayerView.swift; sourceTree = "<group>"; };
 		83CF08DE04AC029D7990909F /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		84B9FF296A68A9377ED664BC /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
 		90179A1FA3D64115BF6F8957 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };

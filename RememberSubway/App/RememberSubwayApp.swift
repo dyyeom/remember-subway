@@ -9,7 +9,7 @@ struct RememberSubwayApp: App {
     private let modelContainer: ModelContainer = {
         let schema = Schema([
             SegmentProgressRecord.self,
-            WeeklyBestRecord.self,
+            SinglePlayerBestRecord.self,
             AppSettingsRecord.self,
             PendingAchievementRecord.self,
             MultiplayerProfileRecord.self,

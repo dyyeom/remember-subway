@@ -2,17 +2,15 @@ import SwiftData
 import SwiftUI
 import UIKit
 
-struct WeeklyChallengeHomeView: View {
+struct SinglePlayerChallengeHomeView: View {
     @EnvironmentObject private var catalogStore: TransitCatalogStore
     @EnvironmentObject private var gameCenter: GameCenterService
-    @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var bestRecords: [WeeklyBestRecord]
+    @Query(sort: \SinglePlayerBestRecord.updatedAt, order: .reverse) private var bestRecords: [SinglePlayerBestRecord]
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
     @Binding var showTutorial: Bool
     @State private var selectedRegionID: String?
     @State private var selectedLineID: String?
-
-    private var weekID: String { WeeklyChallengeFactory.weekID() }
 
     var body: some View {
         ScrollView {
@@ -61,7 +59,6 @@ struct WeeklyChallengeHomeView: View {
                 .padding(.horizontal, 18)
                 .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 GroupBox {
-                    LabeledContent(AppLocalization.text("single.thisWeek"), value: weekID)
                     LabeledContent(
                         AppLocalization.text("single.myBestScore"),
                         value: AppLocalization.format("score.points.format", currentBest)
@@ -75,9 +72,8 @@ struct WeeklyChallengeHomeView: View {
                 }
                 if let selectedRegion {
                     NavigationLink {
-                        WeeklyChallengePlayView(
+                        SinglePlayerChallengePlayView(
                             catalog: catalogStore.catalog,
-                            weekID: weekID,
                             region: selectedRegion,
                             challengeLine: selectedLine
                         )
@@ -88,7 +84,7 @@ struct WeeklyChallengeHomeView: View {
                     .buttonStyle(.borderedProminent)
                 }
                 if gameCenter.isAuthenticated {
-                    Button(AppLocalization.format("single.weeklyRanking.format", challengeName), systemImage: "list.number") {
+                    Button(AppLocalization.format("single.ranking.format", challengeName), systemImage: "list.number") {
                         gameCenter.showLeaderboard(id: leaderboardID)
                     }
                         .buttonStyle(.bordered)
@@ -132,7 +128,7 @@ struct WeeklyChallengeHomeView: View {
     }
 
     private var leaderboardID: String {
-        GameCenterService.weeklyLeaderboardID(regionID: selectedRegionID ?? "unknown", lineID: selectedLineID)
+        GameCenterService.singlePlayerLeaderboardID(regionID: selectedRegionID ?? "unknown", lineID: selectedLineID)
     }
 
     private var challengeName: String {
@@ -142,7 +138,7 @@ struct WeeklyChallengeHomeView: View {
     }
 
     private var pointsPerCorrectAnswer: Int {
-        WeeklyChallengeFactory.pointsPerCorrectAnswer(
+        SinglePlayerQuestionFactory.pointsPerCorrectAnswer(
             catalog: catalogStore.catalog,
             lineID: selectedLineID
         )
@@ -158,32 +154,30 @@ struct WeeklyChallengeHomeView: View {
 
     private var currentBest: Int {
         bestRecords.first {
-            $0.weekID == weekID
-                && $0.poolVersion == catalogStore.catalog.challengePoolVersion
+            $0.poolVersion == catalogStore.catalog.challengePoolVersion
                 && $0.scopeID == scopeID
         }?.bestScore ?? 0
     }
 }
 
-struct WeeklyChallengePlayView: View {
+struct SinglePlayerChallengePlayView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var gameCenter: GameCenterService
     @Query private var settings: [AppSettingsRecord]
-    @StateObject private var session: WeeklyChallengeSession
+    @StateObject private var session: SinglePlayerSession
     @State private var answer = ""
     @State private var feedback = ""
-    @State private var feedbackKind = WeeklyFeedbackKind.neutral
+    @State private var feedbackKind = SinglePlayerFeedbackKind.neutral
     @State private var feedbackColor = Color.secondary
     @State private var didRecord = false
-    @State private var resultStatus = WeeklyResultStatus.saving
+    @State private var resultStatus = SinglePlayerResultStatus.saving
     @State private var keyboardPresented = false
     @State private var revealTask: Task<Void, Never>?
     @State private var timerTask: Task<Void, Never>?
-    @State private var timeRemaining = WeeklyChallengeSession.roundDuration
+    @State private var timeRemaining = SinglePlayerSession.roundDuration
     @FocusState private var focused: Bool
-    let weekID: String
     let poolVersion: String
     let catalog: TransitCatalog
     let region: Region
@@ -191,22 +185,20 @@ struct WeeklyChallengePlayView: View {
     let scopeID: String
     let leaderboardID: String
 
-    init(catalog: TransitCatalog, weekID: String, region: Region, challengeLine: Line? = nil) {
+    init(catalog: TransitCatalog, region: Region, challengeLine: Line? = nil) {
         self.catalog = catalog
-        self.weekID = weekID
         self.region = region
         self.challengeLine = challengeLine
         scopeID = challengeLine.map { "line:\($0.id)" } ?? "region:\(region.id)"
-        leaderboardID = GameCenterService.weeklyLeaderboardID(regionID: region.id, lineID: challengeLine?.id)
+        leaderboardID = GameCenterService.singlePlayerLeaderboardID(regionID: region.id, lineID: challengeLine?.id)
         poolVersion = catalog.challengePoolVersion
-        let points = WeeklyChallengeFactory.pointsPerCorrectAnswer(
+        let points = SinglePlayerQuestionFactory.pointsPerCorrectAnswer(
             catalog: catalog,
             lineID: challengeLine?.id
         )
-        _session = StateObject(wrappedValue: WeeklyChallengeSession(
-            questions: WeeklyChallengeFactory.questions(
+        _session = StateObject(wrappedValue: SinglePlayerSession(
+            questions: SinglePlayerQuestionFactory.questions(
                 catalog: catalog,
-                weekID: weekID,
                 regionID: region.id,
                 lineID: challengeLine?.id
             ),
@@ -247,7 +239,7 @@ struct WeeklyChallengePlayView: View {
 
                         ProgressView(
                             value: timeRemaining,
-                            total: WeeklyChallengeSession.roundDuration
+                            total: SinglePlayerSession.roundDuration
                         )
                         .tint(timeRemaining <= 5 ? .red : line.color)
                     }
@@ -292,7 +284,7 @@ struct WeeklyChallengePlayView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
-        .navigationTitle(AppLocalization.text("single.weeklyChallenge"))
+        .navigationTitle(AppLocalization.text("single.challenge"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
@@ -413,8 +405,8 @@ struct WeeklyChallengePlayView: View {
     private func startQuestionTimer() {
         timerTask?.cancel()
         guard session.current != nil, !session.isFinished, !session.isRevealingIncorrectAnswer else { return }
-        timeRemaining = WeeklyChallengeSession.roundDuration
-        let deadline = Date().addingTimeInterval(WeeklyChallengeSession.roundDuration)
+        timeRemaining = SinglePlayerSession.roundDuration
+        let deadline = Date().addingTimeInterval(SinglePlayerSession.roundDuration)
         timerTask = Task { @MainActor in
             while !Task.isCancelled {
                 timeRemaining = max(0, deadline.timeIntervalSinceNow)
@@ -435,7 +427,7 @@ struct WeeklyChallengePlayView: View {
         UIAccessibility.post(notification: .announcement, argument: feedback)
     }
 
-    private func revealIncorrectAnswer(_ question: WeeklyQuestion?, timedOut: Bool) {
+    private func revealIncorrectAnswer(_ question: SinglePlayerQuestion?, timedOut: Bool) {
         timerTask?.cancel()
         let targetName = question?.target.name ?? AppLocalization.text("station.nameFallback")
         feedback = timedOut
@@ -462,11 +454,10 @@ struct WeeklyChallengePlayView: View {
     private func finish() {
         guard !didRecord else { return }
         didRecord = true
-        let update: ProgressStore.WeeklyRecordUpdate
+        let update: ProgressStore.SinglePlayerRecordUpdate
         do {
-            update = try ProgressStore.recordWeekly(
+            update = try ProgressStore.recordSinglePlayer(
                 score: session.score,
-                weekID: weekID,
                 poolVersion: poolVersion,
                 scopeID: scopeID,
                 leaderboardID: leaderboardID,
@@ -488,7 +479,7 @@ struct WeeklyChallengePlayView: View {
 
         resultStatus = .submitting
         Task {
-            if await gameCenter.submitWeekly(score: update.record.bestScore, leaderboardID: leaderboardID) {
+            if await gameCenter.submitSinglePlayer(score: update.record.bestScore, leaderboardID: leaderboardID) {
                 update.record.pendingSubmission = false
                 try? modelContext.save()
                 resultStatus = .submitted
@@ -530,7 +521,7 @@ struct WeeklyChallengePlayView: View {
     }
 }
 
-enum WeeklyResultStatus: Equatable {
+enum SinglePlayerResultStatus: Equatable {
     case saving
     case zeroScore
     case bestUnchanged
@@ -554,7 +545,7 @@ enum WeeklyResultStatus: Equatable {
     }
 }
 
-private enum WeeklyFeedbackKind {
+private enum SinglePlayerFeedbackKind {
     case neutral
     case correct
     case incorrect

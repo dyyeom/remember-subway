@@ -4,7 +4,7 @@ import SwiftUI
 struct StatsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var catalogStore: TransitCatalogStore
-    @Query(sort: \WeeklyBestRecord.updatedAt, order: .reverse) private var weekly: [WeeklyBestRecord]
+    @Query(sort: \SinglePlayerBestRecord.updatedAt, order: .reverse) private var singlePlayer: [SinglePlayerBestRecord]
     @Query private var multiplayerProfiles: [MultiplayerProfileRecord]
     @Query(sort: \MultiplayerMatchRecord.playedAt, order: .reverse) private var multiplayerHistory: [MultiplayerMatchRecord]
 
@@ -17,10 +17,10 @@ struct StatsView: View {
                 LabeledContent(AppLocalization.text("stats.accuracy"), value: correctRate)
                 LabeledContent(AppLocalization.text("stats.bestScore"), value: AppLocalization.format("score.points.format", profile?.bestScore ?? 0))
             }
-            if !weekly.isEmpty {
+            if !singlePlayer.isEmpty {
                 Section(AppLocalization.text("stats.recentSingle.section")) {
-                    ForEach(weekly.prefix(10)) { record in
-                        LabeledContent("\(weeklyScopeName(record)) · \(record.weekID)", value: AppLocalization.format("score.points.format", record.bestScore))
+                    ForEach(singlePlayer.prefix(10)) { record in
+                        LabeledContent(singlePlayerScopeName(record), value: AppLocalization.format("score.points.format", record.bestScore))
                     }
                 }
             }
@@ -49,7 +49,7 @@ struct StatsView: View {
 
     private var profile: MultiplayerProfileRecord? { multiplayerProfiles.first }
 
-    private func weeklyScopeName(_ record: WeeklyBestRecord) -> String {
+    private func singlePlayerScopeName(_ record: SinglePlayerBestRecord) -> String {
         if record.scopeID.hasPrefix("line:") {
             let lineID = String(record.scopeID.dropFirst("line:".count))
             return catalogStore.catalog.lineByID[lineID]?.name ?? AppLocalization.text("common.line")

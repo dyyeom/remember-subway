@@ -7,7 +7,7 @@ struct RootTabView: View {
     @EnvironmentObject private var gameCenter: GameCenterService
     @Query private var settings: [AppSettingsRecord]
     @Query private var pendingAchievements: [PendingAchievementRecord]
-    @Query private var weeklyRecords: [WeeklyBestRecord]
+    @Query private var singlePlayerRecords: [SinglePlayerBestRecord]
     @State private var showSettings = false
     @State private var showStats = false
     @State private var showTutorial = false
@@ -20,7 +20,7 @@ struct RootTabView: View {
                 TabView {
                     Tab(AppLocalization.text("tab.singlePlayer"), systemImage: "person.fill") {
                         NavigationStack {
-                            WeeklyChallengeHomeView(
+                            SinglePlayerChallengeHomeView(
                                 showSettings: $showSettings,
                                 showStats: $showStats,
                                 showTutorial: $showTutorial
@@ -75,8 +75,8 @@ struct RootTabView: View {
                 modelContext.delete(record)
             }
         }
-        for record in weeklyRecords where record.pendingSubmission {
-            if await gameCenter.submitWeekly(score: record.bestScore, leaderboardID: record.leaderboardID) {
+        for record in singlePlayerRecords where record.pendingSubmission {
+            if await gameCenter.submitSinglePlayer(score: record.bestScore, leaderboardID: record.leaderboardID) {
                 record.pendingSubmission = false
             }
         }

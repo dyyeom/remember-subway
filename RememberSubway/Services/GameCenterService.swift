@@ -9,12 +9,12 @@ final class GameCenterService: NSObject, ObservableObject, @preconcurrency GKGam
     @Published private(set) var isAuthenticated = GKLocalPlayer.local.isAuthenticated
     @Published private(set) var lastError: String?
 
-    static let weeklyLeaderboardID = "kr.co.remembersubway.weekly.v1"
+    static let singlePlayerLeaderboardID = "kr.co.remembersubway.single.v1"
 
-    static func weeklyLeaderboardID(regionID: String, lineID: String?) -> String {
+    static func singlePlayerLeaderboardID(regionID: String, lineID: String?) -> String {
         let scope = lineID.map { "line.\(leaderboardComponent($0))" }
             ?? "region.\(leaderboardComponent(regionID))"
-        return "kr.co.remembersubway.weekly.\(scope).v1"
+        return "kr.co.remembersubway.single.\(scope).v1"
     }
 
     func authenticate() {
@@ -28,7 +28,7 @@ final class GameCenterService: NSObject, ObservableObject, @preconcurrency GKGam
         }
     }
 
-    func submitWeekly(score: Int, leaderboardID: String = weeklyLeaderboardID) async -> Bool {
+    func submitSinglePlayer(score: Int, leaderboardID: String = singlePlayerLeaderboardID) async -> Bool {
         guard isAuthenticated else { return false }
         do {
             try await GKLeaderboard.submitScore(

@@ -64,7 +64,7 @@ final class GameSession: ObservableObject {
     }
 }
 
-struct WeeklyQuestion: Hashable, Sendable {
+struct SinglePlayerQuestion: Hashable, Sendable {
     let lineID: String
     let routePatternID: String
     let previous: Station
@@ -84,35 +84,29 @@ struct SeededGenerator: RandomNumberGenerator {
     }
 }
 
-enum WeeklyChallengeFactory {
+enum SinglePlayerQuestionFactory {
     static func pointsPerCorrectAnswer(catalog: TransitCatalog, lineID: String?) -> Int {
         // 싱글플레이는 노선 길이와 관계없이 모든 문제를 100점 기준으로 계산한다.
         return 100
     }
 
-    static func weekID(for date: Date = .now, calendar: Calendar = Calendar(identifier: .iso8601)) -> String {
-        let parts = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
-        return String(format: "%04d-W%02d", parts.yearForWeekOfYear ?? 0, parts.weekOfYear ?? 0)
-    }
-
     static func questions(
         catalog: TransitCatalog,
-        weekID: String,
         regionID: String,
         lineID: String? = nil,
         shuffleSeed: UInt64? = nil
-    ) -> [WeeklyQuestion] {
+    ) -> [SinglePlayerQuestion] {
         let stations = catalog.stationByID
         let regionLineIDs = Set(catalog.lines.lazy.filter { $0.regionID == regionID }.map(\.id))
         var questions = catalog.routePatterns.filter {
             regionLineIDs.contains($0.lineID) && (lineID == nil || $0.lineID == lineID)
-        }.flatMap { pattern -> [WeeklyQuestion] in
+        }.flatMap { pattern -> [SinglePlayerQuestion] in
             guard pattern.stationIDs.count >= 3 else { return [] }
             return (1..<(pattern.stationIDs.count - 1)).compactMap { index in
                 guard let previous = stations[pattern.stationIDs[index - 1]],
                       let target = stations[pattern.stationIDs[index]],
                       let next = stations[pattern.stationIDs[index + 1]] else { return nil }
-                return WeeklyQuestion(
+                return SinglePlayerQuestion(
                     lineID: pattern.lineID,
                     routePatternID: pattern.id,
                     previous: previous,
@@ -121,7 +115,7 @@ enum WeeklyChallengeFactory {
                 )
             }
         }
-        let seedText = "\(catalog.challengePoolVersion):\(weekID):\(regionID):\(lineID ?? "all")"
+        let seedText = "\(catalog.challengePoolVersion):\(regionID):\(lineID ?? "all")"
         let seed = seedText.utf8.reduce(UInt64(14_695_981_039_346_656_037)) { ($0 ^ UInt64($1)) &* 1_099_511_628_211 }
         let attemptSeed = shuffleSeed ?? UInt64.random(in: UInt64.min...UInt64.max)
         var generator = SeededGenerator(seed: seed ^ attemptSeed)
@@ -131,7 +125,7 @@ enum WeeklyChallengeFactory {
 }
 
 @MainActor
-final class WeeklyChallengeSession: ObservableObject {
+final class SinglePlayerSession: ObservableObject {
     static let roundDuration: TimeInterval = 15
     static let fullScoreRemainingTime: TimeInterval = 10
 
@@ -142,15 +136,15 @@ final class WeeklyChallengeSession: ObservableObject {
     @Published private(set) var isFinished = false
     @Published private(set) var isRevealingIncorrectAnswer = false
 
-    @Published private(set) var questions: [WeeklyQuestion]
+    @Published private(set) var questions: [SinglePlayerQuestion]
     let pointsPerCorrectAnswer: Int
 
-    init(questions: [WeeklyQuestion], pointsPerCorrectAnswer: Int = 100) {
+    init(questions: [SinglePlayerQuestion], pointsPerCorrectAnswer: Int = 100) {
         self.questions = questions
         self.pointsPerCorrectAnswer = pointsPerCorrectAnswer
     }
 
-    var current: WeeklyQuestion? { questions.isEmpty ? nil : questions[index % questions.count] }
+    var current: SinglePlayerQuestion? { questions.isEmpty ? nil : questions[index % questions.count] }
     var hint: String { current.map { AnswerMatcher.initialConsonants(of: $0.target.name) } ?? "" }
 
     func useHint() {
@@ -171,7 +165,7 @@ final class WeeklyChallengeSession: ObservableObject {
     @discardableResult
     func submit(
         _ answer: String,
-        remainingTime: TimeInterval = WeeklyChallengeSession.roundDuration
+        remainingTime: TimeInterval = SinglePlayerSession.roundDuration
     ) -> GameSession.SubmissionResult {
         guard !isFinished, !isRevealingIncorrectAnswer, let current else { return .ignored }
         if AnswerMatcher.matches(answer, station: current.target) {

@@ -23,27 +23,24 @@ final class SegmentProgressRecord {
 }
 
 @Model
-final class WeeklyBestRecord {
+final class SinglePlayerBestRecord {
     @Attribute(.unique) var key: String
-    var weekID: String
     var poolVersion: String
     var scopeID: String = "legacy"
-    var leaderboardID: String = "kr.co.remembersubway.weekly.v1"
+    var leaderboardID: String = "kr.co.remembersubway.single.v1"
     var bestScore: Int
     var pendingSubmission: Bool
     var updatedAt: Date
 
     init(
-        weekID: String,
         poolVersion: String,
         scopeID: String = "legacy",
-        leaderboardID: String = "kr.co.remembersubway.weekly.v1",
+        leaderboardID: String = "kr.co.remembersubway.single.v1",
         bestScore: Int = 0,
         pendingSubmission: Bool = false,
         updatedAt: Date = .now
     ) {
-        self.key = "\(poolVersion):\(weekID):\(scopeID)"
-        self.weekID = weekID
+        self.key = "\(poolVersion):\(scopeID)"
         self.poolVersion = poolVersion
         self.scopeID = scopeID
         self.leaderboardID = leaderboardID

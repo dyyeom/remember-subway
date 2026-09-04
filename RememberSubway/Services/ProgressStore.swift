@@ -5,8 +5,8 @@ import SwiftData
 enum ProgressStore {
     private static let retiredAchievementIDs = ["first_segment", "perfect_segment", "first_line", "first_region", "all_regions"]
 
-    struct WeeklyRecordUpdate {
-        let record: WeeklyBestRecord
+    struct SinglePlayerRecordUpdate {
+        let record: SinglePlayerBestRecord
         let didImproveBest: Bool
     }
 
@@ -25,18 +25,16 @@ enum ProgressStore {
         try context.save()
     }
 
-    static func recordWeekly(
+    static func recordSinglePlayer(
         score: Int,
-        weekID: String,
         poolVersion: String,
         scopeID: String = "legacy",
-        leaderboardID: String = GameCenterService.weeklyLeaderboardID,
+        leaderboardID: String = GameCenterService.singlePlayerLeaderboardID,
         context: ModelContext
-    ) throws -> WeeklyRecordUpdate {
-        let key = "\(poolVersion):\(weekID):\(scopeID)"
-        let descriptor = FetchDescriptor<WeeklyBestRecord>(predicate: #Predicate { $0.key == key })
-        let record = try context.fetch(descriptor).first ?? WeeklyBestRecord(
-            weekID: weekID,
+    ) throws -> SinglePlayerRecordUpdate {
+        let key = "\(poolVersion):\(scopeID)"
+        let descriptor = FetchDescriptor<SinglePlayerBestRecord>(predicate: #Predicate { $0.key == key })
+        let record = try context.fetch(descriptor).first ?? SinglePlayerBestRecord(
             poolVersion: poolVersion,
             scopeID: scopeID,
             leaderboardID: leaderboardID
@@ -49,7 +47,7 @@ enum ProgressStore {
             record.updatedAt = .now
         }
         try context.save()
-        return WeeklyRecordUpdate(record: record, didImproveBest: didImproveBest)
+        return SinglePlayerRecordUpdate(record: record, didImproveBest: didImproveBest)
     }
 
     static func queueAchievement(id: String, context: ModelContext) throws {
