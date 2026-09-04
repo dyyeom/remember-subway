@@ -17,22 +17,22 @@ struct CatalogTests {
         }
     }
 
-    @Test func weeklyOrderChangesByAttemptSeedWithoutChangingQuestionPool() throws {
+    @Test func  singlePlayerOrderChangesByAttemptSeedWithoutChangingQuestionPool() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        let first = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 1)
-        let repeated = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 1)
-        let second = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: "capital", shuffleSeed: 2)
+        let first = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: "capital", shuffleSeed: 1)
+        let repeated = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: "capital", shuffleSeed: 1)
+        let second = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: "capital", shuffleSeed: 2)
         #expect(first == repeated)
         #expect(first != second)
         #expect(Set(first) == Set(second))
         #expect(!first.isEmpty)
     }
 
-    @Test func weeklyQuestionsStayInsideRegionAndUseThreeAdjacentStations() throws {
+    @Test func  singlePlayerQuestionsStayInsideRegionAndUseThreeAdjacentStations() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
 
         for region in catalog.regions {
-            let questions = WeeklyChallengeFactory.questions(catalog: catalog, weekID: "2026-W33", regionID: region.id)
+            let questions = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: region.id)
             #expect(!questions.isEmpty)
 
             for question in questions {
@@ -49,11 +49,10 @@ struct CatalogTests {
         }
     }
 
-    @Test func weeklyLineQuestionsStayInsideSelectedLine() throws {
+    @Test func  singlePlayerLineQuestionsStayInsideSelectedLine() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        let questions = WeeklyChallengeFactory.questions(
+        let questions = SinglePlayerQuestionFactory.questions(
             catalog: catalog,
-            weekID: "2026-W33",
             regionID: "capital",
             lineID: "seoul-4",
             shuffleSeed: 1
@@ -61,8 +60,8 @@ struct CatalogTests {
 
         #expect(!questions.isEmpty)
         #expect(questions.allSatisfy { $0.lineID == "seoul-4" })
-        #expect(WeeklyChallengeFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: "seoul-4") == 100)
-        #expect(WeeklyChallengeFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: nil) == 100)
+        #expect(SinglePlayerQuestionFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: "seoul-4") == 100)
+        #expect(SinglePlayerQuestionFactory.pointsPerCorrectAnswer(catalog: catalog, lineID: nil) == 100)
     }
 
     @Test func bundledCatalogCoversAllOperatingUrbanRailLines() throws {
@@ -133,18 +132,18 @@ struct CatalogTests {
         }
     }
 
-    @Test func weeklyResultMessagesDistinguishLoginAndSubmissionStates() {
+    @Test func  singlePlayerResultMessagesDistinguishLoginAndSubmissionStates() {
         let messages = [
-            WeeklyResultStatus.zeroScore.message,
-            WeeklyResultStatus.bestUnchanged.message,
-            WeeklyResultStatus.waitingForGameCenter.message,
-            WeeklyResultStatus.submissionFailed.message,
-            WeeklyResultStatus.submitted.message
+            SinglePlayerResultStatus.zeroScore.message,
+            SinglePlayerResultStatus.bestUnchanged.message,
+            SinglePlayerResultStatus.waitingForGameCenter.message,
+            SinglePlayerResultStatus.submissionFailed.message,
+            SinglePlayerResultStatus.submitted.message
         ]
         #expect(messages.allSatisfy { !$0.isEmpty })
         #expect(Set(messages).count == messages.count)
-        #expect(WeeklyResultStatus.zeroScore.message.contains("0"))
-        #expect(WeeklyResultStatus.zeroScore.message.contains("Game Center"))
+        #expect(SinglePlayerResultStatus.zeroScore.message.contains("0"))
+        #expect(SinglePlayerResultStatus.zeroScore.message.contains("Game Center"))
     }
 
     @Test func appBundleContainsEnglishAndKoreanLocalizations() throws {
@@ -168,42 +167,42 @@ struct CatalogTests {
         return try #require(PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any])
     }
 
-    @Test func weeklyZeroScoreDoesNotEnterGameCenterSubmissionQueue() throws {
+    @Test func  singlePlayerZeroScoreDoesNotEnterGameCenterSubmissionQueue() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: WeeklyBestRecord.self, configurations: configuration)
+        let container = try ModelContainer(for: SinglePlayerBestRecord.self, configurations: configuration)
         let context = container.mainContext
 
-        let zero = try ProgressStore.recordWeekly(score: 0, weekID: "2026-W34", poolVersion: "test", context: context)
+        let zero = try ProgressStore.recordSinglePlayer(score: 0, poolVersion: "test", context: context)
         #expect(!zero.didImproveBest)
         #expect(zero.record.bestScore == 0)
         #expect(!zero.record.pendingSubmission)
 
-        let best = try ProgressStore.recordWeekly(score: 100, weekID: "2026-W34", poolVersion: "test", context: context)
+        let best = try ProgressStore.recordSinglePlayer(score: 100, poolVersion: "test", context: context)
         #expect(best.didImproveBest)
         #expect(best.record.pendingSubmission)
 
-        let lower = try ProgressStore.recordWeekly(score: 50, weekID: "2026-W34", poolVersion: "test", context: context)
+        let lower = try ProgressStore.recordSinglePlayer(score: 50, poolVersion: "test", context: context)
         #expect(!lower.didImproveBest)
         #expect(lower.record.bestScore == 100)
     }
 
-    @Test func weeklyRecordsAndLeaderboardsAreSeparatedByScope() throws {
+    @Test func singlePlayerRecordsAndLeaderboardsAreSeparatedByScope() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: WeeklyBestRecord.self, configurations: configuration)
+        let container = try ModelContainer(for: SinglePlayerBestRecord.self, configurations: configuration)
         let context = container.mainContext
-        let regionLeaderboard = GameCenterService.weeklyLeaderboardID(regionID: "capital", lineID: nil)
-        let lineLeaderboard = GameCenterService.weeklyLeaderboardID(regionID: "capital", lineID: "seoul-4")
+        let regionLeaderboard = GameCenterService.singlePlayerLeaderboardID(regionID: "capital", lineID: nil)
+        let lineLeaderboard = GameCenterService.singlePlayerLeaderboardID(regionID: "capital", lineID: "seoul-4")
 
-        _ = try ProgressStore.recordWeekly(
-            score: 100, weekID: "2026-W36", poolVersion: "test",
+        _ = try ProgressStore.recordSinglePlayer(
+            score: 100, poolVersion: "test",
             scopeID: "region:capital", leaderboardID: regionLeaderboard, context: context
         )
-        _ = try ProgressStore.recordWeekly(
-            score: 510, weekID: "2026-W36", poolVersion: "test",
+        _ = try ProgressStore.recordSinglePlayer(
+            score: 510, poolVersion: "test",
             scopeID: "line:seoul-4", leaderboardID: lineLeaderboard, context: context
         )
 
-        let records = try context.fetch(FetchDescriptor<WeeklyBestRecord>())
+        let records = try context.fetch(FetchDescriptor<SinglePlayerBestRecord>())
         #expect(records.count == 2)
         #expect(Set(records.map(\.leaderboardID)) == Set([regionLeaderboard, lineLeaderboard]))
         #expect(lineLeaderboard.hasSuffix("line.seoul_4.v1"))

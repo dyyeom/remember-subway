@@ -40,12 +40,12 @@ struct GameSessionTests {
         #expect(session.outcome == .completed(stars: 2))
     }
 
-    @Test func weeklySessionKeepsPlayingAcrossConsecutiveCorrectAnswers() {
+    @Test func  singlePlayerSessionKeepsPlayingAcrossConsecutiveCorrectAnswers() {
         let questions = [
-            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
-            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
+            SinglePlayerQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
+            SinglePlayerQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
         ]
-        let session = WeeklyChallengeSession(questions: questions)
+        let session = SinglePlayerSession(questions: questions)
 
         #expect(session.submit("나역") == .correct)
         #expect(session.current?.target.name == "다역")
@@ -56,43 +56,43 @@ struct GameSessionTests {
     }
 
     @Test func lineScoreUsesConfiguredPointsAndHintAwardsHalf() {
-        let questions = [WeeklyQuestion(
+        let questions = [SinglePlayerQuestion(
             lineID: "line", routePatternID: "route",
             previous: stations[0], target: stations[1], next: stations[2]
         )]
-        let session = WeeklyChallengeSession(questions: questions, pointsPerCorrectAnswer: 510)
+        let session = SinglePlayerSession(questions: questions, pointsPerCorrectAnswer: 510)
 
         session.useHint()
         #expect(session.submit("나역") == .correct)
         #expect(session.score == 255)
     }
 
-    @Test func weeklyTimeScoreIsFullForFirstFiveSecondsThenDropsLinearly() {
-        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 15) == 500)
-        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 10) == 500)
-        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 9) == 450)
-        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 5) == 250)
-        #expect(WeeklyChallengeSession.points(basePoints: 500, hintUsed: false, remainingTime: 0) == 0)
+    @Test func  singlePlayerTimeScoreIsFullForFirstFiveSecondsThenDropsLinearly() {
+        #expect(SinglePlayerSession.points(basePoints: 500, hintUsed: false, remainingTime: 15) == 500)
+        #expect(SinglePlayerSession.points(basePoints: 500, hintUsed: false, remainingTime: 10) == 500)
+        #expect(SinglePlayerSession.points(basePoints: 500, hintUsed: false, remainingTime: 9) == 450)
+        #expect(SinglePlayerSession.points(basePoints: 500, hintUsed: false, remainingTime: 5) == 250)
+        #expect(SinglePlayerSession.points(basePoints: 500, hintUsed: false, remainingTime: 0) == 0)
     }
 
-    @Test func weeklyTimeScoreAppliesHintReductionBeforeTimeReduction() {
-        let question = WeeklyQuestion(
+    @Test func  singlePlayerTimeScoreAppliesHintReductionBeforeTimeReduction() {
+        let question = SinglePlayerQuestion(
             lineID: "line", routePatternID: "route",
             previous: stations[0], target: stations[1], next: stations[2]
         )
-        let session = WeeklyChallengeSession(questions: [question], pointsPerCorrectAnswer: 510)
+        let session = SinglePlayerSession(questions: [question], pointsPerCorrectAnswer: 510)
 
         session.useHint()
         #expect(session.submit("나역", remainingTime: 8) == .correct)
         #expect(session.score == 204)
     }
 
-    @Test func weeklyTimeoutLosesLifeAndRevealsAnswer() {
-        let question = WeeklyQuestion(
+    @Test func  singlePlayerTimeoutLosesLifeAndRevealsAnswer() {
+        let question = SinglePlayerQuestion(
             lineID: "line", routePatternID: "route",
             previous: stations[0], target: stations[1], next: stations[2]
         )
-        let session = WeeklyChallengeSession(questions: [question])
+        let session = SinglePlayerSession(questions: [question])
 
         #expect(session.expireCurrentQuestion() == .incorrect)
         #expect(session.lives == 2)
@@ -102,10 +102,10 @@ struct GameSessionTests {
 
     @Test func incorrectAnswerWaitsForRevealThenAdvances() {
         let questions = [
-            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
-            WeeklyQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
+            SinglePlayerQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),
+            SinglePlayerQuestion(lineID: "line", routePatternID: "route", previous: stations[1], target: stations[2], next: stations[0])
         ]
-        let session = WeeklyChallengeSession(questions: questions)
+        let session = SinglePlayerSession(questions: questions)
 
         #expect(session.submit("오답") == .incorrect)
         #expect(session.current?.target.name == "나역")
@@ -117,11 +117,11 @@ struct GameSessionTests {
     }
 
     @Test func lastLifeFinishesAfterIncorrectAnswerReveal() {
-        let question = WeeklyQuestion(
+        let question = SinglePlayerQuestion(
             lineID: "line", routePatternID: "route",
             previous: stations[0], target: stations[1], next: stations[2]
         )
-        let session = WeeklyChallengeSession(questions: [question])
+        let session = SinglePlayerSession(questions: [question])
 
         for _ in 0..<2 {
             #expect(session.submit("오답") == .incorrect)

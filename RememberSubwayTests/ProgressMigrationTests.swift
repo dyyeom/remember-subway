@@ -5,11 +5,11 @@ import Testing
 
 @MainActor
 struct ProgressMigrationTests {
-    @Test func legacyProgressIsRemovedOnceWithoutDeletingWeeklyRecords() throws {
+    @Test func legacyProgressIsRemovedOnceWithoutDeletingSinglePlayerRecords() throws {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(
             for: SegmentProgressRecord.self,
-            WeeklyBestRecord.self,
+            SinglePlayerBestRecord.self,
             AppSettingsRecord.self,
             PendingAchievementRecord.self,
             configurations: configuration
@@ -18,13 +18,13 @@ struct ProgressMigrationTests {
         let settings = AppSettingsRecord()
         context.insert(settings)
         context.insert(SegmentProgressRecord(segmentID: "old", routePatternID: "route"))
-        context.insert(WeeklyBestRecord(weekID: "2026-W35", poolVersion: "v1", bestScore: 300))
+        context.insert(SinglePlayerBestRecord(poolVersion: "v1", bestScore: 300))
         context.insert(PendingAchievementRecord(achievementID: "first_segment"))
 
         try ProgressStore.removeLegacyProgressIfNeeded(settings: settings, context: context)
         #expect(try context.fetch(FetchDescriptor<SegmentProgressRecord>()).isEmpty)
         #expect(try context.fetch(FetchDescriptor<PendingAchievementRecord>()).isEmpty)
-        #expect(try context.fetch(FetchDescriptor<WeeklyBestRecord>()).count == 1)
+        #expect(try context.fetch(FetchDescriptor<SinglePlayerBestRecord>()).count == 1)
         #expect(settings.didRemoveLegacyProgress)
 
         context.insert(SegmentProgressRecord(segmentID: "later", routePatternID: "route"))
