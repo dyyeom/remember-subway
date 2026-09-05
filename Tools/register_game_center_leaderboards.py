@@ -8,7 +8,9 @@ import argparse, base64, json, os, sys, time, urllib.error, urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-API_ROOT = "https://api.appstoreconnect.apple.com/v2"
+# The v1 endpoint remains the compatible creation endpoint for classic
+# leaderboards; v2 additionally requires an inline leaderboard version.
+API_ROOT = "https://api.appstoreconnect.apple.com/v1"
 DEFAULT_DATA = Path(__file__).resolve().parents[1] / "RememberSubway/Resources/transit_data.json"
 PREFIX = "kr.co.remembersubway.single"
 
@@ -44,7 +46,7 @@ def entries(catalog: dict, include_fallback: bool) -> list[dict]:
 def create(token: str, detail_id: str, item: dict) -> tuple[int, str]:
     body = {"data": {"type":"gameCenterLeaderboards", "attributes": {
         "referenceName": item["name"][:40], "vendorIdentifier": item["id"], "defaultFormatter":"INTEGER",
-        "submissionType":"BEST_SCORE", "scoreSortType":"DESC", "scoreRangeStart":0, "scoreRangeEnd":100000,
+        "submissionType":"BEST_SCORE", "scoreSortType":"DESC", "scoreRangeStart":"0", "scoreRangeEnd":"100000",
         "visibility":"SHOW_FOR_ALL"}, "relationships":{"gameCenterDetail":{"data":{"type":"gameCenterDetails","id":detail_id}}}}}
     req = urllib.request.Request(f"{API_ROOT}/gameCenterLeaderboards", json.dumps(body).encode(), {"Authorization":f"Bearer {token}","Content-Type":"application/json","Accept":"application/json"}, method="POST")
     try:
@@ -73,7 +75,7 @@ def main() -> int:
             if status != 429 or attempt == 2: break
             time.sleep(2 ** attempt)
         if status == 201: print(f"[{index}/{len(items)}] 생성됨: {item['id']}")
-        elif status == 409: print(f"[{index}/{len(items)}] 이미 존재: {item['id']}")
+        elif status == 409 and ("already" in response.lower() or "duplicate" in response.lower()): print(f"[{index}/{len(items)}] 이미 존재: {item['id']}")
         else: print(f"[{index}/{len(items)}] 실패 {status}: {response}", file=sys.stderr)
     return 0
 
