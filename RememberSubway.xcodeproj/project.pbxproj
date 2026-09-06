@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A10000000000000000000001 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* AppLocalization.swift */; };
-		A10000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* Localizable.xcstrings */; };
-		A10000000000000000000003 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* InfoPlist.xcstrings */; };
-		A10000000000000000000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* Assets.xcassets */; };
 		004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A82C708D56BD0B51F706E83D /* ProgressStore.swift */; };
 		0262D6614B01E4D6CDC5E17A /* ProgressMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31533849206E615D7B8109F4 /* ProgressMigrationTests.swift */; };
 		104679C274E591FB759E4E14 /* MultiplayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */; };
@@ -28,6 +24,10 @@
 		9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */; };
 		951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */; };
 		97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB6CD7BC4366C400BEC9137 /* StatsView.swift */; };
+		A10000000000000000000001 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000011 /* AppLocalization.swift */; };
+		A10000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000012 /* Localizable.xcstrings */; };
+		A10000000000000000000003 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000013 /* InfoPlist.xcstrings */; };
+		A10000000000000000000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000014 /* Assets.xcassets */; };
 		B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 223B67012D64E7A51047F971 /* transit_data.json */; };
 		D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */; };
 		ED8077749B53C14C73D5ADCF /* SinglePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */; };
@@ -50,10 +50,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000011 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
-		A10000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		A10000000000000000000013 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
-		A10000000000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionTests.swift; sourceTree = "<group>"; };
 		0792A75284D8DF80362680B7 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
@@ -66,12 +62,16 @@
 		3726629AF4791F7A65C433A5 /* RememberSubway.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RememberSubway.entitlements; sourceTree = "<group>"; };
 		39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTests.swift; sourceTree = "<group>"; };
 		3DD9EE9679024A7F872A5283 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RememberSubwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F2B04DC204CC88AEC58C2CC /* RememberSubwayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RememberSubwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlayerView.swift; sourceTree = "<group>"; };
 		83CF08DE04AC029D7990909F /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		84B9FF296A68A9377ED664BC /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
 		90179A1FA3D64115BF6F8957 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
 		99B4DD290903968E58EB5DC5 /* MatchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCoordinator.swift; sourceTree = "<group>"; };
+		A10000000000000000000011 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
+		A10000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A10000000000000000000013 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		A10000000000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2E2AA64023123F2BA091EEB /* GameSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionView.swift; sourceTree = "<group>"; };
 		A82C708D56BD0B51F706E83D /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
 		AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcherTests.swift; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 		E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitModels.swift; sourceTree = "<group>"; };
 		E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerView.swift; sourceTree = "<group>"; };
 		E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitCatalogStore.swift; sourceTree = "<group>"; };
-		E8E6757CD7409BE2D14B126F /* RememberSubway.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RememberSubway.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8E6757CD7409BE2D14B126F /* RememberSubway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RememberSubway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECB6CD7BC4366C400BEC9137 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberSubwayApp.swift; sourceTree = "<group>"; };
 		F0D855F08219B1C36CF7F982 /* AnswerMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcher.swift; sourceTree = "<group>"; };
@@ -186,7 +186,7 @@
 				84B9FF296A68A9377ED664BC /* SharedViews.swift */,
 				ECB6CD7BC4366C400BEC9137 /* StatsView.swift */,
 				0792A75284D8DF80362680B7 /* TutorialView.swift */,
-				7738C80114EE60D3694F3C05 /* WeeklyChallengeView.swift */,
+				7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -238,14 +238,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2600;
-				TargetAttributes = {
-					6A3786F7D6F8B1B630B08557 = {
-						DevelopmentTeam = "";
-					};
-					A6E8FFC7C77554BCD67AD36D = {
-						DevelopmentTeam = "";
-					};
-				};
 			};
 			buildConfigurationList = E39A393FDB43562AE5955F1F /* Build configuration list for PBXProject "RememberSubway" */;
 			developmentRegion = en;
@@ -319,7 +311,7 @@
 				9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */,
 				951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */,
 				EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */,
-				ED8077749B53C14C73D5ADCF /* WeeklyChallengeView.swift in Sources */,
+				ED8077749B53C14C73D5ADCF /* SinglePlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +397,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = GW3G2WPCXT;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -484,16 +477,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GW3G2WPCXT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RememberSubway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.app;
 				PRODUCT_MODULE_NAME = RememberSubway;
-				PRODUCT_NAME = "역순서";
+				PRODUCT_NAME = RememberSubway;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -503,6 +501,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = GW3G2WPCXT;
 				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -522,16 +521,21 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RememberSubway/RememberSubway.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GW3G2WPCXT;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = RememberSubway/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.app;
 				PRODUCT_MODULE_NAME = RememberSubway;
-				PRODUCT_NAME = "역순서";
+				PRODUCT_NAME = RememberSubway;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
