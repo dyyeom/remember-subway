@@ -2510,7 +2510,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "역순서 · 무료 · 광고 없음"
+            "value" : "사이역 · 무료 · 광고 없음"
           }
         }
       }
@@ -3513,7 +3513,7 @@
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "역순서에 오신 것을 환영해요"
+            "value" : "사이역에 오신 것을 환영해요"
           }
         }
       }

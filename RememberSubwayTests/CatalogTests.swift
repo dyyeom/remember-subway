@@ -158,7 +158,7 @@ struct CatalogTests {
         let englishInfo = try localizedInfo(at: englishPath)
         let koreanInfo = try localizedInfo(at: koreanPath)
         #expect(englishInfo["CFBundleDisplayName"] as? String == "RememberSubway")
-        #expect(koreanInfo["CFBundleDisplayName"] as? String == "역순서")
+        #expect(koreanInfo["CFBundleDisplayName"] as? String == "사이역")
     }
 
     private func localizedInfo(at localizationPath: String) throws -> [String: Any] {
