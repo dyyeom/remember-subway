@@ -2,15 +2,49 @@
   "sourceLanguage" : "en",
   "strings" : {
     "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
       "localizations" : {
-        "en" : {"stringUnit" : {"state" : "translated", "value" : "RememberSubway"}},
-        "ko" : {"stringUnit" : {"state" : "translated", "value" : "역순서"}}
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RememberSubway"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "역순서"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "RememberSubway"
+          }
+        }
       }
     },
     "NSLocalNetworkUsageDescription" : {
+      "comment" : "Privacy - Local Network Usage Description",
       "localizations" : {
-        "en" : {"stringUnit" : {"state" : "translated", "value" : "RememberSubway uses your local network to connect nearby friends for station-name matches."}},
-        "ko" : {"stringUnit" : {"state" : "translated", "value" : "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다."}}
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RememberSubway uses your local network to connect nearby friends for station-name matches."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "근처의 친구와 역 이름 대전을 연결하기 위해 로컬 네트워크를 사용합니다."
+          }
+        }
       }
     }
   },
