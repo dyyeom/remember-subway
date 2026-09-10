@@ -104,8 +104,8 @@ enum SinglePlayerQuestionFactory {
             guard pattern.stationIDs.count >= 2 else { return [] }
             let indices = pattern.kind == .loop ? Array(pattern.stationIDs.indices) : Array(pattern.stationIDs.indices)
             return indices.compactMap { index in
-                let previousID = index > 0 ? pattern.stationIDs[index - 1] : nil
-                let nextID = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : nil
+                let previousID = index > 0 ? pattern.stationIDs[index - 1] : (pattern.kind == .loop ? pattern.stationIDs.last : nil)
+                let nextID = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : (pattern.kind == .loop ? pattern.stationIDs.first : nil)
                 let previous = previousID.flatMap { stations[$0] }
                 guard let target = stations[pattern.stationIDs[index]] else { return nil }
                 let next = nextID.flatMap { stations[$0] }

@@ -140,9 +140,9 @@ enum MultiplayerQuestionFactory {
             indices = Array(pattern.stationIDs.indices)
 
             for index in indices {
-                let previous = index > 0 ? pattern.stationIDs[index - 1] : nil
+                let previous = index > 0 ? pattern.stationIDs[index - 1] : (pattern.kind == .loop ? pattern.stationIDs.last : nil)
                 let target = pattern.stationIDs[index]
-                let next = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : nil
+                let next = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : (pattern.kind == .loop ? pattern.stationIDs.first : nil)
                 let triple = "\(previous ?? "none")|\(target)|\(next ?? "none")"
                 guard seenTriples.insert(triple).inserted else { continue }
                 questions.append(MultiplayerQuestion(
