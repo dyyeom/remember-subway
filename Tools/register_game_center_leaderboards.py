@@ -36,11 +36,11 @@ def component(value: str) -> str:
 
 def entries(catalog: dict, include_fallback: bool) -> list[dict]:
     regions = {r["id"]: r["name"] for r in catalog.get("regions", [])}
-    result = ([{"id": f"{PREFIX}.v1", "name": "역순서 전체 기록"}] if include_fallback else [])
+    result = ([{"id": f"{PREFIX}.v1", "name": "역순서 전체 기록", "name_en": "RememberSubway · All Scores"}] if include_fallback else [])
     for region in sorted(catalog.get("regions", []), key=lambda x: x.get("sortOrder", 0)):
-        result.append({"id": f"{PREFIX}.region.{component(region['id'])}.v1", "name": f"{region['name']} 전체 기록"})
+        result.append({"id": f"{PREFIX}.region.{component(region['id'])}.v1", "name": f"{region['name']} 전체 기록", "name_en": f"{region['name']} · All Scores"})
     for line in sorted(catalog.get("lines", []), key=lambda x: (x.get("regionID", ""), x.get("sortOrder", 0))):
-        result.append({"id": f"{PREFIX}.line.{component(line['id'])}.v1", "name": f"{regions.get(line['regionID'], '지역')} · {line['name']}"})
+        result.append({"id": f"{PREFIX}.line.{component(line['id'])}.v1", "name": f"{regions.get(line['regionID'], '지역')} · {line['name']}", "name_en": f"{regions.get(line['regionID'], 'Region')} · {line['name']}"})
     return result
 
 def create(token: str, detail_id: str, item: dict) -> tuple[int, str]:
@@ -53,12 +53,42 @@ def create(token: str, detail_id: str, item: dict) -> tuple[int, str]:
         with urllib.request.urlopen(req, timeout=30) as response: return response.status, response.read().decode()
     except urllib.error.HTTPError as error: return error.code, error.read().decode()
 
+def list_leaderboards(token: str, detail_id: str) -> dict[str, str]:
+    url = f"{API_ROOT}/gameCenterDetails/{detail_id}/gameCenterLeaderboards?limit=200"
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as response:
+        payload = json.loads(response.read().decode())
+    return {item["attributes"].get("vendorIdentifier"): item["id"] for item in payload.get("data", [])}
+
+def localize(token: str, leaderboard_id: str, locale: str, name: str) -> tuple[int, str]:
+    body = {"data": {"type": "gameCenterLeaderboardLocalizations", "attributes": {
+        "locale": locale, "name": name[:30], "description": "역 이름을 맞혀 최고 점수에 도전하세요." if locale == "ko" else "Guess station names and reach the highest score."
+    }, "relationships": {"gameCenterLeaderboard": {"data": {"type": "gameCenterLeaderboards", "id": leaderboard_id}}}}}
+    req = urllib.request.Request(f"{API_ROOT}/gameCenterLeaderboardLocalizations", json.dumps(body, ensure_ascii=False).encode(), {"Authorization": f"Bearer {token}", "Content-Type": "application/json", "Accept": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response: return response.status, response.read().decode()
+    except urllib.error.HTTPError as error: return error.code, error.read().decode()
+
+def localization_map(token: str, leaderboard_id: str) -> dict[str, tuple[str, str]]:
+    req = urllib.request.Request(f"{API_ROOT}/gameCenterLeaderboards/{leaderboard_id}/localizations?limit=50", headers={"Authorization": f"Bearer {token}", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=30) as response:
+        payload = json.loads(response.read().decode())
+    return {item["attributes"].get("locale"): (item["id"], item["attributes"].get("name", "")) for item in payload.get("data", [])}
+
+def update_localization(token: str, localization_id: str, locale: str, name: str) -> tuple[int, str]:
+    body = {"data": {"type": "gameCenterLeaderboardLocalizations", "id": localization_id, "attributes": {"locale": locale, "name": name[:30]}}}
+    req = urllib.request.Request(f"{API_ROOT}/gameCenterLeaderboardLocalizations/{localization_id}", json.dumps(body).encode(), {"Authorization": f"Bearer {token}", "Content-Type": "application/json", "Accept": "application/json"}, method="PATCH")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response: return response.status, response.read().decode()
+    except urllib.error.HTTPError as error: return error.code, error.read().decode()
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="역순서 리더보드 일괄 등록")
     parser.add_argument("--apply", action="store_true", help="실제 생성 요청 전송")
     parser.add_argument("--data", type=Path, default=DEFAULT_DATA)
     parser.add_argument("--game-center-detail-id", default=os.getenv("ASC_GAME_CENTER_DETAIL_ID"))
     parser.add_argument("--include-fallback", action="store_true", help="호환용 전체 기록 ID 포함")
+    parser.add_argument("--localize", action="store_true", help="한국어·영어 표시 제목도 등록")
     args = parser.parse_args()
     items = entries(json.loads(args.data.read_text(encoding="utf-8")), args.include_fallback)
     print(f"등록 대상: {len(items)}개")
@@ -69,14 +99,32 @@ def main() -> int:
     missing = [key for key, value in values.items() if not value] + ([] if args.game_center_detail_id else ["ASC_GAME_CENTER_DETAIL_ID"])
     if missing: print("필수 설정 누락: " + ", ".join(missing), file=sys.stderr); return 2
     token = make_token(values["ASC_ISSUER_ID"], values["ASC_KEY_ID"], Path(values["ASC_PRIVATE_KEY_PATH"]))
+    existing = list_leaderboards(token, args.game_center_detail_id)
     for index, item in enumerate(items, 1):
         for attempt in range(3):
             status, response = create(token, args.game_center_detail_id, item)
             if status != 429 or attempt == 2: break
             time.sleep(2 ** attempt)
-        if status == 201: print(f"[{index}/{len(items)}] 생성됨: {item['id']}")
-        elif status == 409 and ("already" in response.lower() or "duplicate" in response.lower()): print(f"[{index}/{len(items)}] 이미 존재: {item['id']}")
-        else: print(f"[{index}/{len(items)}] 실패 {status}: {response}", file=sys.stderr)
+        if status == 201:
+            leaderboard_id = json.loads(response)["data"]["id"]
+            existing[item["id"]] = leaderboard_id
+            print(f"[{index}/{len(items)}] 생성됨: {item['id']}")
+        elif status == 409 and ("already" in response.lower() or "duplicate" in response.lower()):
+            leaderboard_id = existing.get(item["id"])
+            print(f"[{index}/{len(items)}] 이미 존재: {item['id']}")
+        else: print(f"[{index}/{len(items)}] 실패 {status}: {response}", file=sys.stderr); continue
+        if args.localize and leaderboard_id:
+            current = localization_map(token, leaderboard_id)
+            for locale, name in (("ko", item["name"]), ("en-US", item["name_en"])):
+                if locale in current:
+                    if current[locale][1] == name: print(f"  현지화 확인: {locale}")
+                    else:
+                        code, detail = update_localization(token, current[locale][0], locale, name)
+                        print(f"  현지화 수정: {locale} — {name}" if code == 200 else f"  현지화 수정 실패 {code}: {detail}", file=sys.stderr if code != 200 else sys.stdout)
+                else:
+                    code, detail = localize(token, leaderboard_id, locale, name)
+                    if code == 201: print(f"  현지화 추가: {locale} — {name}")
+                    else: print(f"  현지화 실패 {code}: {detail}", file=sys.stderr)
     return 0
 
 if __name__ == "__main__": raise SystemExit(main())
