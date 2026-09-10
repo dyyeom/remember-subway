@@ -28,7 +28,7 @@ struct CatalogTests {
         #expect(!first.isEmpty)
     }
 
-    @Test func  singlePlayerQuestionsStayInsideRegionAndUseThreeAdjacentStations() throws {
+    @Test func singlePlayerQuestionsIncludeLineEndpoints() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
 
         for region in catalog.regions {
@@ -39,12 +39,12 @@ struct CatalogTests {
                 let line = try #require(catalog.lineByID[question.lineID])
                 let pattern = try #require(catalog.routePatterns.first { $0.id == question.routePatternID })
                 #expect(line.regionID == region.id)
-                #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains {
-                    $0 == question.previous.id && $1 == question.target.id
-                })
-                #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains {
-                    $0 == question.target.id && $1 == question.next.id
-                })
+                if let previous = question.previous {
+                    #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains { $0 == previous.id && $1 == question.target.id })
+                }
+                if let next = question.next {
+                    #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains { $0 == question.target.id && $1 == next.id })
+                }
             }
         }
     }

@@ -67,9 +67,9 @@ final class GameSession: ObservableObject {
 struct SinglePlayerQuestion: Hashable, Sendable {
     let lineID: String
     let routePatternID: String
-    let previous: Station
+    let previous: Station?
     let target: Station
-    let next: Station
+    let next: Station?
 }
 
 struct SeededGenerator: RandomNumberGenerator {
@@ -101,11 +101,14 @@ enum SinglePlayerQuestionFactory {
         var questions = catalog.routePatterns.filter {
             regionLineIDs.contains($0.lineID) && (lineID == nil || $0.lineID == lineID)
         }.flatMap { pattern -> [SinglePlayerQuestion] in
-            guard pattern.stationIDs.count >= 3 else { return [] }
-            return (1..<(pattern.stationIDs.count - 1)).compactMap { index in
-                guard let previous = stations[pattern.stationIDs[index - 1]],
-                      let target = stations[pattern.stationIDs[index]],
-                      let next = stations[pattern.stationIDs[index + 1]] else { return nil }
+            guard pattern.stationIDs.count >= 2 else { return [] }
+            let indices = pattern.kind == .loop ? Array(pattern.stationIDs.indices) : Array(pattern.stationIDs.indices)
+            return indices.compactMap { index in
+                let previousID = index > 0 ? pattern.stationIDs[index - 1] : nil
+                let nextID = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : nil
+                let previous = previousID.flatMap { stations[$0] }
+                guard let target = stations[pattern.stationIDs[index]] else { return nil }
+                let next = nextID.flatMap { stations[$0] }
                 return SinglePlayerQuestion(
                     lineID: pattern.lineID,
                     routePatternID: pattern.id,

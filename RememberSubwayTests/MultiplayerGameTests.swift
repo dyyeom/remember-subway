@@ -95,7 +95,7 @@ struct MultiplayerGameTests {
 
         let pool = MultiplayerQuestionFactory.pool(catalog: catalog, lineID: "line")
         let questions = MultiplayerQuestionFactory.questions(catalog: catalog, lineID: "line", count: 10, seed: 7)
-        #expect(pool.count == 3)
+        #expect(pool.count == 4)
         #expect(questions.count == 10)
         #expect(zip(questions, questions.dropFirst()).allSatisfy { $0.id != $1.id })
     }

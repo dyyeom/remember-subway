@@ -203,8 +203,8 @@ struct StationSignView: View {
 }
 
 struct NeighborStationSignView: View {
-    let previous: Station
-    let next: Station
+    let previous: Station?
+    let next: Station?
     let line: Line
     var compact = false
 
@@ -228,13 +228,13 @@ struct NeighborStationSignView: View {
         }
         .frame(minHeight: compact ? 106 : 124)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous.name, next.name))
+        .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous?.name ?? AppLocalization.text("station.previous.none"), next?.name ?? AppLocalization.text("station.next.none")))
     }
 
-    private func neighborLabel(title: String, station: Station, arrow: String) -> some View {
+    private func neighborLabel(title: String, station: Station?, arrow: String) -> some View {
         VStack(spacing: 5) {
             Label(title, systemImage: arrow).font(.caption2.weight(.semibold))
-            Text(station.name)
+            Text(station?.name ?? (arrow == "chevron.left" ? AppLocalization.text("station.previous.none") : AppLocalization.text("station.next.none")))
                 .font(.headline)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)

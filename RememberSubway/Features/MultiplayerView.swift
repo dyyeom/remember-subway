@@ -424,8 +424,6 @@ private struct MultiplayerPlayView: View {
     var body: some View {
         ScrollView {
             if let question = coordinator.currentQuestion,
-               let previous = catalog.stationByID[question.previousStationID],
-               let next = catalog.stationByID[question.nextStationID],
                let line = catalog.lineByID[question.lineID] {
                 VStack(spacing: 0) {
                     HStack {
@@ -457,7 +455,12 @@ private struct MultiplayerPlayView: View {
                         .padding(.horizontal, 24)
                         .padding(.top, 8)
 
-                    NeighborStationSignView(previous: previous, next: next, line: line, compact: keyboardPresented)
+                    NeighborStationSignView(
+                        previous: question.previousStationID.flatMap { catalog.stationByID[$0] },
+                        next: question.nextStationID.flatMap { catalog.stationByID[$0] },
+                        line: line,
+                        compact: keyboardPresented
+                    )
                         .padding(.horizontal, 20)
                         .padding(.top, keyboardPresented ? 8 : 28)
 

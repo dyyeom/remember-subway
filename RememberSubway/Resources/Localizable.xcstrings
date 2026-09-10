@@ -3093,6 +3093,18 @@
         }
       }
     },
+    "station.next.none" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No next station" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다음 역 없음" } }
+      }
+    },
+    "station.previous.none" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No previous station" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이전 역 없음" } }
+      }
+    },
     "station.next" : {
       "extractionState" : "stale",
       "localizations" : {

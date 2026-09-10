@@ -4,9 +4,9 @@ struct MultiplayerQuestion: Codable, Identifiable, Hashable, Sendable {
     let id: String
     let lineID: String
     let routePatternID: String
-    let previousStationID: String
+    let previousStationID: String?
     let targetStationID: String
-    let nextStationID: String
+    let nextStationID: String?
 }
 
 struct NearbyPlayer: Codable, Identifiable, Hashable, Sendable {
@@ -137,19 +137,13 @@ enum MultiplayerQuestionFactory {
 
         for pattern in patterns where pattern.stationIDs.count >= 3 {
             let indices: [Int]
-            if pattern.kind == .loop {
-                indices = Array(pattern.stationIDs.indices)
-            } else {
-                indices = Array(1..<(pattern.stationIDs.count - 1))
-            }
+            indices = Array(pattern.stationIDs.indices)
 
             for index in indices {
-                let previousIndex = index == 0 ? pattern.stationIDs.count - 1 : index - 1
-                let nextIndex = index == pattern.stationIDs.count - 1 ? 0 : index + 1
-                let previous = pattern.stationIDs[previousIndex]
+                let previous = index > 0 ? pattern.stationIDs[index - 1] : nil
                 let target = pattern.stationIDs[index]
-                let next = pattern.stationIDs[nextIndex]
-                let triple = "\(previous)|\(target)|\(next)"
+                let next = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : nil
+                let triple = "\(previous ?? "none")|\(target)|\(next ?? "none")"
                 guard seenTriples.insert(triple).inserted else { continue }
                 questions.append(MultiplayerQuestion(
                     id: "\(pattern.id):\(index)",
