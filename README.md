@@ -1,8 +1,8 @@
-# 역순서
+# 사이역 (RememberSubway)
 
-대한민국 도시철도 역 이름을 외우고 가까운 사람들과 대결하는 iOS 26+ SwiftUI 게임입니다.
+대한민국 도시철도 역 이름을 외우고 가까운 사람들과 대결하는 iOS 26+ SwiftUI 게임입니다. 한국어 앱 이름은 `사이역`, 영어 앱 이름은 `RememberSubway`입니다.
 
-- `싱글플레이`: 지역 전체 또는 노선을 선택해 이전 역과 다음 역 사이의 역을 맞히는 상시 도전
+- `싱글플레이`: 지역 전체 또는 노선을 선택해 이전 역과 다음 역 사이의 역을 맞히는 상시 도전. 첫·마지막 역도 출제되며 없는 방향은 `이전 역 없음`·`다음 역 없음`으로 표시
 - `멀티플레이`: 근처의 iPhone 2~8대가 같은 10문제를 푸는 실시간 점수전
 
 싱글플레이는 주차별로 초기화되지 않습니다. 최고 기록은 콘텐츠 버전과 선택한 지역·노선 범위별로 기기에 저장됩니다. 모든 문제의 기본 정답 점수는 100점이며, 초성 힌트 사용 시 50점입니다. 문제당 15초가 주어지고 남은 시간이 10초 미만이면 초당 10%씩 점수가 감소합니다.
@@ -58,8 +58,8 @@ export ASC_GAME_CENTER_DETAIL_ID="Game Center detail resource ID"
 # 등록 목록만 확인
 python3 Tools/register_game_center_leaderboards.py
 
-# 실제 생성 요청(37개)
-python3 Tools/register_game_center_leaderboards.py --apply
+# 실제 생성 및 제목 현지화(37개)
+python3 Tools/register_game_center_leaderboards.py --apply --localize
 ```
 
-기본적으로 현재 사용하는 지역·노선별 37개(지역 5개 + 노선 32개)를 등록하며, 이전 버전 호환용 전체 ID까지 필요하면 `--include-fallback`을 추가합니다. API 키 파일은 저장소에 커밋하거나 채팅으로 공유하지 마세요. 생성 요청은 Apple의 [`POST /v2/gameCenterLeaderboards`](https://developer.apple.com/documentation/appstoreconnectapi/post-v2-gamecenterleaderboards)를 사용하고, 이미 존재하는 ID(409)는 건너뜁니다.
+기본적으로 현재 사용하는 지역·노선별 37개(지역 5개 + 노선 32개)를 등록합니다. `--localize`는 한국어·영어 제목과 설명을 추가하거나 기존 값을 수정합니다. API 키 파일은 저장소에 커밋하거나 채팅으로 공유하지 마세요. 생성 요청은 Apple의 [`POST /v1/gameCenterLeaderboards`](https://developer.apple.com/documentation/appstoreconnectapi/post-v1-gamecenterleaderboards)를 사용합니다.
