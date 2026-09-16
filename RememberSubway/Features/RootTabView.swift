@@ -10,7 +10,6 @@ struct RootTabView: View {
     @Query private var singlePlayerRecords: [SinglePlayerBestRecord]
     @State private var showSettings = false
     @State private var showStats = false
-    @State private var showTutorial = false
 
     var body: some View {
         Group {
@@ -23,7 +22,6 @@ struct RootTabView: View {
                             SinglePlayerChallengeHomeView(
                                 showSettings: $showSettings,
                                 showStats: $showStats,
-                                showTutorial: $showTutorial
                             )
                         }
                     }
@@ -32,7 +30,6 @@ struct RootTabView: View {
                             catalog: catalogStore.catalog,
                             showSettings: $showSettings,
                             showStats: $showStats,
-                            showTutorial: $showTutorial
                         )
                     }
                 }
@@ -47,15 +44,6 @@ struct RootTabView: View {
         }
         .sheet(isPresented: $showSettings) { SettingsView() }
         .sheet(isPresented: $showStats) { NavigationStack { StatsView() } }
-        .fullScreenCover(isPresented: $showTutorial) {
-            TutorialView {
-                let record = settings.first ?? AppSettingsRecord()
-                if record.modelContext == nil { modelContext.insert(record) }
-                record.hasCompletedTutorial = true
-                try? modelContext.save()
-                showTutorial = false
-            }
-        }
     }
 
     private func prepareSettings() {
@@ -96,12 +84,8 @@ struct SettingsButton: ToolbarContent {
 struct AppToolbar: ToolbarContent {
     @Binding var showStats: Bool
     @Binding var showSettings: Bool
-    @Binding var showTutorial: Bool
 
     var body: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Button(AppLocalization.text("common.howToPlay"), systemImage: "questionmark.circle") { showTutorial = true }
-        }
         ToolbarItemGroup(placement: .topBarTrailing) {
             Button(AppLocalization.text("common.records"), systemImage: "chart.bar.fill") { showStats = true }
             Button(AppLocalization.text("common.settings"), systemImage: "gearshape") { showSettings = true }

@@ -8,7 +8,6 @@ struct SinglePlayerChallengeHomeView: View {
     @Query(sort: \SinglePlayerBestRecord.updatedAt, order: .reverse) private var bestRecords: [SinglePlayerBestRecord]
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
-    @Binding var showTutorial: Bool
     @State private var selectedRegionID: String?
     @State private var selectedLineID: String?
 
@@ -98,7 +97,6 @@ struct SinglePlayerChallengeHomeView: View {
             AppToolbar(
                 showStats: $showStats,
                 showSettings: $showSettings,
-                showTutorial: $showTutorial
             )
         }
         .task {

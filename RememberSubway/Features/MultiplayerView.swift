@@ -9,7 +9,6 @@ struct MultiplayerContainerView: View {
     @StateObject private var coordinator: MatchCoordinator
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
-    @Binding var showTutorial: Bool
     @State private var nickname = ""
     @State private var selectedRegionID: String?
     @State private var selectedLineID: String?
@@ -23,13 +22,11 @@ struct MultiplayerContainerView: View {
         catalog: TransitCatalog,
         showSettings: Binding<Bool>,
         showStats: Binding<Bool>,
-        showTutorial: Binding<Bool>
     ) {
         self.catalog = catalog
         _coordinator = StateObject(wrappedValue: MatchCoordinator(catalog: catalog))
         _showSettings = showSettings
         _showStats = showStats
-        _showTutorial = showTutorial
     }
 
     var body: some View {
@@ -41,7 +38,6 @@ struct MultiplayerContainerView: View {
                     AppToolbar(
                         showStats: $showStats,
                         showSettings: $showSettings,
-                        showTutorial: $showTutorial
                     )
                 }
         }

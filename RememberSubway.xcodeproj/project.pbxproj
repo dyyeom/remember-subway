@@ -31,7 +31,6 @@
 		B45BC981348A8A0C38EFF2CA /* transit_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 223B67012D64E7A51047F971 /* transit_data.json */; };
 		D45DDAE4A21049BBAEBB1EE4 /* GameSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */; };
 		ED8077749B53C14C73D5ADCF /* SinglePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */; };
-		EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0792A75284D8DF80362680B7 /* TutorialView.swift */; };
 		EF471FF0E34D19F9C4D64796 /* MultiplayerGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3674DA586C45F9663BBCE3A0 /* MultiplayerGameTests.swift */; };
 		F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */; };
 		F48F3BC440697271B480984E /* RememberSubwayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */; };
@@ -51,7 +50,6 @@
 
 /* Begin PBXFileReference section */
 		0062D1D2957C2FA76E367AB7 /* GameSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionTests.swift; sourceTree = "<group>"; };
-		0792A75284D8DF80362680B7 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSession.swift; sourceTree = "<group>"; };
 		1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceModels.swift; sourceTree = "<group>"; };
 		223B67012D64E7A51047F971 /* transit_data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = transit_data.json; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 				83CF08DE04AC029D7990909F /* RootTabView.swift */,
 				84B9FF296A68A9377ED664BC /* SharedViews.swift */,
 				ECB6CD7BC4366C400BEC9137 /* StatsView.swift */,
-				0792A75284D8DF80362680B7 /* TutorialView.swift */,
 				7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */,
 			);
 			path = Features;
@@ -310,7 +307,6 @@
 				97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */,
 				9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */,
 				951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */,
-				EF2992236FA74BD9EC6B152C /* TutorialView.swift in Sources */,
 				ED8077749B53C14C73D5ADCF /* SinglePlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
