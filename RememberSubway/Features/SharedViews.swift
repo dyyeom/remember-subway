@@ -294,7 +294,7 @@ struct NeighborStationSignView: View {
                 .lineLimit(2)
                 .minimumScaleFactor(0.75)
         }
-        .frame(maxWidth: .infinity, minHeight: compact ? 82 : 118)
+        .frame(maxWidth: .infinity, minHeight: compact ? 84 : 110)
         .padding(.horizontal, compact ? 8 : 12)
         .background(SubwayTheme.stationSurface, in: Capsule())
         .overlay {
