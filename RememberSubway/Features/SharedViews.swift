@@ -1,8 +1,25 @@
 import SwiftUI
 
 enum AppLayout {
-    static let pageHorizontal: CGFloat = 20
-    static let pageVertical: CGFloat = 16
+    static let pageHorizontal: CGFloat = 24
+    static let pageVertical: CGFloat = 20
+}
+
+/// Shared visual tokens translated from the subway-themed Figma library.
+/// Keep layout decisions in SwiftUI while centralising the visual language here.
+enum SubwayTheme {
+    static let pageHorizontal: CGFloat = 24
+    static let stationCornerRadius: CGFloat = 28
+    static let controlCornerRadius: CGFloat = 20
+    static let pillCornerRadius: CGFloat = 32
+    static let controlHeight: CGFloat = 56
+    static let stationSurface = Color("SubwayStationSurface")
+    static let background = Color("SubwayBackground")
+    static let ink = Color("SubwayInk")
+    static let muted = Color("SubwayMuted")
+    static let border = Color("SubwayBorder")
+    static let action = Color("SubwayAction")
+    static let danger = Color("SubwayDanger")
 }
 
 struct GamePlayLayoutMetrics: Equatable {
