@@ -129,7 +129,7 @@ private struct BreakingHeartView: View {
 
     private func heartHalf(alignment: Alignment, direction: CGFloat) -> some View {
         Image(systemName: "heart.fill")
-            .foregroundStyle(.red)
+            .foregroundStyle(SubwayTheme.danger)
             .frame(width: 22, height: 22)
             .mask {
                 Rectangle()
@@ -204,7 +204,7 @@ struct StationSignView: View {
             .padding(.vertical, compact ? 8 : 12)
             .padding(.leading, 12)
             .padding(.trailing, 24)
-            .background(.white, in: Capsule())
+            .background(SubwayTheme.stationSurface, in: Capsule())
             .overlay {
                 Capsule().stroke(line.color, lineWidth: 6)
             }
@@ -226,24 +226,37 @@ struct NeighborStationSignView: View {
     var compact = false
 
     var body: some View {
-        ZStack {
-            Capsule().fill(line.color).frame(height: compact ? 68 : 82)
-            HStack(spacing: 8) {
+        VStack(spacing: 0) {
+            line.color
+                .frame(height: compact ? 8 : 10)
+                .clipShape(Capsule())
+                .padding(.horizontal, 22)
+
+            HStack(spacing: compact ? 8 : 12) {
                 neighborLabel(title: AppLocalization.text("station.previous"), station: previous, arrow: "chevron.left")
                 VStack(spacing: 4) {
-                    Text(AppLocalization.text("station.current")).font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                    Text("?")
-                        .font(.system(size: compact ? 38 : 46, weight: .bold, design: .rounded))
+                    Text(AppLocalization.text("station.current"))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(SubwayTheme.muted)
+                    Image(systemName: "questionmark")
+                        .font(.system(size: compact ? 30 : 38, weight: .bold, design: .rounded))
                         .foregroundStyle(line.color)
+                        .accessibilityHidden(true)
                 }
-                .frame(width: compact ? 96 : 112, height: compact ? 96 : 112)
-                .background(.background, in: Capsule())
-                .overlay { Capsule().stroke(line.color, lineWidth: 5) }
+                .frame(width: compact ? 94 : 112, height: compact ? 78 : 96)
+                .background(SubwayTheme.stationSurface, in: Capsule())
+                .overlay { Capsule().stroke(line.color, lineWidth: compact ? 3 : 5) }
+                .accessibilityLabel(AppLocalization.text("station.current"))
                 neighborLabel(title: AppLocalization.text("station.next"), station: next, arrow: "chevron.right")
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, compact ? 14 : 18)
+            .padding(.vertical, compact ? 8 : 14)
         }
-        .frame(minHeight: compact ? 106 : 124)
+        .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                .stroke(line.color, lineWidth: compact ? 3 : 5)
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous?.name ?? AppLocalization.text("station.previous.none"), next?.name ?? AppLocalization.text("station.next.none")))
     }
@@ -257,7 +270,7 @@ struct NeighborStationSignView: View {
                 .lineLimit(2)
                 .minimumScaleFactor(0.65)
         }
-        .foregroundStyle(line.colorForeground)
+        .foregroundStyle(SubwayTheme.ink)
         .frame(maxWidth: .infinity, minHeight: 72)
     }
 }
