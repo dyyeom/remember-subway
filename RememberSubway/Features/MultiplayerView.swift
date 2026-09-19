@@ -448,7 +448,9 @@ private struct MultiplayerPlayView: View {
                     HStack {
                         LineIdentityLabel(line: line)
                         Spacer()
-                        Text("\(coordinator.roundIndex + 1)/\(coordinator.questions.count)").font(.headline.monospacedDigit())
+                        Text("\(coordinator.roundIndex + 1)/\(coordinator.questions.count)")
+                            .font(.headline.monospacedDigit())
+                            .foregroundStyle(SubwayTheme.ink)
                         Spacer()
                         Button(AppLocalization.text("common.ranking"), systemImage: "list.number") { showRanking = true }
                             .labelStyle(.iconOnly)
@@ -465,6 +467,7 @@ private struct MultiplayerPlayView: View {
                             coordinator.localPlayer?.rank ?? 1
                         ))
                             .font(.headline.monospacedDigit())
+                            .foregroundStyle(SubwayTheme.ink)
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, keyboardPresented ? 6 : 18)
@@ -493,8 +496,12 @@ private struct MultiplayerPlayView: View {
                         TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
                             .font(.title3)
                             .padding(.horizontal, 20)
-                            .frame(minHeight: 60)
-                            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22))
+                            .frame(minHeight: 72)
+                            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                                    .stroke(focused ? line.color : SubwayTheme.border, lineWidth: focused ? 2 : 1)
+                            }
                             .focused($focused)
                             .disabled(coordinator.localAnswerLocked || coordinator.screenState != .playing)
                             .submitLabel(.done)
@@ -513,6 +520,8 @@ private struct MultiplayerPlayView: View {
         }
         .safeAreaInset(edge: .bottom) { actionBar }
         .scrollDismissesKeyboard(.interactively)
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
         .overlay { countdownOverlay }
         .sheet(isPresented: $showRanking) { RankingSheet(players: coordinator.matchPlayers) }
         .task { focused = coordinator.screenState == .playing }
@@ -553,7 +562,8 @@ private struct MultiplayerPlayView: View {
                 Text("\(countdown)")
                     .font(.system(size: 92, weight: .bold, design: .rounded))
                     .padding(44)
-                    .background(.regularMaterial, in: Circle())
+                    .background(SubwayTheme.stationSurface, in: Circle())
+                    .overlay { Circle().stroke(SubwayTheme.border, lineWidth: 1) }
                     .transition(.scale.combined(with: .opacity))
             }
         }
@@ -608,7 +618,7 @@ private struct MultiplayerResultView: View {
                 VStack(spacing: 24) {
                     Image(systemName: coordinator.localPlayer?.rank == 1 ? "trophy.fill" : "flag.checkered")
                         .font(.system(size: 64))
-                        .foregroundStyle(coordinator.localPlayer?.rank == 1 ? Color.yellow : Color.accentColor)
+                        .foregroundStyle(coordinator.localPlayer?.rank == 1 ? SubwayTheme.action : SubwayTheme.ink)
                     Text(coordinator.localPlayer?.rank == 1
                         ? AppLocalization.text("multiplayer.result.winner")
                         : AppLocalization.text("multiplayer.result.finished"))
@@ -632,7 +642,11 @@ private struct MultiplayerResultView: View {
                         }
                     }
                     .padding(20)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24))
+                    .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                            .stroke(SubwayTheme.border, lineWidth: 1)
+                    }
 
                     Button {
                         coordinator.requestRematch()
@@ -649,6 +663,8 @@ private struct MultiplayerResultView: View {
                 }
                 .padding(24)
             }
+            .scrollContentBackground(.hidden)
+            .background(SubwayTheme.background.ignoresSafeArea())
         }
     }
 
