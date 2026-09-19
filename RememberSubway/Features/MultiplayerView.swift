@@ -488,7 +488,7 @@ private struct MultiplayerPlayView: View {
                         line: line,
                         compact: keyboardPresented
                     )
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, AppLayout.pageHorizontal)
                         .padding(.top, keyboardPresented ? 8 : 28)
 
                     VStack(spacing: keyboardPresented ? 10 : 18) {

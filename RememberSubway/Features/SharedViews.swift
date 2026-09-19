@@ -232,52 +232,101 @@ struct NeighborStationSignView: View {
     var compact = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            line.color
-                .frame(height: compact ? 8 : 10)
-                .clipShape(Capsule())
-                .padding(.horizontal, 22)
+        let centerWidth: CGFloat = compact ? 184 : 204
+        let signHeight: CGFloat = compact ? 92 : 116
 
-            HStack(spacing: compact ? 8 : 12) {
-                neighborLabel(title: AppLocalization.text("station.previous"), station: previous, arrow: "chevron.left")
-                VStack(spacing: 4) {
-                    Text(AppLocalization.text("station.current"))
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(SubwayTheme.muted)
-                    Image(systemName: "questionmark")
-                        .font(.system(size: compact ? 30 : 38, weight: .bold, design: .rounded))
-                        .foregroundStyle(line.color)
-                        .accessibilityHidden(true)
+        ZStack {
+            GeometryReader { proxy in
+                let sideWidth = max(0, (proxy.size.width - centerWidth) / 2)
+
+                HStack(spacing: 0) {
+                    neighborPanel(
+                        title: AppLocalization.text("station.previous"),
+                        station: previous,
+                        arrow: "chevron.left"
+                    )
+                    .frame(width: sideWidth)
+
+                    Color.clear.frame(width: centerWidth)
+
+                    neighborPanel(
+                        title: AppLocalization.text("station.next"),
+                        station: next,
+                        arrow: "chevron.right"
+                    )
+                    .frame(width: sideWidth)
                 }
-                .frame(width: compact ? 94 : 112, height: compact ? 78 : 96)
-                .background(SubwayTheme.stationSurface, in: Capsule())
-                .overlay { Capsule().stroke(line.color, lineWidth: compact ? 3 : 5) }
-                .accessibilityLabel(AppLocalization.text("station.current"))
-                neighborLabel(title: AppLocalization.text("station.next"), station: next, arrow: "chevron.right")
             }
-            .padding(.horizontal, compact ? 14 : 18)
-            .padding(.vertical, compact ? 8 : 14)
+            .frame(height: signHeight - (compact ? 8 : 12))
+            .background(line.color, in: Capsule())
+
+            currentPanel
+                .frame(width: centerWidth, height: signHeight)
         }
-        .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                .stroke(line.color, lineWidth: compact ? 3 : 5)
-        }
+        .frame(maxWidth: .infinity, minHeight: signHeight, maxHeight: signHeight)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous?.name ?? AppLocalization.text("station.previous.none"), next?.name ?? AppLocalization.text("station.next.none")))
     }
 
-    private func neighborLabel(title: String, station: Station?, arrow: String) -> some View {
-        VStack(spacing: 5) {
-            Label(title, systemImage: arrow).font(.caption2.weight(.semibold))
-            Text(station?.name ?? (arrow == "chevron.left" ? AppLocalization.text("station.previous.none") : AppLocalization.text("station.next.none")))
-                .font(.headline)
+    private var currentPanel: some View {
+        VStack(spacing: compact ? 5 : 8) {
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(line.color)
+                    .frame(width: compact ? 28 : 36, height: compact ? 28 : 36)
+                    .overlay {
+                        Text("?")
+                            .font(.system(size: compact ? 17 : 22, weight: .bold, design: .rounded))
+                            .foregroundStyle(line.colorForeground)
+                    }
+
+                Text(AppLocalization.text("station.current"))
+                    .font(.system(size: compact ? 13 : 16, weight: .bold))
+                    .foregroundStyle(SubwayTheme.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+            }
+
+            Text(AppLocalization.text("game.stationQuestion"))
+                .font(.system(size: compact ? 18 : 23, weight: .bold, design: .rounded))
+                .foregroundStyle(line.color)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
-                .minimumScaleFactor(0.65)
+                .minimumScaleFactor(0.75)
         }
-        .foregroundStyle(SubwayTheme.ink)
-        .frame(maxWidth: .infinity, minHeight: 72)
+        .frame(maxWidth: .infinity, minHeight: compact ? 82 : 118)
+        .padding(.horizontal, compact ? 8 : 12)
+        .background(SubwayTheme.stationSurface, in: Capsule())
+        .overlay {
+            Capsule().stroke(line.color, lineWidth: compact ? 4 : 6)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(AppLocalization.text("game.stationQuestion"))
+    }
+
+    private func neighborPanel(title: String, station: Station?, arrow: String) -> some View {
+        let fallback = arrow == "chevron.left"
+            ? AppLocalization.text("station.previous.none")
+            : AppLocalization.text("station.next.none")
+
+        return VStack(spacing: compact ? 3 : 5) {
+            Image(systemName: arrow)
+                .font(.system(size: compact ? 12 : 15, weight: .bold))
+
+            Text(title)
+                .font(.system(size: compact ? 10 : 12, weight: .semibold))
+                .lineLimit(1)
+
+            Text(station?.name ?? fallback)
+                .font(.system(size: compact ? 13 : 16, weight: .bold))
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .minimumScaleFactor(0.58)
+        }
+        .foregroundStyle(line.colorForeground)
+        .frame(maxWidth: .infinity, minHeight: compact ? 70 : 92)
+        .padding(.horizontal, compact ? 3 : 5)
+        .accessibilityHidden(true)
     }
 }
 

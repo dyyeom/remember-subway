@@ -264,7 +264,7 @@ struct SinglePlayerChallengePlayView: View {
                         compact: keyboardPresented
                     )
                     .padding(.top, layout.signTop)
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, AppLayout.pageHorizontal)
 
                     VStack(spacing: layout.promptSpacing) {
                         Text(AppLocalization.text("game.stationQuestion"))
