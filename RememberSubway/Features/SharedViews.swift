@@ -150,17 +150,23 @@ struct LineIdentityLabel: View {
     let line: Line
 
     var body: some View {
-        Label {
-            Text(line.name)
-                .font(.subheadline.weight(.semibold))
-        } icon: {
+        HStack(spacing: 9) {
             Circle()
                 .fill(line.color)
-                .frame(width: 18, height: 18)
+                .frame(width: 24, height: 24)
                 .overlay {
-                    Circle().stroke(.primary.opacity(0.12), lineWidth: 0.5)
+                    Text(line.shortName)
+                        .font(.caption2.weight(.bold).monospacedDigit())
+                        .foregroundStyle(line.colorForeground)
                 }
+            Text(line.name)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(SubwayTheme.ink)
         }
+        .padding(.horizontal, 12)
+        .frame(minHeight: 44)
+        .background(SubwayTheme.stationSurface, in: Capsule())
+        .overlay { Capsule().stroke(line.color, lineWidth: 2) }
         .accessibilityElement(children: .combine)
     }
 }
