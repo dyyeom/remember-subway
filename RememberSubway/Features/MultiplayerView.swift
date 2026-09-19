@@ -94,8 +94,9 @@ struct MultiplayerContainerView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(AppLocalization.text("multiplayer.home.title"))
                         .font(.largeTitle.bold())
+                        .foregroundStyle(SubwayTheme.ink)
                     Text(AppLocalization.text("multiplayer.home.description"))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(SubwayTheme.muted)
                 }
 
                 VStack(spacing: 0) {
@@ -123,7 +124,12 @@ struct MultiplayerContainerView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .padding(.vertical, 4)
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                        .stroke(SubwayTheme.border, lineWidth: 1)
+                }
 
                 GroupBox {
                     LabeledContent(AppLocalization.text("multiplayer.questions"), value: AppLocalization.text("multiplayer.tenQuestions"))
@@ -145,7 +151,7 @@ struct MultiplayerContainerView: View {
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(.glassProminent)
-                    .tint(selectedLine?.color ?? .accentColor)
+                    .tint(selectedLine?.color ?? SubwayTheme.action)
                     .disabled(!canEnterMultiplayer || selectedLine == nil)
 
                     Button {
@@ -163,6 +169,8 @@ struct MultiplayerContainerView: View {
             .padding(.vertical, AppLayout.pageVertical)
         }
         .scrollDismissesKeyboard(.immediately)
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
         .onScrollPhaseChange { _, phase in
             if phase.isScrolling { nicknameFocused = false }
         }
@@ -182,7 +190,11 @@ struct MultiplayerContainerView: View {
                     }
                     .padding(24)
                     .frame(maxWidth: .infinity)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28))
+                    .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                            .stroke(SubwayTheme.border, lineWidth: 1)
+                    }
                 }
 
                 if let configuration = coordinator.configuration,
@@ -214,7 +226,12 @@ struct MultiplayerContainerView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22))
+                .padding(.vertical, 4)
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                        .stroke(SubwayTheme.border, lineWidth: 1)
+                }
 
                 if coordinator.isHost {
                     Button {
@@ -234,6 +251,8 @@ struct MultiplayerContainerView: View {
             .padding(.horizontal, AppLayout.pageHorizontal)
             .padding(.vertical, AppLayout.pageVertical)
         }
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
     }
 
     private func matchPlay(countdown: Int?) -> some View {
@@ -392,7 +411,11 @@ private struct JoinCodeView: View {
                     .multilineTextAlignment(.center)
                     .keyboardType(.numberPad)
                     .padding()
-                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
+                    .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                            .stroke(SubwayTheme.border, lineWidth: 1)
+                    }
                     .onChange(of: code) { _, value in code = String(value.filter(\.isNumber).prefix(4)) }
                 Button(AppLocalization.text("multiplayer.join"), action: join)
                     .buttonStyle(.glassProminent)
