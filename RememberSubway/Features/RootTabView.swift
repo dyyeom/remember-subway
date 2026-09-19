@@ -137,6 +137,8 @@ struct SettingsView: View {
                     Text(AppLocalization.text("settings.appSummary"))
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(SubwayTheme.background.ignoresSafeArea())
             .navigationTitle(AppLocalization.text("common.settings"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) { Button(AppLocalization.text("common.done")) { dismiss() } }

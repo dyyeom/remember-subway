@@ -41,6 +41,8 @@ struct StatsView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
         .navigationTitle(AppLocalization.text("common.records"))
         .toolbar {
             ToolbarItem(placement: .confirmationAction) { Button(AppLocalization.text("common.done")) { dismiss() } }
