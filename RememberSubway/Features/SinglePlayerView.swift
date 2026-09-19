@@ -16,18 +16,20 @@ struct SinglePlayerChallengeHomeView: View {
             VStack(spacing: 24) {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 64))
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(SubwayTheme.action)
                     .accessibilityHidden(true)
                 Text(AppLocalization.text("single.home.title"))
                     .font(.title2.bold())
+                    .foregroundStyle(SubwayTheme.ink)
                     .multilineTextAlignment(.center)
                 Text(scoreDescription)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(SubwayTheme.muted)
                     .multilineTextAlignment(.center)
                 VStack(spacing: 0) {
                     HStack {
                         Label(AppLocalization.text("single.region.label"), systemImage: "map")
                             .font(.headline)
+                            .foregroundStyle(SubwayTheme.ink)
                         Spacer()
                         Picker(AppLocalization.text("single.region.label"), selection: $selectedRegionID) {
                             Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
@@ -44,6 +46,7 @@ struct SinglePlayerChallengeHomeView: View {
                     HStack {
                         Label(AppLocalization.text("single.line.label"), systemImage: "tram.fill")
                             .font(.headline)
+                            .foregroundStyle(SubwayTheme.ink)
                         Spacer()
                         Picker(AppLocalization.text("single.line.label"), selection: $selectedLineID) {
                             Text(AppLocalization.text("single.allLines")).tag(Optional<String>.none)
@@ -56,7 +59,12 @@ struct SinglePlayerChallengeHomeView: View {
                     .frame(minHeight: 56)
                 }
                 .padding(.horizontal, 18)
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .padding(.vertical, 6)
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                        .stroke(SubwayTheme.border, lineWidth: 1)
+                }
                 GroupBox {
                     LabeledContent(
                         AppLocalization.text("single.myBestScore"),
@@ -68,7 +76,7 @@ struct SinglePlayerChallengeHomeView: View {
                             ? AppLocalization.text("gameCenter.signedIn")
                             : AppLocalization.text("gameCenter.signedOut")
                     )
-                }
+                } 
                 if let selectedRegion {
                     NavigationLink {
                         SinglePlayerChallengePlayView(
@@ -80,7 +88,8 @@ struct SinglePlayerChallengeHomeView: View {
                         Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glassProminent)
+                    .tint(SubwayTheme.action)
                 }
                 if gameCenter.isAuthenticated {
                     Button(AppLocalization.format("single.ranking.format", challengeName), systemImage: "list.number") {
@@ -92,6 +101,8 @@ struct SinglePlayerChallengeHomeView: View {
             .padding(.horizontal, AppLayout.pageHorizontal)
             .padding(.vertical, AppLayout.pageVertical)
         }
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
         .navigationTitle(AppLocalization.text("tab.singlePlayer"))
         .toolbar {
             AppToolbar(
