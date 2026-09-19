@@ -224,6 +224,7 @@ struct SinglePlayerChallengePlayView: View {
                         Spacer()
                         Text(AppLocalization.format("score.points.format", session.score))
                             .font(.headline.monospacedDigit())
+                            .foregroundStyle(SubwayTheme.ink)
                         Spacer()
                         LivesView(lives: session.lives)
                     }
@@ -244,13 +245,13 @@ struct SinglePlayerChallengePlayView: View {
                             systemImage: "timer"
                         )
                         .font(.headline.monospacedDigit())
-                        .foregroundStyle(timeRemaining <= 5 ? .red : .primary)
+                        .foregroundStyle(timeRemaining <= 5 ? SubwayTheme.danger : SubwayTheme.ink)
 
                         ProgressView(
                             value: timeRemaining,
                             total: SinglePlayerSession.roundDuration
                         )
-                        .tint(timeRemaining <= 5 ? .red : line.color)
+                        .tint(timeRemaining <= 5 ? SubwayTheme.danger : line.color)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, keyboardPresented ? 6 : 12)
@@ -292,6 +293,8 @@ struct SinglePlayerChallengePlayView: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .navigationTitle(AppLocalization.text("single.challenge"))
         .navigationBarTitleDisplayMode(.inline)
@@ -327,11 +330,11 @@ struct SinglePlayerChallengePlayView: View {
         TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
             .font(.title3)
             .padding(.horizontal, 20)
-            .frame(minHeight: 64)
-            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .frame(minHeight: 72)
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
             .overlay {
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .stroke(focused ? (currentLine?.color ?? .accentColor) : .secondary.opacity(0.22), lineWidth: focused ? 2 : 1)
+                RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                    .stroke(focused ? (currentLine?.color ?? .accentColor) : SubwayTheme.border, lineWidth: focused ? 2 : 1)
             }
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
@@ -502,7 +505,7 @@ struct SinglePlayerChallengePlayView: View {
         ZStack {
             Color.black.opacity(0.25).ignoresSafeArea()
             VStack(spacing: 18) {
-                Image(systemName: "trophy.fill").font(.system(size: 54)).foregroundStyle(.yellow)
+                Image(systemName: "trophy.fill").font(.system(size: 54)).foregroundStyle(SubwayTheme.action)
                 Text(AppLocalization.text("single.result.title")).font(.title.bold())
                 Text(AppLocalization.format("score.points.format", session.score)).font(.largeTitle.bold().monospacedDigit())
                 Text(resultStatus.message)
@@ -512,7 +515,13 @@ struct SinglePlayerChallengePlayView: View {
                 Button(AppLocalization.text("common.finish"), systemImage: "checkmark") { dismiss() }
                     .buttonStyle(.bordered)
             }
-            .padding(28).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28)).padding()
+            .padding(28)
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                    .stroke(SubwayTheme.border, lineWidth: 1)
+            }
+            .padding()
         }
     }
 
