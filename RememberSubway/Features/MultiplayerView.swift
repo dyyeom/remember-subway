@@ -381,9 +381,12 @@ private struct RoomBrowserView: View {
                         .frame(minHeight: 52)
                     }
                     .buttonStyle(.plain)
+                    .listRowBackground(SubwayTheme.stationSurface)
                 }
+                .scrollContentBackground(.hidden)
             }
         }
+        .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Button(AppLocalization.text("multiplayer.backHome"), systemImage: "chevron.backward", action: exit)
                 .buttonStyle(.glass)
@@ -423,6 +426,8 @@ private struct JoinCodeView: View {
                     .disabled(code.count != 4)
             }
             .padding(24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(SubwayTheme.background.ignoresSafeArea())
             .navigationTitle(AppLocalization.text("multiplayer.joinCode"))
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button(AppLocalization.text("common.cancel")) { dismiss() } } }
         }
