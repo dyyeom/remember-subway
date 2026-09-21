@@ -184,8 +184,12 @@ struct SinglePlayerChallengePlayView: View {
     @State private var resultStatus = SinglePlayerResultStatus.saving
     @State private var keyboardPresented = false
     @State private var keyboardLayoutAnimationEnabled = false
+    @State private var isPreparing = true
+    @State private var isStarting = false
+    @State private var preparationCountdown = 3
     @State private var revealTask: Task<Void, Never>?
     @State private var timerTask: Task<Void, Never>?
+    @State private var preparationTask: Task<Void, Never>?
     @State private var timeRemaining = SinglePlayerSession.roundDuration
     @FocusState private var focused: Bool
     let poolVersion: String
@@ -294,21 +298,13 @@ struct SinglePlayerChallengePlayView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
+        .accessibilityHidden(isPreparing)
         .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .navigationTitle(AppLocalization.text("single.challenge"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
-        .task {
-            startQuestionTimer()
-            // Let the navigation push settle before presenting the keyboard.
-            // Otherwise the push and the keyboard/layout transition appear as
-            // two consecutive navigations.
-            try? await Task.sleep(for: .milliseconds(250))
-            guard !Task.isCancelled else { return }
-            focused = true
-        }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
             updateKeyboardLayout(presented: true)
         }
@@ -324,8 +320,15 @@ struct SinglePlayerChallengePlayView: View {
         .onDisappear {
             revealTask?.cancel()
             timerTask?.cancel()
+            preparationTask?.cancel()
         }
-        .overlay { if session.isFinished { resultOverlay } }
+        .overlay {
+            if isPreparing {
+                preparationOverlay
+            } else if session.isFinished {
+                resultOverlay
+            }
+        }
     }
 
     private var currentLine: Line? {
@@ -364,6 +367,75 @@ struct SinglePlayerChallengePlayView: View {
             onHint: { session.useHint() },
             onConfirm: submit
         )
+    }
+
+    private var preparationOverlay: some View {
+        ZStack {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .overlay { Color.black.opacity(0.04) }
+                .ignoresSafeArea()
+
+            VStack(spacing: 18) {
+                Text(AppLocalization.text("single.preparation.eyebrow"))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(SubwayTheme.muted)
+
+                Text(AppLocalization.text("single.preparation.title"))
+                    .font(.title2.bold())
+                    .foregroundStyle(SubwayTheme.ink)
+                    .multilineTextAlignment(.center)
+
+                Text(AppLocalization.text("single.preparation.message"))
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(SubwayTheme.ink)
+
+                Text("\(preparationCountdown)")
+                    .font(.title2.bold().monospacedDigit())
+                    .foregroundStyle(SubwayTheme.ink)
+                    .frame(width: 56, height: 44)
+                    .background(currentLine?.color ?? SubwayTheme.action, in: Capsule())
+
+                Button(AppLocalization.text("single.preparation.start"), action: beginPreparation)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(currentLine?.colorForeground ?? .black)
+                    .frame(maxWidth: .infinity, minHeight: 56)
+                    .background(currentLine?.color ?? SubwayTheme.action, in: Capsule())
+                    .disabled(isStarting)
+            }
+            .padding(28)
+            .frame(maxWidth: 342)
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                    .stroke(currentLine?.color ?? SubwayTheme.action, lineWidth: 2)
+            }
+            .padding(.horizontal, AppLayout.pageHorizontal)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isModal)
+    }
+
+    private func beginPreparation() {
+        guard isPreparing, !isStarting else { return }
+        isStarting = true
+        preparationTask?.cancel()
+        preparationTask = Task { @MainActor in
+            for value in stride(from: 3, through: 1, by: -1) {
+                guard !Task.isCancelled else { return }
+                preparationCountdown = value
+                impact(.warning)
+                try? await Task.sleep(for: .seconds(1))
+            }
+            guard !Task.isCancelled else { return }
+            isPreparing = false
+            isStarting = false
+            preparationTask = nil
+            startQuestionTimer()
+            try? await Task.sleep(for: .milliseconds(120))
+            guard !Task.isCancelled else { return }
+            focused = true
+        }
     }
 
     private func submit() {
