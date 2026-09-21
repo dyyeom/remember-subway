@@ -183,6 +183,7 @@ struct SinglePlayerChallengePlayView: View {
     @State private var didRecord = false
     @State private var resultStatus = SinglePlayerResultStatus.saving
     @State private var keyboardPresented = false
+    @State private var keyboardLayoutAnimationEnabled = false
     @State private var revealTask: Task<Void, Never>?
     @State private var timerTask: Task<Void, Never>?
     @State private var timeRemaining = SinglePlayerSession.roundDuration
@@ -282,7 +283,6 @@ struct SinglePlayerChallengePlayView: View {
                     .padding(.top, layout.promptTop)
                     .padding(.bottom, layout.promptBottom)
                 }
-                .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: keyboardPresented)
             } else {
                 EmptyStateView(
                     title: AppLocalization.text("single.noQuestions.title"),
@@ -301,14 +301,24 @@ struct SinglePlayerChallengePlayView: View {
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
         .task {
-            focused = true
             startQuestionTimer()
+            // Let the navigation push settle before presenting the keyboard.
+            // Otherwise the push and the keyboard/layout transition appear as
+            // two consecutive navigations.
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled else { return }
+            focused = true
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-            keyboardPresented = true
+            updateKeyboardLayout(presented: true)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            keyboardPresented = false
+            updateKeyboardLayout(presented: false)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+            // Do not animate the first keyboard transition caused by entering
+            // the screen. Later manual show/hide transitions can animate.
+            keyboardLayoutAnimationEnabled = true
         }
         .onChange(of: session.isFinished) { _, finished in if finished { finish() } }
         .onDisappear {
@@ -411,6 +421,21 @@ struct SinglePlayerChallengePlayView: View {
         Task { @MainActor in
             await Task.yield()
             focused = true
+        }
+    }
+
+    private func updateKeyboardLayout(presented: Bool) {
+        guard keyboardPresented != presented else { return }
+        guard keyboardLayoutAnimationEnabled, !reduceMotion else {
+            var transaction = Transaction()
+            transaction.animation = nil
+            withTransaction(transaction) {
+                keyboardPresented = presented
+            }
+            return
+        }
+        withAnimation(.easeOut(duration: 0.25)) {
+            keyboardPresented = presented
         }
     }
 
