@@ -4,19 +4,42 @@ import Foundation
 final class TransitCatalogStore: ObservableObject {
     @Published private(set) var catalog: TransitCatalog = .empty
     @Published private(set) var loadingError: String?
+    @Published private(set) var isLoading = true
 
     init(bundle: Bundle = .main) {
-        do {
-            catalog = try Self.load(from: bundle)
-        } catch {
-            loadingError = error.localizedDescription
+        guard let url = bundle.url(forResource: "transit_data", withExtension: "json") else {
+            loadingError = CatalogError.missingResource.localizedDescription
+            isLoading = false
+            return
+        }
+
+        // Decoding and validating the catalog walks 1,000+ stations and is
+        // deliberately kept off the main actor so the first tab can render
+        // immediately instead of stalling during app launch.
+        Task { [weak self] in
+            let result = await Task.detached(priority: .userInitiated) {
+                Result { try Self.load(from: url) }
+            }.value
+
+            guard let self else { return }
+            switch result {
+            case .success(let catalog):
+                self.catalog = catalog
+            case .failure(let error):
+                self.loadingError = error.localizedDescription
+            }
+            self.isLoading = false
         }
     }
 
-    static func load(from bundle: Bundle) throws -> TransitCatalog {
+    nonisolated static func load(from bundle: Bundle) throws -> TransitCatalog {
         guard let url = bundle.url(forResource: "transit_data", withExtension: "json") else {
             throw CatalogError.missingResource
         }
+        return try load(from: url)
+    }
+
+    nonisolated private static func load(from url: URL) throws -> TransitCatalog {
         let data = try Data(contentsOf: url)
         let catalog = try JSONDecoder().decode(TransitCatalog.self, from: data)
         let errors = CatalogValidator.validate(catalog)

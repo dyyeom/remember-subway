@@ -13,7 +13,12 @@ struct RootTabView: View {
 
     var body: some View {
         Group {
-            if let error = catalogStore.loadingError {
+            if catalogStore.isLoading {
+                ProgressView()
+                    .tint(SubwayTheme.action)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(SubwayTheme.background.ignoresSafeArea())
+            } else if let error = catalogStore.loadingError {
                 EmptyStateView(title: AppLocalization.text("catalog.error.open.title"), message: error, symbol: "exclamationmark.triangle")
             } else {
                 TabView {
