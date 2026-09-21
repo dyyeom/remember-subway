@@ -183,7 +183,6 @@ struct SinglePlayerChallengePlayView: View {
     @State private var didRecord = false
     @State private var resultStatus = SinglePlayerResultStatus.saving
     @State private var keyboardPresented = false
-    @State private var keyboardLayoutAnimationEnabled = false
     @State private var isPreparing = true
     @State private var isStarting = false
     @State private var preparationCountdown = 3
@@ -310,11 +309,6 @@ struct SinglePlayerChallengePlayView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
             updateKeyboardLayout(presented: false)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-            // Do not animate the first keyboard transition caused by entering
-            // the screen. Later manual show/hide transitions can animate.
-            keyboardLayoutAnimationEnabled = true
         }
         .onChange(of: session.isFinished) { _, finished in if finished { finish() } }
         .onDisappear {
@@ -498,12 +492,8 @@ struct SinglePlayerChallengePlayView: View {
 
     private func updateKeyboardLayout(presented: Bool) {
         guard keyboardPresented != presented else { return }
-        guard keyboardLayoutAnimationEnabled, !reduceMotion else {
-            var transaction = Transaction()
-            transaction.animation = nil
-            withTransaction(transaction) {
-                keyboardPresented = presented
-            }
+        guard !reduceMotion else {
+            keyboardPresented = presented
             return
         }
         withAnimation(.easeOut(duration: 0.25)) {
