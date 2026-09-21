@@ -384,11 +384,14 @@ struct SinglePlayerChallengePlayView: View {
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(SubwayTheme.ink)
 
-                Text("\(preparationCountdown)")
-                    .font(.title2.bold().monospacedDigit())
-                    .foregroundStyle(SubwayTheme.ink)
-                    .frame(width: 56, height: 44)
-                    .background(currentLine?.color ?? SubwayTheme.action, in: Capsule())
+                if isStarting {
+                    Text("\(preparationCountdown)")
+                        .font(.title2.bold().monospacedDigit())
+                        .foregroundStyle(SubwayTheme.ink)
+                        .frame(width: 56, height: 44)
+                        .background(currentLine?.color ?? SubwayTheme.action, in: Capsule())
+                        .transition(.opacity)
+                }
 
                 Button(AppLocalization.text("single.preparation.start"), action: beginPreparation)
                     .font(.headline.weight(.bold))
