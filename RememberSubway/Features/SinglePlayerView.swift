@@ -393,21 +393,25 @@ struct SinglePlayerChallengePlayView: View {
                         .transition(.opacity)
                 }
 
-                Button(AppLocalization.text("single.preparation.start"), action: beginPreparation)
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(
-                        isStarting
-                            ? Color.secondary
-                            : (currentLine?.colorForeground ?? .black)
-                    )
-                    .frame(maxWidth: .infinity, minHeight: 56)
-                    .background(
-                        isStarting
-                            ? Color.gray.opacity(0.28)
-                            : (currentLine?.color ?? SubwayTheme.action),
-                        in: Capsule()
-                    )
-                    .disabled(isStarting)
+                Button(action: beginPreparation) {
+                    Text(AppLocalization.text("single.preparation.start"))
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(
+                            isStarting
+                                ? Color.secondary
+                                : (currentLine?.colorForeground ?? .black)
+                        )
+                        .frame(maxWidth: .infinity, minHeight: 56)
+                        .background(
+                            isStarting
+                                ? Color.gray.opacity(0.28)
+                                : (currentLine?.color ?? SubwayTheme.action),
+                            in: Capsule()
+                        )
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .disabled(isStarting)
             }
             .padding(28)
             .frame(maxWidth: 342)
