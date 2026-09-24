@@ -14,17 +14,24 @@ struct SinglePlayerChallengeHomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Image(systemName: "trophy.fill")
-                    .font(.system(size: 64))
-                    .foregroundStyle(SubwayTheme.action)
-                    .accessibilityHidden(true)
-                Text(AppLocalization.text("single.home.title"))
-                    .font(.title2.bold())
-                    .foregroundStyle(SubwayTheme.ink)
-                    .multilineTextAlignment(.center)
-                Text(scoreDescription)
-                    .foregroundStyle(SubwayTheme.muted)
-                    .multilineTextAlignment(.center)
+                HStack(alignment: .center, spacing: 12) {
+                    Image(systemName: "trophy.fill")
+                        .font(.system(size: 28, weight: .semibold))
+                        .foregroundStyle(SubwayTheme.action)
+                        .frame(width: 56, height: 56)
+                        .accessibilityHidden(true)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(AppLocalization.text("single.home.title"))
+                            .font(.title2.bold())
+                            .foregroundStyle(SubwayTheme.ink)
+                        Text(scoreDescription)
+                            .foregroundStyle(SubwayTheme.muted)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
                 VStack(spacing: 0) {
                     HStack {
                         Label(AppLocalization.text("single.region.label"), systemImage: "map")
