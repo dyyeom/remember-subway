@@ -296,6 +296,8 @@ struct MultiplayerContainerView: View {
             Text(title).font(.body.weight(.medium))
             Spacer()
             content()
+                .frame(minWidth: 112, alignment: .trailing)
+                .layoutPriority(1)
         }
         .frame(minHeight: 58)
     }
