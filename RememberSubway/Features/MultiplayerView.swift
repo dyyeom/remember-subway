@@ -95,8 +95,6 @@ struct MultiplayerContainerView: View {
                     Text(AppLocalization.text("multiplayer.home.title"))
                         .font(.largeTitle.bold())
                         .foregroundStyle(SubwayTheme.ink)
-                    Text(AppLocalization.text("multiplayer.home.description"))
-                        .foregroundStyle(SubwayTheme.muted)
                 }
 
                 VStack(spacing: 0) {
@@ -139,7 +137,7 @@ struct MultiplayerContainerView: View {
                     Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
                 }
 
-                VStack(spacing: 12) {
+                HStack(alignment: .top, spacing: 12) {
                     Button {
                         guard let regionID = selectedRegionID, let lineID = selectedLineID else { return }
                         coordinator.host(
@@ -148,7 +146,8 @@ struct MultiplayerContainerView: View {
                         )
                     } label: {
                         Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
-                            .frame(maxWidth: .infinity, minHeight: 52)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, minHeight: 56)
                     }
                     .buttonStyle(.glassProminent)
                     .tint(selectedLine?.color ?? SubwayTheme.action)
@@ -158,7 +157,8 @@ struct MultiplayerContainerView: View {
                         coordinator.browse(nickname: validNickname)
                     } label: {
                         Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
-                            .frame(maxWidth: .infinity, minHeight: 52)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, minHeight: 56)
                     }
                     .buttonStyle(.glass)
                     .disabled(!canEnterMultiplayer)
