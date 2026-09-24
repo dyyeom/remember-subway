@@ -233,7 +233,7 @@ struct NeighborStationSignView: View {
 
     var body: some View {
         let centerWidth: CGFloat = 204
-        let signHeight: CGFloat = 101
+        let signHeight: CGFloat = 84
 
         ZStack {
             GeometryReader { proxy in
@@ -255,7 +255,7 @@ struct NeighborStationSignView: View {
                     .frame(width: sideWidth)
                 }
             }
-            .frame(height: signHeight - 12)
+            .frame(height: signHeight - 8)
             .background(line.color, in: Capsule())
 
             currentPanel
@@ -313,7 +313,7 @@ struct NeighborStationSignView: View {
                 .minimumScaleFactor(0.58)
         }
         .foregroundStyle(line.colorForeground)
-        .frame(maxWidth: .infinity, minHeight: 85)
+        .frame(maxWidth: .infinity, minHeight: 76)
         .padding(.horizontal, 5)
         .accessibilityHidden(true)
     }
