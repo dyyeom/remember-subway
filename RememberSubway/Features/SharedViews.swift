@@ -255,11 +255,11 @@ struct NeighborStationSignView: View {
                     .frame(width: sideWidth)
                 }
             }
-            .frame(height: signHeight - 8)
+            .frame(height: 48)
             .background(line.color, in: Capsule())
 
             currentPanel
-                .frame(width: centerWidth, height: 76)
+                .frame(width: centerWidth, height: signHeight)
         }
         .frame(maxWidth: .infinity, minHeight: signHeight, maxHeight: signHeight)
         .accessibilityElement(children: .ignore)
@@ -313,7 +313,7 @@ struct NeighborStationSignView: View {
                 .minimumScaleFactor(0.58)
         }
         .foregroundStyle(line.colorForeground)
-        .frame(maxWidth: .infinity, minHeight: 76)
+        .frame(maxWidth: .infinity, minHeight: 48)
         .padding(.horizontal, 5)
         .accessibilityHidden(true)
     }
