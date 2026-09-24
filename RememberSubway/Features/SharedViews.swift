@@ -259,7 +259,7 @@ struct NeighborStationSignView: View {
             .background(line.color, in: Capsule())
 
             currentPanel
-                .frame(width: centerWidth, height: signHeight)
+                .frame(width: centerWidth, height: 76)
         }
         .frame(maxWidth: .infinity, minHeight: signHeight, maxHeight: signHeight)
         .accessibilityElement(children: .ignore)
@@ -285,12 +285,6 @@ struct NeighborStationSignView: View {
                     .minimumScaleFactor(0.75)
             }
 
-            Text(AppLocalization.text("game.stationQuestion"))
-                .font(.system(size: 23, weight: .bold, design: .rounded))
-                .foregroundStyle(line.color)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.75)
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 12)
@@ -300,7 +294,7 @@ struct NeighborStationSignView: View {
             Capsule().stroke(line.color, lineWidth: 6)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(AppLocalization.text("game.stationQuestion"))
+        .accessibilityLabel(AppLocalization.text("station.current"))
     }
 
     private func neighborPanel(station: Station?, arrow: String) -> some View {

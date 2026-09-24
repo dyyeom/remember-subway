@@ -271,16 +271,14 @@ struct SinglePlayerChallengePlayView: View {
                     .padding(.horizontal, AppLayout.pageHorizontal)
 
                     VStack(spacing: layout.promptSpacing) {
-                        Text(AppLocalization.text("game.stationQuestion"))
-                            .font(.largeTitle.bold())
                         if session.hintVisible {
                             Text(session.hint)
                                 .font(.title2.monospaced().bold())
                                 .foregroundStyle(line.color)
                                 .accessibilityLabel(AppLocalization.format("accessibility.initialHint.format", session.hint))
                         }
+                        promptFeedbackView
                         answerField
-                        feedbackView
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, layout.promptTop)
@@ -473,10 +471,11 @@ struct SinglePlayerChallengePlayView: View {
         if !session.isRevealingIncorrectAnswer { restoreAnswerFocus() }
     }
 
-    private var feedbackView: some View {
+    private var promptFeedbackView: some View {
         Group {
             if feedback.isEmpty {
-                Color.clear
+                Text(AppLocalization.text("game.stationQuestion"))
+                    .font(.largeTitle.bold())
             } else {
                 Text(feedback)
                     .font(feedbackKind == .correct ? .largeTitle.bold() : .title2.bold())
