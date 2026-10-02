@@ -379,7 +379,7 @@ struct SinglePlayerChallengePlayView: View {
     private var preparationOverlay: some View {
         ZStack {
             Rectangle()
-                .fill(.ultraThinMaterial)
+                .fill(SubwayTheme.background)
                 .overlay { Color.black.opacity(0.04) }
                 .ignoresSafeArea()
 
@@ -471,8 +471,7 @@ struct SinglePlayerChallengePlayView: View {
                             .frame(maxWidth: .infinity, minHeight: 50)
                     }
                     .contentShape(Rectangle())
-                    .buttonStyle(.bordered)
-                    .tint(SubwayTheme.ink)
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.ink, prominent: false))
 
                     Button {
                         stopChallenge()
@@ -482,8 +481,7 @@ struct SinglePlayerChallengePlayView: View {
                             .frame(maxWidth: .infinity, minHeight: 50)
                     }
                     .contentShape(Rectangle())
-                    .buttonStyle(.borderedProminent)
-                    .tint(SubwayTheme.danger)
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.danger, prominent: true))
                 }
             }
             .padding(24)
@@ -702,9 +700,11 @@ struct SinglePlayerChallengePlayView: View {
                 Text(resultStatus.message)
                     .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 Button(AppLocalization.text("single.tryAgain"), systemImage: "arrow.clockwise") { restart() }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: true))
+                    .frame(maxWidth: .infinity, minHeight: 52)
                 Button(AppLocalization.text("common.finish"), systemImage: "checkmark") { dismiss() }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: false))
+                    .frame(maxWidth: .infinity, minHeight: 52)
             }
             .padding(28)
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))

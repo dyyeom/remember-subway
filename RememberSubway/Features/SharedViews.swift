@@ -407,19 +407,19 @@ struct GameGlassActionBar: View {
     let onConfirm: () -> Void
 
     var body: some View {
-        GlassEffectContainer(spacing: 12) {
+        SubwayPanel(accent: color) {
             HStack(spacing: 12) {
                 Button(hintTitle, systemImage: "lightbulb", action: onHint)
-                    .buttonStyle(.glass)
+                    .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false))
                     .disabled(hintDisabled)
                     .frame(maxWidth: .infinity, minHeight: 52)
 
                 Button(AppLocalization.text("game.checkAnswer"), systemImage: "checkmark.circle", action: onConfirm)
-                    .buttonStyle(.glassProminent)
-                    .tint(color)
+                    .buttonStyle(SubwayActionButtonStyle(color: color, prominent: true))
                     .disabled(confirmDisabled)
                     .frame(maxWidth: .infinity, minHeight: 52)
             }
+            .padding(12)
         }
         .controlSize(.large)
         .padding(.horizontal, AppLayout.pageHorizontal)

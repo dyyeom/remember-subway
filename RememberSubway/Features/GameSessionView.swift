@@ -281,11 +281,16 @@ struct GameSessionView: View {
                         session.retry()
                         answerFocused = true
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(SubwayActionButtonStyle(color: line.color, prominent: true))
+                    .frame(maxWidth: .infinity, minHeight: 52)
                 }
                 .padding(28)
                 .frame(maxWidth: 340)
-                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 28))
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .stroke(line.color, lineWidth: 2)
+                }
                 .padding()
                 .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
             }
@@ -332,7 +337,11 @@ struct GameSessionView: View {
                     )
                 }
                 .padding(22)
-                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .stroke(line.color, lineWidth: 1)
+                }
                 .padding(.top, 32)
 
                 Spacer(minLength: 32)
@@ -344,8 +353,7 @@ struct GameSessionView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: 54)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(line.color)
+                .buttonStyle(SubwayActionButtonStyle(color: line.color, prominent: true))
                 .accessibilityHint(AppLocalization.text("legacy.completion.finishHint"))
             }
             .padding(.horizontal, 24)

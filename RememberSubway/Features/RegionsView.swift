@@ -159,8 +159,7 @@ struct RegionsView: View {
                     Label(AppLocalization.text("common.startGame"), systemImage: "play.fill")
                         .frame(maxWidth: .infinity, minHeight: 52)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(line.color)
+                .buttonStyle(SubwayActionButtonStyle(color: line.color, prominent: true))
                 .controlSize(.large)
             }
 

@@ -243,7 +243,7 @@ struct MultiplayerContainerView: View {
                     } label: {
                         Label(AppLocalization.text("common.startGame"), systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 52)
                     }
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(SubwayActionButtonStyle(color: coordinator.configuration.flatMap { catalog.lineByID[$0.lineID]?.color } ?? SubwayTheme.action, prominent: true))
                     .disabled(!coordinator.canStart)
                 } else {
                     Label(AppLocalization.text("multiplayer.waitingForHost"), systemImage: "hourglass")
@@ -278,8 +278,11 @@ struct MultiplayerContainerView: View {
                     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                     UIApplication.shared.open(url)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
+                .frame(maxWidth: .infinity, minHeight: 52)
                 Button(AppLocalization.text("multiplayer.backHome")) { coordinator.leave() }
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                    .frame(maxWidth: .infinity, minHeight: 52)
             }
         }
     }
@@ -395,7 +398,7 @@ private struct RoomBrowserView: View {
         .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Button(AppLocalization.text("multiplayer.backHome"), systemImage: "chevron.backward", action: exit)
-                .buttonStyle(.glass)
+                .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
                 .controlSize(.large)
                 .frame(maxWidth: .infinity, minHeight: 52)
                 .padding(.horizontal, AppLayout.pageHorizontal)
@@ -427,7 +430,7 @@ private struct JoinCodeView: View {
                     }
                     .onChange(of: code) { _, value in code = String(value.filter(\.isNumber).prefix(4)) }
                 Button(AppLocalization.text("multiplayer.join"), action: join)
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
                     .controlSize(.large)
                     .disabled(code.count != 4)
             }
@@ -636,11 +639,14 @@ private struct MultiplayerResultView: View {
                         .font(.largeTitle.bold())
                     if let player = coordinator.localPlayer {
                         Text(AppLocalization.format("stats.rankAndScore.format", player.rank, player.score)).font(.title2.bold().monospacedDigit())
-                        GroupBox {
+                    SubwayPanel(accent: resultLine?.color ?? SubwayTheme.border) {
+                        VStack(spacing: 10) {
                             LabeledContent(AppLocalization.text("game.correctAnswers"), value: AppLocalization.format("count.items.format", player.correctAnswers))
                             LabeledContent(AppLocalization.text("game.hints"), value: AppLocalization.format("count.times.format", player.hintsUsed))
                             LabeledContent(AppLocalization.text("game.wrongAnswers"), value: AppLocalization.format("count.times.format", player.wrongAnswers))
                         }
+                        .padding(18)
+                    }
                     }
                     VStack(spacing: 12) {
                         ForEach(MultiplayerScoring.ranked(coordinator.matchPlayers)) { player in
@@ -667,10 +673,12 @@ private struct MultiplayerResultView: View {
                             : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
-                    .buttonStyle(.glassProminent)
+                    .buttonStyle(SubwayActionButtonStyle(color: resultLine?.color ?? SubwayTheme.action, prominent: true))
                     .disabled(coordinator.rematchRequested && !coordinator.isHost)
 
-                    Button(AppLocalization.text("common.leave")) { coordinator.leave() }.buttonStyle(.glass)
+                    Button(AppLocalization.text("common.leave")) { coordinator.leave() }
+                        .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                        .frame(maxWidth: .infinity, minHeight: 52)
                 }
                 .padding(24)
             }
