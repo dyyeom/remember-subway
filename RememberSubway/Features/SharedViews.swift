@@ -22,6 +22,96 @@ enum SubwayTheme {
     static let danger = Color("SubwayDanger")
 }
 
+struct SubwayPanel<Content: View>: View {
+    let accent: Color
+    @ViewBuilder let content: () -> Content
+
+    init(accent: Color = SubwayTheme.border, @ViewBuilder content: @escaping () -> Content) {
+        self.accent = accent
+        self.content = content
+    }
+
+    var body: some View {
+        content()
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                    .stroke(accent.opacity(0.9), lineWidth: accent == SubwayTheme.border ? 1 : 2)
+            }
+    }
+}
+
+struct SubwayActionButtonStyle: ButtonStyle {
+    let color: Color
+    let prominent: Bool
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline)
+            .foregroundStyle(prominent ? colorForeground : SubwayTheme.ink)
+            .background(
+                prominent ? color : SubwayTheme.stationSurface,
+                in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                    .stroke(prominent ? color : SubwayTheme.border, lineWidth: prominent ? 2 : 1)
+            }
+            .opacity(isEnabled ? (configuration.isPressed ? 0.78 : 1) : 0.42)
+            .contentShape(Rectangle())
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+
+    private var colorForeground: Color {
+        let uiColor = UIColor(color)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+        return luminance > 0.56 ? .black : .white
+    }
+}
+
+struct SubwayHomeHeader: View {
+    let symbol: String
+    let title: String
+    let message: String
+    let accent: Color
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 14) {
+            Image(systemName: symbol)
+                .font(.system(size: 28, weight: .semibold))
+                .foregroundStyle(accent)
+                .frame(width: 52, height: 52)
+                .background(accent.opacity(0.14), in: Circle())
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.title2.bold())
+                    .foregroundStyle(SubwayTheme.ink)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(SubwayTheme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                .stroke(accent, lineWidth: 2)
+        }
+    }
+}
+
 struct GamePlayLayoutMetrics: Equatable {
     let statusTop: CGFloat
     let contextTop: CGFloat

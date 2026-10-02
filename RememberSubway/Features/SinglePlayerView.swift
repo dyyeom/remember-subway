@@ -14,24 +14,12 @@ struct SinglePlayerChallengeHomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                HStack(alignment: .center, spacing: 12) {
-                    Image(systemName: "trophy.fill")
-                        .font(.system(size: 28, weight: .semibold))
-                        .foregroundStyle(SubwayTheme.action)
-                        .frame(width: 56, height: 56)
-                        .accessibilityHidden(true)
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(AppLocalization.text("single.home.title"))
-                            .font(.title2.bold())
-                            .foregroundStyle(SubwayTheme.ink)
-                        Text(scoreDescription)
-                            .foregroundStyle(SubwayTheme.muted)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .frame(maxWidth: .infinity, minHeight: 72, alignment: .leading)
+                SubwayHomeHeader(
+                    symbol: "trophy.fill",
+                    title: AppLocalization.text("single.home.title"),
+                    message: scoreDescription,
+                    accent: SubwayTheme.action
+                )
                 VStack(spacing: 0) {
                     HStack {
                         Label(AppLocalization.text("single.region.label"), systemImage: "map")
@@ -72,7 +60,8 @@ struct SinglePlayerChallengeHomeView: View {
                     RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
                         .stroke(SubwayTheme.border, lineWidth: 1)
                 }
-                GroupBox {
+                SubwayPanel(accent: SubwayTheme.border) {
+                    VStack(spacing: 12) {
                     LabeledContent(
                         AppLocalization.text("single.myBestScore"),
                         value: AppLocalization.format("score.points.format", currentBest)
@@ -83,7 +72,9 @@ struct SinglePlayerChallengeHomeView: View {
                             ? AppLocalization.text("gameCenter.signedIn")
                             : AppLocalization.text("gameCenter.signedOut")
                     )
-                } 
+                    }
+                    .padding(18)
+                }
                 if let selectedRegion {
                     NavigationLink {
                         SinglePlayerChallengePlayView(
@@ -95,14 +86,13 @@ struct SinglePlayerChallengeHomeView: View {
                         Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
                             .frame(maxWidth: .infinity, minHeight: 52)
                     }
-                    .buttonStyle(.glassProminent)
-                    .tint(SubwayTheme.action)
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
                 }
                 if gameCenter.isAuthenticated {
                     Button(AppLocalization.format("single.ranking.format", challengeName), systemImage: "list.number") {
                         gameCenter.showLeaderboard(id: leaderboardID)
                     }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
                 }
             }
             .padding(.horizontal, AppLayout.pageHorizontal)

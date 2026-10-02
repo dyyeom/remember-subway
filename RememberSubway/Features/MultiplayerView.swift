@@ -91,11 +91,12 @@ struct MultiplayerContainerView: View {
     private var home: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(AppLocalization.text("multiplayer.home.title"))
-                        .font(.largeTitle.bold())
-                        .foregroundStyle(SubwayTheme.ink)
-                }
+                SubwayHomeHeader(
+                    symbol: "person.2.fill",
+                    title: AppLocalization.text("multiplayer.home.title"),
+                    message: AppLocalization.text("multiplayer.simultaneousMatch"),
+                    accent: selectedLine?.color ?? SubwayTheme.action
+                )
 
                 VStack(spacing: 0) {
                     selectionRow(AppLocalization.text("multiplayer.nickname.label"), systemImage: "person.fill") {
@@ -126,15 +127,19 @@ struct MultiplayerContainerView: View {
                 .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                        .stroke(SubwayTheme.border, lineWidth: 1)
+                        .stroke(selectedLine?.color ?? SubwayTheme.border, lineWidth: selectedLine == nil ? 1 : 2)
                 }
 
-                GroupBox {
-                    LabeledContent(AppLocalization.text("multiplayer.questions"), value: AppLocalization.text("multiplayer.tenQuestions"))
-                    LabeledContent(AppLocalization.text("multiplayer.timeLimit"), value: AppLocalization.text("multiplayer.tenSecondsEach"))
-                    LabeledContent(AppLocalization.text("multiplayer.players"), value: AppLocalization.text("multiplayer.twoToEightPlayers"))
-                } label: {
-                    Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
+                SubwayPanel(accent: selectedLine?.color ?? SubwayTheme.border) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
+                            .font(.headline)
+                            .foregroundStyle(SubwayTheme.ink)
+                        LabeledContent(AppLocalization.text("multiplayer.questions"), value: AppLocalization.text("multiplayer.tenQuestions"))
+                        LabeledContent(AppLocalization.text("multiplayer.timeLimit"), value: AppLocalization.text("multiplayer.tenSecondsEach"))
+                        LabeledContent(AppLocalization.text("multiplayer.players"), value: AppLocalization.text("multiplayer.twoToEightPlayers"))
+                    }
+                    .padding(18)
                 }
 
                 HStack(alignment: .top, spacing: 12) {
@@ -149,8 +154,7 @@ struct MultiplayerContainerView: View {
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity, minHeight: 56)
                     }
-                    .buttonStyle(.glassProminent)
-                    .tint(selectedLine?.color ?? SubwayTheme.action)
+                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: true))
                     .disabled(!canEnterMultiplayer || selectedLine == nil)
 
                     Button {
@@ -160,7 +164,7 @@ struct MultiplayerContainerView: View {
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity, minHeight: 56)
                     }
-                    .buttonStyle(.glass)
+                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: false))
                     .disabled(!canEnterMultiplayer)
                 }
                 .controlSize(.large)
