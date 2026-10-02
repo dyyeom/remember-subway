@@ -136,7 +136,7 @@ struct GameSessionView: View {
             .font(.title3)
             .padding(.horizontal, 20)
             .frame(minHeight: 64)
-            .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: 22, style: .continuous)
                     .stroke(answerFocused ? line.color : .secondary.opacity(0.22), lineWidth: answerFocused ? 2 : 1)
@@ -303,7 +303,7 @@ struct GameSessionView: View {
 
     private func completionOverlay(stars: Int) -> some View {
         ZStack {
-            Color(uiColor: .systemBackground)
+            SubwayTheme.background
                 .ignoresSafeArea()
 
             CelebrationFireworksView(color: line.color, reduceMotion: reduceMotion)

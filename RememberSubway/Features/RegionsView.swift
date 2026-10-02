@@ -43,7 +43,7 @@ struct RegionsView: View {
                     }
                 }
                 .padding(.horizontal, 16)
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
 
                 if let line = selectedLine {
                     selectedLineCard(line)
@@ -142,7 +142,7 @@ struct RegionsView: View {
             }
         }
         .padding(20)
-        .background(.background, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .stroke(line.color.opacity(0.35), lineWidth: 1)
