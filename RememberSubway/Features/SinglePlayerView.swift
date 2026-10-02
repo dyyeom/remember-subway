@@ -197,6 +197,7 @@ struct SinglePlayerChallengePlayView: View {
     @State private var timerTask: Task<Void, Never>?
     @State private var preparationTask: Task<Void, Never>?
     @State private var timeRemaining = SinglePlayerSession.roundDuration
+    @State private var showStopConfirmation = false
     @FocusState private var focused: Bool
     let poolVersion: String
     let catalog: TransitCatalog
@@ -300,15 +301,30 @@ struct SinglePlayerChallengePlayView: View {
                     .padding()
             }
         }
+        .blur(radius: showStopConfirmation ? 3 : 0)
         .scrollDismissesKeyboard(.interactively)
         .scrollContentBackground(.hidden)
-        .accessibilityHidden(isPreparing)
+        .accessibilityHidden(isPreparing || showStopConfirmation)
         .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) { actionBar }
         .navigationTitle(AppLocalization.text("single.challenge"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    presentStopConfirmation()
+                } label: {
+                    Label(
+                        AppLocalization.text("single.stopChallenge"),
+                        systemImage: "xmark.circle"
+                    )
+                }
+                .disabled(isPreparing || session.isFinished)
+                .accessibilityHint(AppLocalization.text("single.stopChallenge.hint"))
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
             updateKeyboardLayout(presented: true)
         }
@@ -326,6 +342,8 @@ struct SinglePlayerChallengePlayView: View {
                 preparationOverlay
             } else if session.isFinished {
                 resultOverlay
+            } else if showStopConfirmation {
+                stopConfirmationOverlay
             }
         }
     }
@@ -429,6 +447,80 @@ struct SinglePlayerChallengePlayView: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.isModal)
+    }
+
+    private var stopConfirmationOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.42)
+                .ignoresSafeArea()
+                .accessibilityHidden(true)
+
+            VStack(spacing: 16) {
+                Image(systemName: "rectangle.portrait.and.arrow.right")
+                    .font(.system(size: 32, weight: .semibold))
+                    .foregroundStyle(currentLine?.color ?? SubwayTheme.action)
+                    .accessibilityHidden(true)
+
+                Text(AppLocalization.text("single.stopConfirmation.title"))
+                    .font(.title2.bold())
+                    .foregroundStyle(SubwayTheme.ink)
+                    .multilineTextAlignment(.center)
+
+                Text(AppLocalization.text("single.stopConfirmation.message"))
+                    .font(.body)
+                    .foregroundStyle(SubwayTheme.muted)
+                    .multilineTextAlignment(.center)
+
+                HStack(spacing: 12) {
+                    Button {
+                        showStopConfirmation = false
+                        restoreAnswerFocus()
+                    } label: {
+                        Text(AppLocalization.text("single.stopConfirmation.continue"))
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                    }
+                    .contentShape(Rectangle())
+                    .buttonStyle(.bordered)
+                    .tint(SubwayTheme.ink)
+
+                    Button {
+                        stopChallenge()
+                    } label: {
+                        Text(AppLocalization.text("single.stopConfirmation.stop"))
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                    }
+                    .contentShape(Rectangle())
+                    .buttonStyle(.borderedProminent)
+                    .tint(SubwayTheme.danger)
+                }
+            }
+            .padding(24)
+            .frame(maxWidth: 342)
+            .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                    .stroke(currentLine?.color ?? SubwayTheme.action, lineWidth: 2)
+            }
+            .padding(.horizontal, AppLayout.pageHorizontal)
+            .accessibilityElement(children: .contain)
+            .accessibilityAddTraits(.isModal)
+        }
+    }
+
+    private func presentStopConfirmation() {
+        guard !isPreparing, !session.isFinished else { return }
+        focused = false
+        showStopConfirmation = true
+    }
+
+    private func stopChallenge() {
+        revealTask?.cancel()
+        timerTask?.cancel()
+        preparationTask?.cancel()
+        showStopConfirmation = false
+        dismiss()
     }
 
     private func beginPreparation() {

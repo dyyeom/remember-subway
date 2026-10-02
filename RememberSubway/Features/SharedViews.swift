@@ -267,28 +267,17 @@ struct NeighborStationSignView: View {
     }
 
     private var currentPanel: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(line.color)
-                    .frame(width: 36, height: 36)
-                    .overlay {
-                        Text("?")
-                            .font(.system(size: 22, weight: .bold, design: .rounded))
-                            .foregroundStyle(line.colorForeground)
-                    }
-
-                Text(AppLocalization.text("station.current"))
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(SubwayTheme.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
+        Circle()
+            .fill(line.color)
+            .frame(width: 42, height: 42)
+            .overlay {
+                Text("?")
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                    .foregroundStyle(line.colorForeground)
             }
-
-        }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.vertical, 9)
         .background(SubwayTheme.stationSurface, in: Capsule())
         .overlay {
             Capsule().stroke(line.color, lineWidth: 6)
