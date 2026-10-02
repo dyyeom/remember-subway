@@ -50,6 +50,9 @@ struct SubwayActionButtonStyle: ButtonStyle {
         configuration.label
             .font(.headline)
             .foregroundStyle(prominent ? colorForeground : SubwayTheme.ink)
+            .padding(.horizontal, 18)
+            .padding(.vertical, 14)
+            .frame(minHeight: 52)
             .background(
                 prominent ? color : SubwayTheme.stationSurface,
                 in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
