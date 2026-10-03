@@ -102,6 +102,8 @@ struct MultiplayerContainerView: View {
                     selectionRow(AppLocalization.text("multiplayer.nickname.label"), systemImage: "person.fill") {
                         TextField(AppLocalization.text("multiplayer.nickname.placeholder"), text: $nickname)
                             .multilineTextAlignment(.trailing)
+                            .accessibilityLabel(AppLocalization.text("multiplayer.nickname.label"))
+                            .accessibilityHint(AppLocalization.text("multiplayer.nickname.placeholder"))
                             .focused($nicknameFocused)
                             .submitLabel(.done)
                             .onSubmit { nicknameFocused = false }
@@ -561,6 +563,12 @@ private struct MultiplayerPlayView: View {
             GameGlassActionBar(
                 color: line.color,
                 hintTitle: AppLocalization.text("game.initialHint"),
+                hintText: coordinator.hintVisible
+                    ? AppLocalization.format(
+                        "game.initialHint.format",
+                        AnswerMatcher.initialConsonants(of: catalog.stationByID[question.targetStationID]?.name ?? "")
+                    )
+                    : nil,
                 hintDisabled: coordinator.hintVisible || coordinator.localAnswerLocked || coordinator.screenState != .playing,
                 confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || coordinator.localAnswerLocked || coordinator.screenState != .playing,
                 onHint: { coordinator.useHint(); restoreFocus() },

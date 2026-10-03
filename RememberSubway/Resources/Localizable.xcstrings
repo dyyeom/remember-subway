@@ -1002,6 +1002,23 @@
         }
       }
     },
+    "game.initialHint.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initials · %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초성 · %@"
+          }
+        }
+      }
+    },
     "game.noLives" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2970,6 +2987,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "게임을 곧 시작합니다!"
+          }
+        }
+      }
+    },
+    "single.preparation.countdown.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting in %d"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d초 후 시작"
           }
         }
       }

@@ -269,12 +269,6 @@ struct SinglePlayerChallengePlayView: View {
                     .padding(.horizontal, AppLayout.pageHorizontal)
 
                     VStack(spacing: layout.promptSpacing) {
-                        if session.hintVisible {
-                            Text(session.hint)
-                                .font(.title2.monospaced().bold())
-                                .foregroundStyle(line.color)
-                                .accessibilityLabel(AppLocalization.format("accessibility.initialHint.format", session.hint))
-                        }
                         promptFeedbackView
                         answerField
                     }
@@ -369,6 +363,9 @@ struct SinglePlayerChallengePlayView: View {
         GameGlassActionBar(
             color: currentLine?.color ?? .accentColor,
             hintTitle: AppLocalization.text("game.initialHint"),
+            hintText: session.hintVisible
+                ? AppLocalization.format("game.initialHint.format", session.hint)
+                : nil,
             hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer,
             confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished || session.isRevealingIncorrectAnswer,
             onHint: { session.useHint() },
@@ -397,18 +394,11 @@ struct SinglePlayerChallengePlayView: View {
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(SubwayTheme.ink)
 
-                if isStarting {
-                    Text("\(preparationCountdown)")
-                        .font(.title2.bold().monospacedDigit())
-                        .foregroundStyle(SubwayTheme.ink)
-                        .frame(width: 56, height: 44)
-                        .background(currentLine?.color ?? SubwayTheme.action, in: Capsule())
-                        .transition(.opacity)
-                }
-
                 Button(action: beginPreparation) {
-                    Text(AppLocalization.text("single.preparation.start"))
-                        .font(.headline.weight(.bold))
+                    Text(isStarting
+                        ? "\(preparationCountdown)"
+                        : AppLocalization.text("single.preparation.start"))
+                        .font(isStarting ? .title2.bold().monospacedDigit() : .headline.weight(.bold))
                         .foregroundStyle(
                             isStarting
                                 ? Color.secondary
@@ -425,6 +415,9 @@ struct SinglePlayerChallengePlayView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(isStarting)
+                .accessibilityLabel(isStarting
+                    ? AppLocalization.format("single.preparation.countdown.format", preparationCountdown)
+                    : AppLocalization.text("single.preparation.start"))
             }
             .padding(28)
             .frame(maxWidth: 342)

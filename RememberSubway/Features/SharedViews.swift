@@ -404,6 +404,7 @@ struct NeighborStationSignView: View {
 struct GameGlassActionBar: View {
     let color: Color
     let hintTitle: String
+    let hintText: String?
     let hintDisabled: Bool
     let confirmDisabled: Bool
     let onHint: () -> Void
@@ -412,7 +413,7 @@ struct GameGlassActionBar: View {
     var body: some View {
         SubwayPanel(accent: color) {
             HStack(spacing: 12) {
-                Button(hintTitle, systemImage: "lightbulb", action: onHint)
+                Button(hintText ?? hintTitle, systemImage: "lightbulb", action: onHint)
                     .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false))
                     .disabled(hintDisabled)
                     .frame(maxWidth: .infinity, minHeight: 52)

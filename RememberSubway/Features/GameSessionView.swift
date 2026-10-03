@@ -48,13 +48,6 @@ struct GameSessionView: View {
                         .font(.largeTitle.bold())
                         .multilineTextAlignment(.center)
 
-                    if session.hintUsedForCurrentStation {
-                        Text(session.hint ?? "")
-                            .font(.title2.monospaced().bold())
-                            .foregroundStyle(line.color)
-                            .accessibilityLabel(AppLocalization.format("accessibility.initialHint.format", session.hint ?? ""))
-                    }
-
                     answerField
 
                     feedbackView
@@ -153,6 +146,9 @@ struct GameSessionView: View {
         GameGlassActionBar(
             color: line.color,
             hintTitle: AppLocalization.text("game.initialHint"),
+            hintText: session.hintUsedForCurrentStation
+                ? AppLocalization.format("game.initialHint.format", session.hint ?? "")
+                : nil,
             hintDisabled: session.hintUsedForCurrentStation,
             confirmDisabled: AnswerMatcher.normalize(answer).isEmpty,
             onHint: {
