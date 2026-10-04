@@ -559,7 +559,7 @@ private struct MultiplayerPlayView: View {
     }
 
     @ViewBuilder private var actionBar: some View {
-        if let line = coordinator.currentQuestion.flatMap({ catalog.lineByID[$0.lineID] }) {
+        if let question = coordinator.currentQuestion, let line = catalog.lineByID[question.lineID] {
             GameGlassActionBar(
                 color: line.color,
                 hintTitle: AppLocalization.text("game.initialHint"),
