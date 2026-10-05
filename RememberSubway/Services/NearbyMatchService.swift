@@ -293,6 +293,10 @@ private final class SecurePeerConnection: @unchecked Sendable {
                 finish(AppLocalization.text("network.error.secureConnection"))
                 return
             }
+            // 보안 모델: 참가 코드는 Bonjour 서비스명·TXT에 싣지 않고 화면으로만 전달한다.
+            // 코드를 salt로 섞은 키라서 코드를 모르는 상대는 첫 AES-GCM 메시지부터 복호화에 실패한다(암묵적 키 확인).
+            // 한계: 4자리 코드(10⁴)는 중간자가 첫 암호문으로 오프라인 대입할 수 있다.
+            // 별도 HMAC 키 확인을 더해도 같은 대입 대상이 생길 뿐이므로, 근본 대책은 PAKE나 화면 확인 코드(SAS) 비교다.
             symmetricKey = sharedSecret.hkdfDerivedSymmetricKey(
                 using: SHA256.self,
                 salt: Data(passcode.utf8),
