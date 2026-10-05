@@ -39,11 +39,16 @@ struct CatalogTests {
                 let line = try #require(catalog.lineByID[question.lineID])
                 let pattern = try #require(catalog.routePatterns.first { $0.id == question.routePatternID })
                 #expect(line.regionID == region.id)
+                // 순환선은 마지막 역과 첫 역도 인접한다.
+                var edges = Array(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()))
+                if pattern.kind == .loop, let first = pattern.stationIDs.first, let last = pattern.stationIDs.last {
+                    edges.append((last, first))
+                }
                 if let previous = question.previous {
-                    #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains { $0 == previous.id && $1 == question.target.id })
+                    #expect(edges.contains { $0 == previous.id && $1 == question.target.id })
                 }
                 if let next = question.next {
-                    #expect(zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains { $0 == question.target.id && $1 == next.id })
+                    #expect(edges.contains { $0 == question.target.id && $1 == next.id })
                 }
             }
         }

@@ -403,7 +403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RememberSubway.app/RememberSubway";
 			};
 			name = Debug;
 		};
@@ -507,7 +507,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.evolveark.remembersubway.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RememberSubway.app/RememberSubway";
 			};
 			name = Release;
 		};

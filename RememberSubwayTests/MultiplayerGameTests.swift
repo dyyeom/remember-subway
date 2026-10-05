@@ -111,6 +111,7 @@ struct MultiplayerGameTests {
             lines: [Line(id: "line", regionID: "r", operatorID: "o", name: "노선", shortName: "L", colorHex: "000000", sortOrder: 0)],
             routePatterns: patterns
         )
-        #expect(MultiplayerQuestionFactory.pool(catalog: catalog, lineID: "line").count == 1)
+        // 양 끝 역 문제를 포함하므로 a·b·c 한 계통은 3문제이고, 같은 계통이 하나 더 있어도 늘지 않는다.
+        #expect(MultiplayerQuestionFactory.pool(catalog: catalog, lineID: "line").count == 3)
     }
 }
