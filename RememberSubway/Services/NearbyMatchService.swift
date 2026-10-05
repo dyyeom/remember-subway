@@ -105,7 +105,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
         let secureConnection = makeSecureConnection(connection, passcode: roomCode)
         pendingJoinConnectionID = secureConnection.id
         connections[secureConnection.id] = secureConnection
-        secureConnection.start(queue: Self.queue)
+        secureConnection.start()
     }
 
     func send(_ envelope: MultiplayerEnvelope, to connectionID: UUID? = nil) {
@@ -139,35 +139,35 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
         }
         let secureConnection = makeSecureConnection(connection, passcode: roomCode)
         connections[secureConnection.id] = secureConnection
-        secureConnection.start(queue: Self.queue)
+        secureConnection.start()
     }
 
     private func makeSecureConnection(_ connection: NWConnection, passcode: String) -> SecurePeerConnection {
-        let secureConnection = SecurePeerConnection(connection: connection, passcode: passcode)
-        secureConnection.readyHandler = { [weak self, weak secureConnection] in
-            guard let id = secureConnection?.id else { return }
-            Task { @MainActor in
-                guard let self else { return }
-                if id == self.pendingJoinConnectionID { self.state = .connected }
-                self.connectionReadyHandler?(id)
-            }
-        }
-        secureConnection.messageHandler = { [weak self, weak secureConnection] envelope in
-            guard let id = secureConnection?.id else { return }
-            Task { @MainActor in self?.messageHandler?(id, envelope) }
-        }
-        secureConnection.failureHandler = { [weak self, weak secureConnection] error in
-            guard let id = secureConnection?.id else { return }
-            Task { @MainActor in
-                guard let self else { return }
-                self.connections.removeValue(forKey: id)
-                self.disconnectHandler?(id)
-                if id == self.pendingJoinConnectionID, let error {
-                    self.fail(error)
+        SecurePeerConnection(
+            connection: connection,
+            passcode: passcode,
+            queue: Self.queue,
+            readyHandler: { [weak self] id in
+                Task { @MainActor in
+                    guard let self else { return }
+                    if id == self.pendingJoinConnectionID { self.state = .connected }
+                    self.connectionReadyHandler?(id)
+                }
+            },
+            messageHandler: { [weak self] id, envelope in
+                Task { @MainActor in self?.messageHandler?(id, envelope) }
+            },
+            failureHandler: { [weak self] id, error in
+                Task { @MainActor in
+                    guard let self else { return }
+                    self.connections.removeValue(forKey: id)
+                    self.disconnectHandler?(id)
+                    if id == self.pendingJoinConnectionID, let error {
+                        self.fail(error)
+                    }
                 }
             }
-        }
-        return secureConnection
+        )
     }
 
     private func handle(listenerState: NWListener.State, code: String) {
@@ -189,26 +189,40 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
     }
 }
 
+/// 가변 상태(대칭키·취소 여부·인코더)는 모두 `queue`에서만 읽고 쓴다.
+/// 메인 액터에서 호출되는 `send`·`cancel`도 이 큐로 넘겨 직렬화하므로 별도 락 없이 안전하다.
 private final class SecurePeerConnection: @unchecked Sendable {
     let id = UUID()
-    var readyHandler: (() -> Void)?
-    var messageHandler: ((MultiplayerEnvelope) -> Void)?
-    var failureHandler: ((String?) -> Void)?
 
     private let connection: NWConnection
     private let passcode: String
+    private let queue: DispatchQueue
+    private let readyHandler: @Sendable (UUID) -> Void
+    private let messageHandler: @Sendable (UUID, MultiplayerEnvelope) -> Void
+    private let failureHandler: @Sendable (UUID, String?) -> Void
     private let privateKey = P256.KeyAgreement.PrivateKey()
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     private var symmetricKey: SymmetricKey?
     private var isCancelled = false
 
-    init(connection: NWConnection, passcode: String) {
+    init(
+        connection: NWConnection,
+        passcode: String,
+        queue: DispatchQueue,
+        readyHandler: @escaping @Sendable (UUID) -> Void,
+        messageHandler: @escaping @Sendable (UUID, MultiplayerEnvelope) -> Void,
+        failureHandler: @escaping @Sendable (UUID, String?) -> Void
+    ) {
         self.connection = connection
         self.passcode = passcode
+        self.queue = queue
+        self.readyHandler = readyHandler
+        self.messageHandler = messageHandler
+        self.failureHandler = failureHandler
     }
 
-    func start(queue: DispatchQueue) {
+    func start() {
         connection.stateUpdateHandler = { [weak self] state in
             guard let self else { return }
             switch state {
@@ -224,16 +238,21 @@ private final class SecurePeerConnection: @unchecked Sendable {
     }
 
     func send(_ envelope: MultiplayerEnvelope) {
-        guard let symmetricKey,
-              let encoded = try? encoder.encode(envelope),
-              let sealed = try? AES.GCM.seal(encoded, using: symmetricKey),
-              let combined = sealed.combined else { return }
-        sendFrame(payload: combined, encrypted: true)
+        queue.async { [weak self] in
+            guard let self,
+                  let symmetricKey = self.symmetricKey,
+                  let encoded = try? self.encoder.encode(envelope),
+                  let sealed = try? AES.GCM.seal(encoded, using: symmetricKey),
+                  let combined = sealed.combined else { return }
+            self.sendFrame(payload: combined, encrypted: true)
+        }
     }
 
     func cancel() {
-        isCancelled = true
-        connection.cancel()
+        queue.async { [self] in
+            isCancelled = true
+            connection.cancel()
+        }
     }
 
     private func receiveHeader() {
@@ -280,7 +299,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
                 sharedInfo: Data("rsubway-v1".utf8),
                 outputByteCount: 32
             )
-            readyHandler?()
+            readyHandler(id)
             return
         }
 
@@ -291,7 +310,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
             finish(AppLocalization.text("network.error.checkJoinCode"))
             return
         }
-        messageHandler?(envelope)
+        messageHandler(id, envelope)
     }
 
     private func sendFrame(payload: Data, encrypted: Bool) {
@@ -300,6 +319,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
         var length = UInt32(body.count).bigEndian
         let header = Data(bytes: &length, count: MemoryLayout<UInt32>.size)
         connection.send(content: header + body, completion: .contentProcessed { [weak self] error in
+            // 완료 콜백은 연결의 큐(`queue`)에서 호출된다.
             if let error { self?.finish(error.localizedDescription) }
         })
     }
@@ -307,7 +327,7 @@ private final class SecurePeerConnection: @unchecked Sendable {
     private func finish(_ error: String?) {
         guard !isCancelled else { return }
         isCancelled = true
-        failureHandler?(error)
+        failureHandler(id, error)
         connection.cancel()
     }
 }
