@@ -376,9 +376,7 @@ struct SinglePlayerChallengePlayView: View {
         GameGlassActionBar(
             color: currentLine?.color ?? .accentColor,
             hintTitle: AppLocalization.text("game.initialHint"),
-            hintText: session.hintVisible
-                ? AppLocalization.format("game.initialHint.format", session.hint)
-                : nil,
+            hintText: session.hintVisible ? session.hint : nil,
             hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer || session.isPaused,
             confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished || session.isRevealingIncorrectAnswer || session.isPaused,
             onHint: { session.useHint() },

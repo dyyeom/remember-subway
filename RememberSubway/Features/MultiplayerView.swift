@@ -557,10 +557,7 @@ private struct MultiplayerPlayView: View {
                 color: line.color,
                 hintTitle: AppLocalization.text("game.initialHint"),
                 hintText: coordinator.hintVisible
-                    ? AppLocalization.format(
-                        "game.initialHint.format",
-                        AnswerMatcher.initialConsonants(of: catalog.stationByID[question.targetStationID]?.name ?? "")
-                    )
+                    ? AnswerMatcher.initialConsonants(of: catalog.stationByID[question.targetStationID]?.name ?? "")
                     : nil,
                 hintDisabled: coordinator.hintVisible || coordinator.localAnswerLocked || coordinator.screenState != .playing,
                 confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || coordinator.localAnswerLocked || coordinator.screenState != .playing,

@@ -1036,23 +1036,6 @@
         }
       }
     },
-    "game.initialHint.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Initials · %@"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "초성 · %@"
-          }
-        }
-      }
-    },
     "game.noLives" : {
       "extractionState" : "stale",
       "localizations" : {

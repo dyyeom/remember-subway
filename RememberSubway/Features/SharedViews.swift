@@ -367,7 +367,7 @@ struct GameGlassActionBar: View {
     var body: some View {
         SubwayPanel(accent: color) {
             HStack(spacing: 12) {
-                Button(hintText ?? hintTitle, systemImage: "lightbulb", action: onHint)
+                hintButton
                     .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false))
                     .disabled(hintDisabled)
 
@@ -380,6 +380,15 @@ struct GameGlassActionBar: View {
         .controlSize(.large)
         .padding(.horizontal, AppLayout.pageHorizontal)
         .padding(.vertical, 12)
+    }
+
+    @ViewBuilder private var hintButton: some View {
+        if let hintText {
+            Button(hintText, action: onHint)
+                .accessibilityLabel(AppLocalization.format("accessibility.initialHint.format", hintText))
+        } else {
+            Button(hintTitle, systemImage: "lightbulb", action: onHint)
+        }
     }
 }
 
