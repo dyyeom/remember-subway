@@ -299,6 +299,7 @@ struct MultiplayerContainerView: View {
         HStack(spacing: 14) {
             Image(systemName: systemImage).foregroundStyle(.secondary).frame(width: 24)
             Text(title).font(.body.weight(.medium))
+                .fixedSize()
             Spacer()
             content()
                 .frame(minWidth: 112, alignment: .trailing)

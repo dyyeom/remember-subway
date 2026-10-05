@@ -2062,13 +2062,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "My Name"
+            "value" : "Nickname"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "내 이름"
+            "value" : "닉네임"
           }
         }
       }
@@ -2079,13 +2079,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nickname"
+            "value" : "Enter a nickname"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "닉네임"
+            "value" : "닉네임을 입력해주세요"
           }
         }
       }
