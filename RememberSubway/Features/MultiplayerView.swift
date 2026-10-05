@@ -72,11 +72,13 @@ struct MultiplayerContainerView: View {
         case .home:
             home
         case .browsing:
-            RoomBrowserView(
-                service: coordinator.service,
-                select: { selectedRoom = $0 },
-                exit: { coordinator.leave() }
-            )
+            if let service = coordinator.service as? NearbyMatchService {
+                RoomBrowserView(
+                    service: service,
+                    select: { selectedRoom = $0 },
+                    exit: { coordinator.leave() }
+                )
+            }
         case .joining:
             progress(
                 title: AppLocalization.text("multiplayer.joining.title"),

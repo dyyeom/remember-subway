@@ -33,7 +33,8 @@ final class MatchCoordinator: ObservableObject {
     @Published private(set) var rematchRequested = false
 
     let localPlayerID: UUID
-    let service: NearbyMatchService
+    /// 테스트에서는 `NearbyMatchServing` 대역을 주입해 네트워크 없이 메시지 흐름을 검증한다.
+    let service: any NearbyMatchServing
     private(set) var role: Role?
 
     private let catalog: TransitCatalog
@@ -58,7 +59,7 @@ final class MatchCoordinator: ObservableObject {
     private var participantReconnectTask: Task<Void, Never>?
     private var wasPlayingBeforeReconnect = false
 
-    init(catalog: TransitCatalog, service: NearbyMatchService = NearbyMatchService(), localPlayerID: UUID = UUID()) {
+    init(catalog: TransitCatalog, service: any NearbyMatchServing = NearbyMatchService(), localPlayerID: UUID = UUID()) {
         self.catalog = catalog
         self.service = service
         self.localPlayerID = localPlayerID
