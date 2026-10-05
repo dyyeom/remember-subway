@@ -337,6 +337,12 @@ struct MultiplayerContainerView: View {
         nickname = settings.first?.multiplayerNickname ?? ""
         selectedRegionID = selectedRegionID ?? regions.first?.id
         selectedLineID = selectedLineID ?? lines.first?.id
+        #if DEBUG
+        // 마케팅 스크린샷 전용: `-ScreenshotScene multiLobby|multiResult` 런치 인자로 샘플 경기 상태를 주입한다.
+        if let scene = UserDefaults.standard.string(forKey: "ScreenshotScene") {
+            coordinator.applyScreenshotScene(scene)
+        }
+        #endif
     }
 
     private func saveNickname(_ value: String) {

@@ -661,3 +661,45 @@ final class MatchCoordinator: ObservableObject {
         }
     }
 }
+
+#if DEBUG
+extension MatchCoordinator {
+    /// 마케팅 스크린샷 전용 샘플 상태. 네트워크를 시작하지 않고 실제 로비·결과 화면에 샘플 참가자를 채운다.
+    /// Release 빌드에는 포함되지 않는다.
+    func applyScreenshotScene(_ scene: String) {
+        guard screenState == .home else { return }
+        let names = ["지하철왕", "환승마스터", "2호선러버", "출근길", "막차탑승"]
+        let ids = [localPlayerID] + names.dropFirst().map { _ in UUID() }
+        resetSession()
+        role = .host
+        nickname = names[0]
+        configuration = MultiplayerRoomConfiguration(regionID: "capital", lineID: "seoul-2")
+        roomCode = "4821"
+        switch scene {
+        case "multiLobby":
+            lobbyPlayers = zip(ids, names).enumerated().map { index, pair in
+                NearbyPlayer(id: pair.0, nickname: pair.1, isHost: index == 0, connectionState: .connected)
+            }
+            screenState = .lobby
+        case "multiResult":
+            let stats: [(score: Int, correct: Int, hints: Int, wrong: Int)] = [
+                (1240, 10, 0, 1), (1110, 9, 1, 0), (960, 8, 1, 1), (780, 7, 2, 1), (540, 5, 2, 2)
+            ]
+            let players = zip(zip(ids, names), stats).map { pair, stat in
+                PlayerMatchState(
+                    id: pair.0,
+                    nickname: pair.1,
+                    score: stat.score,
+                    correctAnswers: stat.correct,
+                    hintsUsed: stat.hints,
+                    wrongAnswers: stat.wrong
+                )
+            }
+            matchPlayers = MultiplayerScoring.ranked(players)
+            screenState = .matchResult
+        default:
+            break
+        }
+    }
+}
+#endif
