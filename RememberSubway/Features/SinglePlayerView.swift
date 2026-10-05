@@ -298,7 +298,18 @@ struct SinglePlayerChallengePlayView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         .tint(currentLine?.color ?? .accentColor)
+        // 시스템 뒤로 버튼과 엣지 스와이프를 막아 진행 중 이탈은 `중단` 확인 팝업으로만 하게 한다.
+        .navigationBarBackButtonHidden(true)
         .toolbar {
+            if isPreparing {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        leaveBeforeStart()
+                    } label: {
+                        Label(AppLocalization.text("common.back"), systemImage: "chevron.backward")
+                    }
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     presentStopConfirmation()
@@ -515,6 +526,13 @@ struct SinglePlayerChallengePlayView: View {
         countdown.resume(at: Date())
         runQuestionTimer()
         restoreAnswerFocus()
+    }
+
+    /// 시작 전 준비 단계에서는 기록할 진행 상황이 없으므로 확인 없이 나간다.
+    private func leaveBeforeStart() {
+        guard isPreparing else { return }
+        preparationTask?.cancel()
+        dismiss()
     }
 
     private func stopChallenge() {
