@@ -187,7 +187,10 @@ struct SinglePlayerChallengePlayView: View {
     @State private var timerTask: Task<Void, Never>?
     @State private var preparationTask: Task<Void, Never>?
     @State private var timeRemaining = SinglePlayerSession.roundDuration
+    @State private var countdown = QuestionCountdown(duration: SinglePlayerSession.roundDuration)
     @State private var showStopConfirmation = false
+    /// 정답 공개 중 일시정지되면 다음 문제 이동을 재개 시점까지 미룬다.
+    @State private var revealPendingAfterPause = false
     @FocusState private var focused: Bool
     let poolVersion: String
     let catalog: TransitCatalog
@@ -353,7 +356,7 @@ struct SinglePlayerChallengePlayView: View {
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             .focused($focused)
-            .disabled(session.isRevealingIncorrectAnswer)
+            .disabled(session.isRevealingIncorrectAnswer || session.isPaused)
             .submitLabel(.next)
             .onSubmit(submit)
             .accessibilityLabel(AppLocalization.text("game.answer.placeholder"))
@@ -366,8 +369,8 @@ struct SinglePlayerChallengePlayView: View {
             hintText: session.hintVisible
                 ? AppLocalization.format("game.initialHint.format", session.hint)
                 : nil,
-            hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer,
-            confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished || session.isRevealingIncorrectAnswer,
+            hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer || session.isPaused,
+            confirmDisabled: AnswerMatcher.normalize(answer).isEmpty || session.isFinished || session.isRevealingIncorrectAnswer || session.isPaused,
             onHint: { session.useHint() },
             onConfirm: submit
         )
@@ -456,8 +459,7 @@ struct SinglePlayerChallengePlayView: View {
 
                 HStack(spacing: 12) {
                     Button {
-                        showStopConfirmation = false
-                        restoreAnswerFocus()
+                        resumeChallenge()
                     } label: {
                         Text(AppLocalization.text("single.stopConfirmation.continue"))
                             .font(.headline)
@@ -491,9 +493,28 @@ struct SinglePlayerChallengePlayView: View {
     }
 
     private func presentStopConfirmation() {
-        guard !isPreparing, !session.isFinished else { return }
+        guard !isPreparing, !session.isFinished, !showStopConfirmation else { return }
         focused = false
+        // 확인 팝업이 떠 있는 동안 남은 시간을 보존한 채 타이머를 멈춘다.
+        timerTask?.cancel()
+        countdown.pause(at: Date())
+        timeRemaining = countdown.remaining(at: Date())
+        session.pause()
         showStopConfirmation = true
+    }
+
+    private func resumeChallenge() {
+        showStopConfirmation = false
+        session.resume()
+        if revealPendingAfterPause {
+            revealPendingAfterPause = false
+            continueAfterReveal()
+            return
+        }
+        guard !session.isRevealingIncorrectAnswer else { return }
+        countdown.resume(at: Date())
+        runQuestionTimer()
+        restoreAnswerFocus()
     }
 
     private func stopChallenge() {
@@ -578,7 +599,7 @@ struct SinglePlayerChallengePlayView: View {
     }
 
     private func restoreAnswerFocus() {
-        guard !session.isFinished, !session.isRevealingIncorrectAnswer else { return }
+        guard !session.isFinished, !session.isRevealingIncorrectAnswer, !session.isPaused else { return }
         Task { @MainActor in
             await Task.yield()
             focused = true
@@ -600,10 +621,16 @@ struct SinglePlayerChallengePlayView: View {
         timerTask?.cancel()
         guard session.current != nil, !session.isFinished, !session.isRevealingIncorrectAnswer else { return }
         timeRemaining = SinglePlayerSession.roundDuration
-        let deadline = Date().addingTimeInterval(SinglePlayerSession.roundDuration)
+        countdown.start(at: Date())
+        runQuestionTimer()
+    }
+
+    private func runQuestionTimer() {
+        timerTask?.cancel()
+        guard !session.isPaused else { return }
         timerTask = Task { @MainActor in
             while !Task.isCancelled {
-                timeRemaining = max(0, deadline.timeIntervalSinceNow)
+                timeRemaining = countdown.remaining(at: Date())
                 if timeRemaining <= 0 {
                     timeRemaining = 0
                     timeExpired()
@@ -636,12 +663,20 @@ struct SinglePlayerChallengePlayView: View {
         revealTask = Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(1_500))
             guard !Task.isCancelled else { return }
-            session.continueAfterIncorrectAnswer()
-            feedback = ""
-            if !session.isFinished {
-                startQuestionTimer()
-                restoreAnswerFocus()
+            guard !session.isPaused else {
+                revealPendingAfterPause = true
+                return
             }
+            continueAfterReveal()
+        }
+    }
+
+    private func continueAfterReveal() {
+        session.continueAfterIncorrectAnswer()
+        feedback = ""
+        if !session.isFinished {
+            startQuestionTimer()
+            restoreAnswerFocus()
         }
     }
 
@@ -712,6 +747,7 @@ struct SinglePlayerChallengePlayView: View {
     private func restart() {
         revealTask?.cancel()
         timerTask?.cancel()
+        revealPendingAfterPause = false
         didRecord = false
         resultStatus = .saving
         answer = ""

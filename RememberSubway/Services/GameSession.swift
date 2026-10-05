@@ -127,6 +127,42 @@ enum SinglePlayerQuestionFactory {
     }
 }
 
+/// 문제 제한 시간. 일시정지하면 남은 시간을 보존하고 재개 시 그 시간부터 다시 줄어든다.
+struct QuestionCountdown: Equatable {
+    let duration: TimeInterval
+    private(set) var deadline: Date?
+    private(set) var pausedRemaining: TimeInterval?
+
+    init(duration: TimeInterval) {
+        self.duration = duration
+    }
+
+    var isPaused: Bool { pausedRemaining != nil }
+
+    func remaining(at now: Date) -> TimeInterval {
+        if let pausedRemaining { return pausedRemaining }
+        guard let deadline else { return duration }
+        return max(0, deadline.timeIntervalSince(now))
+    }
+
+    mutating func start(at now: Date) {
+        deadline = now.addingTimeInterval(duration)
+        pausedRemaining = nil
+    }
+
+    mutating func pause(at now: Date) {
+        guard !isPaused, deadline != nil else { return }
+        pausedRemaining = remaining(at: now)
+        deadline = nil
+    }
+
+    mutating func resume(at now: Date) {
+        guard let pausedRemaining else { return }
+        deadline = now.addingTimeInterval(pausedRemaining)
+        self.pausedRemaining = nil
+    }
+}
+
 @MainActor
 final class SinglePlayerSession: ObservableObject {
     static let roundDuration: TimeInterval = 15
@@ -138,6 +174,8 @@ final class SinglePlayerSession: ObservableObject {
     @Published private(set) var hintVisible = false
     @Published private(set) var isFinished = false
     @Published private(set) var isRevealingIncorrectAnswer = false
+    /// 중단 확인 팝업이 떠 있는 동안 입력·힌트·시간 초과를 막는다.
+    @Published private(set) var isPaused = false
 
     @Published private(set) var questions: [SinglePlayerQuestion]
     let pointsPerCorrectAnswer: Int
@@ -151,8 +189,17 @@ final class SinglePlayerSession: ObservableObject {
     var hint: String { current.map { AnswerMatcher.initialConsonants(of: $0.target.name) } ?? "" }
 
     func useHint() {
-        guard !isFinished, !isRevealingIncorrectAnswer else { return }
+        guard !isFinished, !isRevealingIncorrectAnswer, !isPaused else { return }
         hintVisible = true
+    }
+
+    func pause() {
+        guard !isFinished else { return }
+        isPaused = true
+    }
+
+    func resume() {
+        isPaused = false
     }
 
     func restart() {
@@ -162,6 +209,7 @@ final class SinglePlayerSession: ObservableObject {
         hintVisible = false
         isFinished = false
         isRevealingIncorrectAnswer = false
+        isPaused = false
         questions.shuffle()
     }
 
@@ -170,7 +218,7 @@ final class SinglePlayerSession: ObservableObject {
         _ answer: String,
         remainingTime: TimeInterval = SinglePlayerSession.roundDuration
     ) -> GameSession.SubmissionResult {
-        guard !isFinished, !isRevealingIncorrectAnswer, let current else { return .ignored }
+        guard !isFinished, !isRevealingIncorrectAnswer, !isPaused, let current else { return .ignored }
         if AnswerMatcher.matches(answer, station: current.target) {
             score += Self.points(
                 basePoints: pointsPerCorrectAnswer,
@@ -185,7 +233,7 @@ final class SinglePlayerSession: ObservableObject {
 
     @discardableResult
     func expireCurrentQuestion() -> GameSession.SubmissionResult {
-        guard !isFinished, !isRevealingIncorrectAnswer, current != nil else { return .ignored }
+        guard !isFinished, !isRevealingIncorrectAnswer, !isPaused, current != nil else { return .ignored }
         lives -= 1
         isRevealingIncorrectAnswer = true
         return .incorrect

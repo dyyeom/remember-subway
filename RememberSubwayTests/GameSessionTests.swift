@@ -133,6 +133,45 @@ struct GameSessionTests {
         #expect(session.isFinished)
     }
 
+    @Test func pausedSinglePlayerSessionIgnoresInputHintAndTimeout() {
+        let question = SinglePlayerQuestion(
+            lineID: "line", routePatternID: "route",
+            previous: stations[0], target: stations[1], next: stations[2]
+        )
+        let session = SinglePlayerSession(questions: [question])
+
+        session.pause()
+        session.useHint()
+        #expect(session.submit("나역") == .ignored)
+        #expect(session.expireCurrentQuestion() == .ignored)
+        #expect(!session.hintVisible)
+        #expect(session.lives == 3)
+        #expect(session.score == 0)
+
+        session.resume()
+        #expect(session.submit("나역") == .correct)
+        #expect(session.score == 100)
+    }
+
+    @Test func questionCountdownKeepsRemainingTimeWhilePaused() {
+        let start = Date(timeIntervalSinceReferenceDate: 1_000)
+        var countdown = QuestionCountdown(duration: 15)
+        countdown.start(at: start)
+        #expect(countdown.remaining(at: start.addingTimeInterval(4)) == 11)
+
+        countdown.pause(at: start.addingTimeInterval(4))
+        #expect(countdown.isPaused)
+        #expect(countdown.remaining(at: start.addingTimeInterval(60)) == 11)
+
+        countdown.resume(at: start.addingTimeInterval(60))
+        #expect(!countdown.isPaused)
+        #expect(countdown.remaining(at: start.addingTimeInterval(62)) == 9)
+        #expect(countdown.remaining(at: start.addingTimeInterval(100)) == 0)
+
+        countdown.start(at: start.addingTimeInterval(100))
+        #expect(countdown.remaining(at: start.addingTimeInterval(100)) == 15)
+    }
+
     @Test func keyboardLayoutReducesOnlyVerticalSpacing() {
         let regular = GamePlayLayoutMetrics.regular
         let compact = GamePlayLayoutMetrics.keyboardPresented
