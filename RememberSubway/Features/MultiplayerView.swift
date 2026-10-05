@@ -644,66 +644,67 @@ private struct MultiplayerResultView: View {
     let catalog: TransitCatalog
 
     var body: some View {
-        ZStack {
+        ScrollView {
+            VStack(spacing: 24) {
+                Image(systemName: coordinator.localPlayer?.rank == 1 ? "trophy.fill" : "flag.checkered")
+                    .font(.system(size: 64))
+                    .foregroundStyle(coordinator.localPlayer?.rank == 1 ? SubwayTheme.action : SubwayTheme.ink)
+                Text(coordinator.localPlayer?.rank == 1
+                    ? AppLocalization.text("multiplayer.result.winner")
+                    : AppLocalization.text("multiplayer.result.finished"))
+                    .font(.largeTitle.bold())
+                if let player = coordinator.localPlayer {
+                    Text(AppLocalization.format("stats.rankAndScore.format", player.rank, player.score)).font(.title2.bold().monospacedDigit())
+                SubwayPanel(accent: resultLine?.color ?? SubwayTheme.border) {
+                    VStack(spacing: 10) {
+                        LabeledContent(AppLocalization.text("game.correctAnswers"), value: AppLocalization.format("count.items.format", player.correctAnswers))
+                        LabeledContent(AppLocalization.text("game.hints"), value: AppLocalization.format("count.times.format", player.hintsUsed))
+                        LabeledContent(AppLocalization.text("game.wrongAnswers"), value: AppLocalization.format("count.times.format", player.wrongAnswers))
+                    }
+                    .padding(18)
+                }
+                }
+                VStack(spacing: 12) {
+                    ForEach(MultiplayerScoring.ranked(coordinator.matchPlayers)) { player in
+                        HStack {
+                            Text(AppLocalization.format("rank.position.format", player.rank)).font(.headline).frame(width: 48, alignment: .leading)
+                            Text(player.nickname)
+                            Spacer()
+                            Text(AppLocalization.format("score.points.format", player.score)).monospacedDigit()
+                        }
+                    }
+                }
+                .padding(20)
+                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
+                        .stroke(SubwayTheme.border, lineWidth: 1)
+                }
+
+                Button {
+                    coordinator.requestRematch()
+                } label: {
+                    Label(coordinator.isHost
+                        ? AppLocalization.text("multiplayer.rematch.sameRoom")
+                        : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
+                }
+                .buttonStyle(SubwayActionButtonStyle(color: resultLine?.color ?? SubwayTheme.action, prominent: true))
+                .disabled(coordinator.rematchRequested && !coordinator.isHost)
+
+                Button(AppLocalization.text("common.leave")) { coordinator.leave() }
+                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+            }
+            .padding(24)
+        }
+        .scrollContentBackground(.hidden)
+        .background(SubwayTheme.background.ignoresSafeArea())
+        // 폭죽은 불투명 배경에 가려지지 않도록 콘텐츠 위에 겹치되, 터치와 VoiceOver에는 관여하지 않는다.
+        .overlay {
             if coordinator.localPlayer?.rank == 1 {
                 CelebrationFireworksView(color: resultLine?.color ?? .accentColor, reduceMotion: reduceMotion)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
-            ScrollView {
-                VStack(spacing: 24) {
-                    Image(systemName: coordinator.localPlayer?.rank == 1 ? "trophy.fill" : "flag.checkered")
-                        .font(.system(size: 64))
-                        .foregroundStyle(coordinator.localPlayer?.rank == 1 ? SubwayTheme.action : SubwayTheme.ink)
-                    Text(coordinator.localPlayer?.rank == 1
-                        ? AppLocalization.text("multiplayer.result.winner")
-                        : AppLocalization.text("multiplayer.result.finished"))
-                        .font(.largeTitle.bold())
-                    if let player = coordinator.localPlayer {
-                        Text(AppLocalization.format("stats.rankAndScore.format", player.rank, player.score)).font(.title2.bold().monospacedDigit())
-                    SubwayPanel(accent: resultLine?.color ?? SubwayTheme.border) {
-                        VStack(spacing: 10) {
-                            LabeledContent(AppLocalization.text("game.correctAnswers"), value: AppLocalization.format("count.items.format", player.correctAnswers))
-                            LabeledContent(AppLocalization.text("game.hints"), value: AppLocalization.format("count.times.format", player.hintsUsed))
-                            LabeledContent(AppLocalization.text("game.wrongAnswers"), value: AppLocalization.format("count.times.format", player.wrongAnswers))
-                        }
-                        .padding(18)
-                    }
-                    }
-                    VStack(spacing: 12) {
-                        ForEach(MultiplayerScoring.ranked(coordinator.matchPlayers)) { player in
-                            HStack {
-                                Text(AppLocalization.format("rank.position.format", player.rank)).font(.headline).frame(width: 48, alignment: .leading)
-                                Text(player.nickname)
-                                Spacer()
-                                Text(AppLocalization.format("score.points.format", player.score)).monospacedDigit()
-                            }
-                        }
-                    }
-                    .padding(20)
-                    .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                            .stroke(SubwayTheme.border, lineWidth: 1)
-                    }
-
-                    Button {
-                        coordinator.requestRematch()
-                    } label: {
-                        Label(coordinator.isHost
-                            ? AppLocalization.text("multiplayer.rematch.sameRoom")
-                            : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
-                    }
-                    .buttonStyle(SubwayActionButtonStyle(color: resultLine?.color ?? SubwayTheme.action, prominent: true))
-                    .disabled(coordinator.rematchRequested && !coordinator.isHost)
-
-                    Button(AppLocalization.text("common.leave")) { coordinator.leave() }
-                        .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
-                }
-                .padding(24)
-            }
-            .scrollContentBackground(.hidden)
-            .background(SubwayTheme.background.ignoresSafeArea())
         }
     }
 
