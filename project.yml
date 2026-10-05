@@ -9,8 +9,8 @@ settings:
     SWIFT_VERSION: "6.0"
     TARGETED_DEVICE_FAMILY: "1"
     SUPPORTS_MACCATALYST: NO
-    MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "3"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "5"
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
     DEVELOPMENT_TEAM: ""
 targets:
@@ -18,21 +18,24 @@ targets:
     type: application
     platform: iOS
     sources:
+      # 에셋 카탈로그·String Catalog·JSON은 파일 형식에 따라 Resources 단계로 자동 분류된다.
       - path: RememberSubway
-        excludes:
-          - Resources/Assets.xcassets
-    resources:
-      - path: RememberSubway/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.evolveark.remembersubway.app
-        PRODUCT_NAME: "역순서"
+        PRODUCT_NAME: RememberSubway
         PRODUCT_MODULE_NAME: RememberSubway
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_FILE: RememberSubway/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: GW3G2WPCXT
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+          PROVISIONING_PROFILE_SPECIFIER: ""
     entitlements:
       path: RememberSubway/RememberSubway.entitlements
       properties:
@@ -48,7 +51,8 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: io.evolveark.remembersubway.tests
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/역순서.app/역순서"
+        DEVELOPMENT_TEAM: GW3G2WPCXT
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/RememberSubway.app/RememberSubway"
         BUNDLE_LOADER: "$(TEST_HOST)"
 schemes:
   RememberSubway:
