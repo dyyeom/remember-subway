@@ -1756,13 +1756,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your app version differs from the host's. Update the app to continue."
+            "value" : "Your app version differs from the host's. Update both devices to the latest version."
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "방장과 앱 버전이 달라요. 앱을 업데이트해 주세요."
+            "value" : "방장과 앱 버전이 달라요. 두 기기 모두 최신 버전으로 업데이트해 주세요."
           }
         }
       }

@@ -230,20 +230,16 @@ final class MatchCoordinator: ObservableObject {
         guard envelope.protocolVersion == MultiplayerEnvelope.currentProtocolVersion,
               envelope.contentVersion == catalog.contentVersion else {
             if isHost {
-                send(.joinResponse(JoinResponse(
-                    accepted: false,
-                    reason: AppLocalization.text("multiplayer.error.versionMismatch"),
-                    player: nil
-                )), to: connectionID)
+                rejectJoin(reason: AppLocalization.text("multiplayer.error.versionMismatch"), connectionID: connectionID)
             } else {
-                screenState = .failed(AppLocalization.text("multiplayer.error.updateRequired"))
+                failJoin(AppLocalization.text("multiplayer.error.updateRequired"), connectionID: connectionID)
             }
             return
         }
 
         switch envelope.message {
         case .joinRequest(let request): handleJoin(request, connectionID: connectionID)
-        case .joinResponse(let response): handleJoinResponse(response)
+        case .joinResponse(let response): handleJoinResponse(response, connectionID: connectionID)
         case .lobbySnapshot(let snapshot):
             configuration = snapshot.configuration
             lobbyPlayers = snapshot.players
@@ -283,11 +279,11 @@ final class MatchCoordinator: ObservableObject {
     private func handleJoin(_ request: JoinRequest, connectionID: UUID) {
         guard isHost, let configuration else { return }
         guard screenState == .lobby || lobbyPlayers.contains(where: { $0.id == request.playerID }) else {
-            send(.joinResponse(JoinResponse(accepted: false, reason: AppLocalization.text("multiplayer.error.alreadyStarted"), player: nil)), to: connectionID)
+            rejectJoin(reason: AppLocalization.text("multiplayer.error.alreadyStarted"), connectionID: connectionID)
             return
         }
         guard lobbyPlayers.count < configuration.maximumPlayers || lobbyPlayers.contains(where: { $0.id == request.playerID }) else {
-            send(.joinResponse(JoinResponse(accepted: false, reason: AppLocalization.text("multiplayer.error.roomFull"), player: nil)), to: connectionID)
+            rejectJoin(reason: AppLocalization.text("multiplayer.error.roomFull"), connectionID: connectionID)
             return
         }
 
@@ -306,9 +302,31 @@ final class MatchCoordinator: ObservableObject {
         sendCurrentMatchStateIfNeeded(to: connectionID)
     }
 
-    private func handleJoinResponse(_ response: JoinResponse) {
+    /// 방장: 거절 응답을 보낸 뒤 그 연결을 바로 닫는다. 로비에 넣지 않은 상대가 브로드캐스트를 계속 받지 않게 한다.
+    /// 서비스는 전송과 취소를 같은 큐에서 순서대로 처리하므로 거절 응답이 먼저 나간다.
+    private func rejectJoin(reason: String, connectionID: UUID) {
+        send(.joinResponse(JoinResponse(accepted: false, reason: reason, player: nil)), to: connectionID)
+        service.disconnect(connectionID: connectionID)
+        lastMessageAt.removeValue(forKey: connectionID)
+        lastReceivedSequence.removeValue(forKey: connectionID)
+    }
+
+    /// 참가자: 입장이 거절되면 실패 화면을 띄우고 연결을 스스로 정리한다.
+    /// 방장 연결로 남겨 두면 연결이 끊길 때 재접속을 시도해 실패 안내가 사라진다.
+    private func failJoin(_ message: String, connectionID: UUID) {
+        participantReconnectTask?.cancel()
+        wasPlayingBeforeReconnect = false
+        if connectionID == hostConnectionID {
+            hostConnectionID = nil
+            pendingRoom = nil
+        }
+        service.disconnect(connectionID: connectionID)
+        screenState = .failed(message)
+    }
+
+    private func handleJoinResponse(_ response: JoinResponse, connectionID: UUID) {
         guard response.accepted else {
-            screenState = .failed(response.reason ?? AppLocalization.text("multiplayer.error.joinFailed"))
+            failJoin(response.reason ?? AppLocalization.text("multiplayer.error.joinFailed"), connectionID: connectionID)
             return
         }
         participantReconnectTask?.cancel()
