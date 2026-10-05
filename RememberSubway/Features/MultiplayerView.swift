@@ -505,11 +505,6 @@ private struct MultiplayerPlayView: View {
 
                     VStack(spacing: keyboardPresented ? 10 : 18) {
                         Text(AppLocalization.text("game.stationQuestion")).font(.largeTitle.bold())
-                        if coordinator.hintVisible {
-                            Text(AnswerMatcher.initialConsonants(of: catalog.stationByID[question.targetStationID]?.name ?? ""))
-                                .font(.title2.monospaced().bold())
-                                .foregroundStyle(line.color)
-                        }
                         TextField(AppLocalization.text("game.answer.placeholder"), text: $answer)
                             .font(.title3)
                             .padding(.horizontal, 20)
