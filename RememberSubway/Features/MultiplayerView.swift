@@ -497,7 +497,8 @@ private struct MultiplayerPlayView: View {
                         previous: question.previousStationID.flatMap { catalog.stationByID[$0] },
                         next: question.nextStationID.flatMap { catalog.stationByID[$0] },
                         line: line,
-                        compact: keyboardPresented
+                        compact: keyboardPresented,
+                        concealed: countdown != nil
                     )
                         .padding(.horizontal, AppLayout.pageHorizontal)
                         .padding(.top, keyboardPresented ? 8 : 28)
@@ -539,6 +540,7 @@ private struct MultiplayerPlayView: View {
         .scrollContentBackground(.hidden)
         .background(SubwayTheme.background.ignoresSafeArea())
         .overlay { countdownOverlay }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.25), value: countdown == nil)
         .sheet(isPresented: $showRanking) { RankingSheet(players: coordinator.matchPlayers) }
         .task { focused = coordinator.screenState == .playing }
         .onChange(of: coordinator.roundIndex) { _, _ in answer = ""; restoreFocus() }
@@ -586,8 +588,9 @@ private struct MultiplayerPlayView: View {
                     .padding(44)
                     .background(SubwayTheme.stationSurface, in: Circle())
                     .overlay { Circle().stroke(SubwayTheme.border, lineWidth: 1) }
-                    .transition(.scale.combined(with: .opacity))
+                    .transition(reduceMotion ? .identity : .scale.combined(with: .opacity))
             }
+            .transition(.opacity)
         }
     }
 

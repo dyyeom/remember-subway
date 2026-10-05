@@ -323,6 +323,8 @@ struct NeighborStationSignView: View {
     let next: Station?
     let line: Line
     var compact = false
+    /// 카운트다운 중처럼 문제를 아직 공개하면 안 될 때 이전·다음 역 이름을 자리 표시로 가린다.
+    var concealed = false
 
     var body: some View {
         let centerWidth: CGFloat = 204
@@ -356,7 +358,16 @@ struct NeighborStationSignView: View {
         }
         .frame(maxWidth: .infinity, minHeight: signHeight, maxHeight: signHeight)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(AppLocalization.format("accessibility.stationQuestion.format", previous?.name ?? AppLocalization.text("station.previous.none"), next?.name ?? AppLocalization.text("station.next.none")))
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var accessibilityText: String {
+        guard !concealed else { return AppLocalization.text("accessibility.stationQuestion.concealed") }
+        return AppLocalization.format(
+            "accessibility.stationQuestion.format",
+            previous?.name ?? AppLocalization.text("station.previous.none"),
+            next?.name ?? AppLocalization.text("station.next.none")
+        )
     }
 
     private var currentPanel: some View {
@@ -388,11 +399,18 @@ struct NeighborStationSignView: View {
             Image(systemName: arrow)
                 .font(.system(size: 15, weight: .bold))
 
-            Text(station?.name ?? fallback)
-                .font(.system(size: 16, weight: .bold))
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.58)
+            if concealed {
+                Capsule()
+                    .fill(line.colorForeground.opacity(0.35))
+                    .frame(width: 52, height: 12)
+                    .frame(height: 20)
+            } else {
+                Text(station?.name ?? fallback)
+                    .font(.system(size: 16, weight: .bold))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.58)
+            }
         }
         .foregroundStyle(line.colorForeground)
         .frame(maxWidth: .infinity, minHeight: 48)

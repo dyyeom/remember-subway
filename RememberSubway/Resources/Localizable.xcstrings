@@ -152,6 +152,23 @@
         }
       }
     },
+    "accessibility.stationQuestion.concealed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The question appears after the countdown."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카운트다운이 끝나면 문제가 공개됩니다."
+          }
+        }
+      }
+    },
     "accessibility.stationQuestion.format" : {
       "extractionState" : "stale",
       "localizations" : {
