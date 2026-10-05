@@ -392,6 +392,31 @@ struct GameGlassActionBar: View {
     }
 }
 
+/// 메뉴형 Picker와 같은 모양이지만 라벨 바깥 여백이 없어 행의 오른쪽 끝에 정확히 맞춰지는 선택 메뉴.
+struct TrailingMenuPicker<SelectionValue: Hashable, Options: View>: View {
+    let title: String
+    @Binding var selection: SelectionValue
+    let valueText: String
+    @ViewBuilder let options: () -> Options
+
+    var body: some View {
+        Menu {
+            Picker(title, selection: $selection, content: options)
+        } label: {
+            HStack(spacing: 5) {
+                Text(valueText)
+                    .lineLimit(1)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.footnote.weight(.medium))
+            }
+            .font(.body)
+            .foregroundStyle(.tint)
+        }
+        .accessibilityLabel(title)
+        .accessibilityValue(valueText)
+    }
+}
+
 struct EmptyStateView: View {
     let title: String
     let message: String

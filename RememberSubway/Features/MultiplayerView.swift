@@ -111,17 +111,25 @@ struct MultiplayerContainerView: View {
                     }
                     Divider().padding(.leading, 52)
                     selectionRow(AppLocalization.text("common.region"), systemImage: "map") {
-                        Picker(AppLocalization.text("common.region"), selection: $selectedRegionID) {
+                        TrailingMenuPicker(
+                            title: AppLocalization.text("common.region"),
+                            selection: $selectedRegionID,
+                            valueText: selectedRegion?.name ?? AppLocalization.text("common.selectRegion")
+                        ) {
                             Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
                             ForEach(regions) { Text($0.name).tag(Optional($0.id)) }
-                        }.labelsHidden()
+                        }
                     }
                     Divider().padding(.leading, 52)
                     selectionRow(AppLocalization.text("common.line"), systemImage: "tram.fill") {
-                        Picker(AppLocalization.text("common.line"), selection: $selectedLineID) {
+                        TrailingMenuPicker(
+                            title: AppLocalization.text("common.line"),
+                            selection: $selectedLineID,
+                            valueText: selectedLine?.name ?? AppLocalization.text("common.selectLine")
+                        ) {
                             Text(AppLocalization.text("common.selectLine")).tag(Optional<String>.none)
                             ForEach(lines) { Text($0.name).tag(Optional($0.id)) }
-                        }.labelsHidden()
+                        }
                     }
                 }
                 .padding(.horizontal, 16)
