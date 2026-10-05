@@ -84,7 +84,6 @@ struct SinglePlayerChallengeHomeView: View {
                         )
                     } label: {
                         Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
-                            .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
                 }
@@ -473,20 +472,14 @@ struct SinglePlayerChallengePlayView: View {
                         resumeChallenge()
                     } label: {
                         Text(AppLocalization.text("single.stopConfirmation.continue"))
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
                     }
-                    .contentShape(Rectangle())
                     .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.ink, prominent: false))
 
                     Button {
                         stopChallenge()
                     } label: {
                         Text(AppLocalization.text("single.stopConfirmation.stop"))
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, minHeight: 50)
                     }
-                    .contentShape(Rectangle())
                     .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.danger, prominent: true))
                 }
             }

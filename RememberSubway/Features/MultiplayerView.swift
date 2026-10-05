@@ -154,9 +154,8 @@ struct MultiplayerContainerView: View {
                     } label: {
                         Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, minHeight: 56)
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: true))
+                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: true, minHeight: SubwayTheme.controlHeight))
                     .disabled(!canEnterMultiplayer || selectedLine == nil)
 
                     Button {
@@ -164,9 +163,8 @@ struct MultiplayerContainerView: View {
                     } label: {
                         Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, minHeight: 56)
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: false))
+                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: false, minHeight: SubwayTheme.controlHeight))
                     .disabled(!canEnterMultiplayer)
                 }
                 .controlSize(.large)
@@ -243,7 +241,7 @@ struct MultiplayerContainerView: View {
                     Button {
                         coordinator.startMatch()
                     } label: {
-                        Label(AppLocalization.text("common.startGame"), systemImage: "play.fill").frame(maxWidth: .infinity, minHeight: 52)
+                        Label(AppLocalization.text("common.startGame"), systemImage: "play.fill")
                     }
                     .buttonStyle(SubwayActionButtonStyle(color: coordinator.configuration.flatMap { catalog.lineByID[$0.lineID]?.color } ?? SubwayTheme.action, prominent: true))
                     .disabled(!coordinator.canStart)
@@ -674,7 +672,6 @@ private struct MultiplayerResultView: View {
                         Label(coordinator.isHost
                             ? AppLocalization.text("multiplayer.rematch.sameRoom")
                             : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
-                            .frame(maxWidth: .infinity, minHeight: 52)
                     }
                     .buttonStyle(SubwayActionButtonStyle(color: resultLine?.color ?? SubwayTheme.action, prominent: true))
                     .disabled(coordinator.rematchRequested && !coordinator.isHost)

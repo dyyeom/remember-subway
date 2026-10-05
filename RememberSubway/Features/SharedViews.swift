@@ -41,9 +41,12 @@ struct SubwayPanel<Content: View>: View {
     }
 }
 
+/// Full-width action button. `minHeight` is the minimum height of the whole button,
+/// padding included, so callers should not add their own height or width frames.
 struct SubwayActionButtonStyle: ButtonStyle {
     let color: Color
     let prominent: Bool
+    var minHeight: CGFloat = 52
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
@@ -51,8 +54,8 @@ struct SubwayActionButtonStyle: ButtonStyle {
             .font(.headline)
             .foregroundStyle(prominent ? colorForeground : SubwayTheme.ink)
             .padding(.horizontal, 18)
-            .padding(.vertical, 14)
-            .frame(maxWidth: .infinity, minHeight: 52)
+            .padding(.vertical, 10)
+            .frame(maxWidth: .infinity, minHeight: minHeight)
             .background(
                 prominent ? color : SubwayTheme.stationSurface,
                 in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
