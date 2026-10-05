@@ -224,7 +224,7 @@ struct MultiplayerContainerView: View {
                             if coordinator.isHost && !player.isHost {
                                 Button(AppLocalization.text("multiplayer.removePlayer"), systemImage: "xmark.circle") { coordinator.remove(playerID: player.id) }
                                     .labelStyle(.iconOnly)
-                                    .foregroundStyle(.red)
+                                    .foregroundStyle(SubwayTheme.danger)
                             }
                         }
                         .frame(minHeight: 56)

@@ -673,7 +673,7 @@ struct SinglePlayerChallengePlayView: View {
             ? AppLocalization.format("game.timeoutReveal.format", targetName)
             : AppLocalization.format("game.incorrectReveal.format", targetName)
         feedbackKind = .incorrect
-        feedbackColor = .red
+        feedbackColor = SubwayTheme.danger
         answer = ""
         focused = false
         impact(.error)
