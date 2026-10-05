@@ -281,10 +281,8 @@ struct MultiplayerContainerView: View {
                     UIApplication.shared.open(url)
                 }
                 .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
-                .frame(maxWidth: .infinity, minHeight: 52)
                 Button(AppLocalization.text("multiplayer.backHome")) { coordinator.leave() }
                     .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
-                    .frame(maxWidth: .infinity, minHeight: 52)
             }
         }
     }
@@ -402,7 +400,6 @@ private struct RoomBrowserView: View {
             Button(AppLocalization.text("multiplayer.backHome"), systemImage: "chevron.backward", action: exit)
                 .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
                 .controlSize(.large)
-                .frame(maxWidth: .infinity, minHeight: 52)
                 .padding(.horizontal, AppLayout.pageHorizontal)
                 .padding(.vertical, 12)
         }
@@ -684,7 +681,6 @@ private struct MultiplayerResultView: View {
 
                     Button(AppLocalization.text("common.leave")) { coordinator.leave() }
                         .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
-                        .frame(maxWidth: .infinity, minHeight: 52)
                 }
                 .padding(24)
             }

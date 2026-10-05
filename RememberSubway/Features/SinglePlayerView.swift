@@ -747,10 +747,8 @@ struct SinglePlayerChallengePlayView: View {
                     .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 Button(AppLocalization.text("single.tryAgain"), systemImage: "arrow.clockwise") { restart() }
                     .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: true))
-                    .frame(maxWidth: .infinity, minHeight: 52)
                 Button(AppLocalization.text("common.finish"), systemImage: "checkmark") { dismiss() }
                     .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: false))
-                    .frame(maxWidth: .infinity, minHeight: 52)
             }
             .padding(28)
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))

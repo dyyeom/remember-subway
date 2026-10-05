@@ -52,7 +52,7 @@ struct SubwayActionButtonStyle: ButtonStyle {
             .foregroundStyle(prominent ? colorForeground : SubwayTheme.ink)
             .padding(.horizontal, 18)
             .padding(.vertical, 14)
-            .frame(minHeight: 52)
+            .frame(maxWidth: .infinity, minHeight: 52)
             .background(
                 prominent ? color : SubwayTheme.stationSurface,
                 in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
@@ -367,12 +367,10 @@ struct GameGlassActionBar: View {
                 Button(hintText ?? hintTitle, systemImage: "lightbulb", action: onHint)
                     .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false))
                     .disabled(hintDisabled)
-                    .frame(maxWidth: .infinity, minHeight: 52)
 
                 Button(AppLocalization.text("game.checkAnswer"), systemImage: "checkmark.circle", action: onConfirm)
                     .buttonStyle(SubwayActionButtonStyle(color: color, prominent: true))
                     .disabled(confirmDisabled)
-                    .frame(maxWidth: .infinity, minHeight: 52)
             }
             .padding(12)
         }
