@@ -58,4 +58,20 @@ struct ProgressMigrationTests {
         #expect(profile.matches == 22)
         #expect(profile.wins == 22)
     }
+
+    @Test func unavailablePersistentStoreFallsBackToInMemoryStore() throws {
+        // 상위 경로가 일반 파일이라 영구 저장소를 만들 수 없는 위치.
+        let blocker = FileManager.default.temporaryDirectory.appending(path: "storage-blocker-\(UUID().uuidString)")
+        try Data("x".utf8).write(to: blocker)
+        defer { try? FileManager.default.removeItem(at: blocker) }
+
+        let storage = AppModelContainer.make(configuration: ModelConfiguration(url: blocker.appending(path: "default.store")))
+        #expect(!storage.isPersistent)
+        #expect(try Data(contentsOf: blocker) == Data("x".utf8))
+
+        let context = storage.container.mainContext
+        context.insert(SinglePlayerBestRecord(poolVersion: "v1", bestScore: 100))
+        try context.save()
+        #expect(try context.fetch(FetchDescriptor<SinglePlayerBestRecord>()).count == 1)
+    }
 }

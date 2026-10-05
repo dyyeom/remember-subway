@@ -3603,6 +3603,23 @@
         }
       }
     },
+    "storage.volatile.notice" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storage couldn't be opened, so records from this session won't be saved."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기록 저장소를 열지 못해 이번 실행의 기록은 저장되지 않아요."
+          }
+        }
+      }
+    },
     "tab.multiplayer" : {
       "extractionState" : "stale",
       "localizations" : {

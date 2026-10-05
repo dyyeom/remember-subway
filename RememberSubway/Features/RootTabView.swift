@@ -10,6 +10,14 @@ struct RootTabView: View {
     @Query private var singlePlayerRecords: [SinglePlayerBestRecord]
     @State private var showSettings = false
     @State private var showStats = false
+    @State private var showStorageNotice: Bool
+    /// 영구 저장소를 열지 못해 인메모리 저장소로 실행 중인지 여부.
+    let isStorageVolatile: Bool
+
+    init(isStorageVolatile: Bool = false) {
+        self.isStorageVolatile = isStorageVolatile
+        _showStorageNotice = State(initialValue: isStorageVolatile)
+    }
 
     var body: some View {
         Group {
@@ -38,6 +46,11 @@ struct RootTabView: View {
                         )
                     }
                 }
+            }
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if showStorageNotice {
+                StorageNoticeBanner { showStorageNotice = false }
             }
         }
         .task {
@@ -74,6 +87,38 @@ struct RootTabView: View {
             }
         }
         try? modelContext.save()
+    }
+}
+
+/// 기록이 저장되지 않는 상태를 알리는 비차단 안내. 닫으면 이번 실행 동안 다시 표시하지 않는다.
+private struct StorageNoticeBanner: View {
+    let onClose: () -> Void
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(SubwayTheme.danger)
+                .accessibilityHidden(true)
+            Text(AppLocalization.text("storage.volatile.notice"))
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(SubwayTheme.ink)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Button(AppLocalization.text("common.close"), systemImage: "xmark", action: onClose)
+                .labelStyle(.iconOnly)
+                .foregroundStyle(SubwayTheme.muted)
+                .frame(minWidth: 44, minHeight: 44)
+                .contentShape(Rectangle())
+        }
+        .padding(.leading, 16)
+        .padding(.trailing, 4)
+        .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
+                .stroke(SubwayTheme.danger, lineWidth: 1)
+        }
+        .padding(.horizontal, AppLayout.pageHorizontal)
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .contain)
     }
 }
 
