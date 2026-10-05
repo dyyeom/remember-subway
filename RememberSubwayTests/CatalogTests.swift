@@ -5,16 +5,9 @@ import Testing
 
 @MainActor
 struct CatalogTests {
-    @Test func bundledCatalogIsValidAndSegmentsOverlapAtAnchor() throws {
+    @Test func bundledCatalogIsValid() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         #expect(CatalogValidator.validate(catalog).isEmpty)
-        for pattern in catalog.routePatterns {
-            let segments = catalog.segments(for: pattern)
-            #expect(segments.allSatisfy { (2...9).contains($0.stationIDs.count) })
-            for pair in zip(segments, segments.dropFirst()) {
-                #expect(pair.0.stationIDs.last == pair.1.stationIDs.first)
-            }
-        }
     }
 
     @Test func  singlePlayerOrderChangesByAttemptSeedWithoutChangingQuestionPool() throws {

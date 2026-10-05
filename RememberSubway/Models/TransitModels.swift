@@ -30,23 +30,6 @@ struct TransitCatalog: Codable, Sendable {
     func patterns(for line: Line) -> [RoutePattern] {
         routePatterns.filter { $0.lineID == line.id }
     }
-
-    func segments(for pattern: RoutePattern, maximumAnswers: Int = 8) -> [Segment] {
-        guard pattern.stationIDs.count > 1 else { return [] }
-        var result: [Segment] = []
-        var anchorIndex = 0
-        while anchorIndex < pattern.stationIDs.count - 1 {
-            let end = min(anchorIndex + maximumAnswers, pattern.stationIDs.count - 1)
-            result.append(Segment(
-                id: "\(pattern.id)-\(result.count + 1)",
-                routePatternID: pattern.id,
-                index: result.count,
-                stationIDs: Array(pattern.stationIDs[anchorIndex...end])
-            ))
-            anchorIndex = end
-        }
-        return result
-    }
 }
 
 struct CatalogSource: Codable, Hashable, Sendable {
@@ -93,15 +76,4 @@ struct RoutePattern: Codable, Identifiable, Hashable, Sendable {
     let kind: Kind
     let stationIDs: [String]
     let stationCodes: [String: String]?
-
-    func stationCode(for stationID: String, fallback: String) -> String {
-        stationCodes?[stationID] ?? fallback
-    }
-}
-
-struct Segment: Identifiable, Hashable, Sendable {
-    let id: String
-    let routePatternID: String
-    let index: Int
-    let stationIDs: [String]
 }

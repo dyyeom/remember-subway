@@ -10,36 +10,6 @@ struct GameSessionTests {
         Station(id: "c", name: "다역", fullName: nil, aliases: [])
     ]
 
-    private func makeSession(reverse: Bool = false) -> GameSession {
-        GameSession(
-            segment: Segment(id: "s", routePatternID: "p", index: 0, stationIDs: stations.map(\.id)),
-            stationByID: Dictionary(uniqueKeysWithValues: stations.map { ($0.id, $0) }),
-            reverse: reverse
-        )
-    }
-
-    @Test func followsSelectedDirection() {
-        #expect(makeSession().anchor.name == "가역")
-        #expect(makeSession(reverse: true).anchor.name == "다역")
-    }
-
-    @Test func losesLivesAndFailsOnThirdError() {
-        let session = makeSession()
-        #expect(session.submit("오답") == .incorrect)
-        #expect(session.submit("오답") == .incorrect)
-        #expect(session.submit("오답") == .incorrect)
-        #expect(session.lives == 0)
-        #expect(session.outcome == .failed)
-    }
-
-    @Test func completesAndScoresStars() {
-        let session = makeSession()
-        session.useHint()
-        #expect(session.submit("나") == .correct)
-        #expect(session.submit("다역") == .correct)
-        #expect(session.outcome == .completed(stars: 2))
-    }
-
     @Test func  singlePlayerSessionKeepsPlayingAcrossConsecutiveCorrectAnswers() {
         let questions = [
             SinglePlayerQuestion(lineID: "line", routePatternID: "route", previous: stations[0], target: stations[1], next: stations[2]),

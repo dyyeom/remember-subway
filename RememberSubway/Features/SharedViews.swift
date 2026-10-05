@@ -175,19 +175,6 @@ extension Line {
     }
 }
 
-struct LineBadge: View {
-    let line: Line
-    var body: some View {
-        Text(line.shortName)
-            .font(.headline.monospacedDigit())
-            .foregroundStyle(line.colorForeground)
-            .frame(minWidth: 44, minHeight: 44)
-            .padding(.horizontal, 4)
-            .background(Color(hex: line.colorHex), in: Circle())
-            .accessibilityLabel(AppLocalization.format("accessibility.line.format", line.name))
-    }
-}
-
 struct LivesView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let lives: Int
@@ -261,60 +248,6 @@ struct LineIdentityLabel: View {
         .background(SubwayTheme.stationSurface, in: Capsule())
         .overlay { Capsule().stroke(line.color, lineWidth: 2) }
         .accessibilityElement(children: .combine)
-    }
-}
-
-struct StationSignView: View {
-    let station: Station
-    let stationCode: String
-    let line: Line
-    var compact = false
-
-    var body: some View {
-        ZStack {
-            line.color
-                .frame(height: compact ? 28 : 34)
-                .accessibilityHidden(true)
-
-            HStack(spacing: compact ? 10 : 14) {
-                Text(stationCode)
-                    .font(.title3.bold().monospaced())
-                    .foregroundStyle(line.colorForeground)
-                    .minimumScaleFactor(0.7)
-                    .frame(width: compact ? 56 : 66, height: compact ? 56 : 66)
-                    .background(line.color, in: Circle())
-
-                VStack(spacing: compact ? 2 : 4) {
-                    Text(station.fullName ?? station.name)
-                        .font(.title2.bold())
-                        .foregroundStyle(.black)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.65)
-
-                    if station.fullName != nil {
-                        Text(station.name)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-            }
-            .padding(.vertical, compact ? 8 : 12)
-            .padding(.leading, 12)
-            .padding(.trailing, 24)
-            .background(SubwayTheme.stationSurface, in: Capsule())
-            .overlay {
-                Capsule().stroke(line.color, lineWidth: 6)
-            }
-            .padding(.horizontal, 20)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(AppLocalization.format(
-            "accessibility.currentStation.format",
-            station.fullName ?? station.name,
-            stationCode
-        ))
     }
 }
 
@@ -449,25 +382,92 @@ struct GameGlassActionBar: View {
     }
 }
 
-struct StarsView: View {
-    let stars: Int
-    var body: some View {
-        HStack(spacing: 3) {
-            ForEach(1...3, id: \.self) { value in
-                Image(systemName: value <= stars ? "star.fill" : "star")
-                    .foregroundStyle(value <= stars ? .yellow : .secondary)
-            }
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(AppLocalization.format("accessibility.stars.format", stars))
-    }
-}
-
 struct EmptyStateView: View {
     let title: String
     let message: String
     let symbol: String
     var body: some View {
         ContentUnavailableView(title, systemImage: symbol, description: Text(message))
+    }
+}
+
+struct CelebrationFireworksView: View {
+    @State private var exploded = false
+    let color: Color
+    let reduceMotion: Bool
+
+    var body: some View {
+        GeometryReader { proxy in
+            if reduceMotion {
+                staticSparkles(in: proxy.size)
+            } else {
+                ForEach(0..<42, id: \.self) { index in
+                    particle(index, in: proxy.size)
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .task {
+            guard !reduceMotion else { return }
+            await Task.yield()
+            exploded = true
+        }
+    }
+
+    private func particle(_ index: Int, in size: CGSize) -> some View {
+        let burst = index / 14
+        let ray = index % 14
+        let angle = (Double(ray) / 14 * Double.pi * 2) - Double.pi / 2
+        let origin = burstOrigin(burst, in: size)
+        let distance: CGFloat = burst == 2 ? 112 : 88
+        let destination = CGPoint(
+            x: origin.x + CGFloat(cos(angle)) * distance,
+            y: origin.y + CGFloat(sin(angle)) * distance
+        )
+
+        return Capsule(style: .continuous)
+            .fill(particleColor(index))
+            .frame(width: 6, height: 16)
+            .rotationEffect(.radians(angle + Double.pi / 2))
+            .scaleEffect(exploded ? 0.45 : 1)
+            .position(exploded ? destination : origin)
+            .opacity(exploded ? 0 : 1)
+            .animation(
+                .easeOut(duration: 1.05)
+                    .delay(Double(burst) * 0.16 + Double(ray % 3) * 0.025),
+                value: exploded
+            )
+    }
+
+    private func burstOrigin(_ burst: Int, in size: CGSize) -> CGPoint {
+        switch burst {
+        case 0: CGPoint(x: size.width * 0.22, y: size.height * 0.24)
+        case 1: CGPoint(x: size.width * 0.78, y: size.height * 0.28)
+        default: CGPoint(x: size.width * 0.5, y: size.height * 0.12)
+        }
+    }
+
+    private func particleColor(_ index: Int) -> Color {
+        switch index % 5 {
+        case 0: color
+        case 1: .yellow
+        case 2: .orange
+        case 3: .pink
+        default: .cyan
+        }
+    }
+
+    private func staticSparkles(in size: CGSize) -> some View {
+        ZStack {
+            Image(systemName: "sparkles")
+                .font(.system(size: 42))
+                .foregroundStyle(color)
+                .position(x: size.width * 0.2, y: size.height * 0.2)
+            Image(systemName: "sparkles")
+                .font(.system(size: 34))
+                .foregroundStyle(.yellow)
+                .position(x: size.width * 0.82, y: size.height * 0.25)
+        }
+        .opacity(0.7)
     }
 }

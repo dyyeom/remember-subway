@@ -20,7 +20,6 @@
 		88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B72C9D9DA8FD6AECDB716CE /* GameSession.swift */; };
 		8B91F55975E4233EA7D1D3C8 /* MultiplayerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B3481AD630D3538A4F35B6 /* MultiplayerProtocol.swift */; };
 		8D4DC69FA5C8A076F17F6695 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CF08DE04AC029D7990909F /* RootTabView.swift */; };
-		8F7C763F3BD384B92F2CA16E /* GameSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E2AA64023123F2BA091EEB /* GameSessionView.swift */; };
 		9340EF35B7DD6F75EE4BB4D7 /* TransitCatalogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C0A90D6EFC66252E341DA3 /* TransitCatalogStore.swift */; };
 		951F94D6C2F798D0F4DBBE8C /* TransitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E87A65ADBDA3639A8FB4F3 /* TransitModels.swift */; };
 		97B8F1DE7AD06EB153E32DE3 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB6CD7BC4366C400BEC9137 /* StatsView.swift */; };
@@ -35,7 +34,6 @@
 		F48D1AEE61FE099934563838 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E83BA3D5F1EB94CA888999 /* CatalogTests.swift */; };
 		F48F3BC440697271B480984E /* RememberSubwayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE68B68DBF64F55A162DD9FA /* RememberSubwayApp.swift */; };
 		F7D8E992F1333953D2CF4BDA /* PersistenceModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3556D0C1E9EECAFE8D555F /* PersistenceModels.swift */; };
-		FA5674B38688750D2BC8FADE /* RegionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90179A1FA3D64115BF6F8957 /* RegionsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,13 +62,11 @@
 		7738C80114EE60D3694F3C05 /* SinglePlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePlayerView.swift; sourceTree = "<group>"; };
 		83CF08DE04AC029D7990909F /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		84B9FF296A68A9377ED664BC /* SharedViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViews.swift; sourceTree = "<group>"; };
-		90179A1FA3D64115BF6F8957 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
 		99B4DD290903968E58EB5DC5 /* MatchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCoordinator.swift; sourceTree = "<group>"; };
 		A10000000000000000000011 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		A10000000000000000000012 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A10000000000000000000013 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		A10000000000000000000014 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A2E2AA64023123F2BA091EEB /* GameSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSessionView.swift; sourceTree = "<group>"; };
 		A82C708D56BD0B51F706E83D /* ProgressStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStore.swift; sourceTree = "<group>"; };
 		AD541F0D1F23752A3282A07F /* AnswerMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerMatcherTests.swift; sourceTree = "<group>"; };
 		C0E633D6B46F4D11E932F54C /* NearbyMatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyMatchService.swift; sourceTree = "<group>"; };
@@ -177,9 +173,7 @@
 		E1BA05B9CF0A3CA6651E323D /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				A2E2AA64023123F2BA091EEB /* GameSessionView.swift */,
 				E52F0D4C0AE6AAA764281E4C /* MultiplayerView.swift */,
-				90179A1FA3D64115BF6F8957 /* RegionsView.swift */,
 				83CF08DE04AC029D7990909F /* RootTabView.swift */,
 				84B9FF296A68A9377ED664BC /* SharedViews.swift */,
 				ECB6CD7BC4366C400BEC9137 /* StatsView.swift */,
@@ -292,7 +286,6 @@
 				624029F789DE51844FF070CE /* AnswerMatcher.swift in Sources */,
 				3CEF78B14FFC98EBA3343ED5 /* GameCenterService.swift in Sources */,
 				88D2E7F908D13A814FF05FBE /* GameSession.swift in Sources */,
-				8F7C763F3BD384B92F2CA16E /* GameSessionView.swift in Sources */,
 				39A2A9575A5A90D7CD21A4A9 /* MatchCoordinator.swift in Sources */,
 				63CA0511F869335F234498E8 /* MultiplayerModels.swift in Sources */,
 				8B91F55975E4233EA7D1D3C8 /* MultiplayerProtocol.swift in Sources */,
@@ -300,7 +293,6 @@
 				21D17EFACF2EE668FF1D10C9 /* NearbyMatchService.swift in Sources */,
 				F7D8E992F1333953D2CF4BDA /* PersistenceModels.swift in Sources */,
 				004D515C945B71CD37BA9713 /* ProgressStore.swift in Sources */,
-				FA5674B38688750D2BC8FADE /* RegionsView.swift in Sources */,
 				F48F3BC440697271B480984E /* RememberSubwayApp.swift in Sources */,
 				8D4DC69FA5C8A076F17F6695 /* RootTabView.swift in Sources */,
 				17D2430402D654F7093D9BAC /* SharedViews.swift in Sources */,

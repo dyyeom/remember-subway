@@ -1,69 +1,5 @@
 import Foundation
 
-@MainActor
-final class GameSession: ObservableObject {
-    enum Outcome: Equatable { case playing, completed(stars: Int), failed }
-    enum SubmissionResult: Equatable { case correct, incorrect, ignored }
-
-    let segment: Segment
-    let stations: [Station]
-    let isReversed: Bool
-
-    @Published private(set) var currentIndex = 1
-    @Published private(set) var lives = 3
-    @Published private(set) var penalties = 0
-    @Published private(set) var wrongAnswers = 0
-    @Published private(set) var hintUsedForCurrentStation = false
-    @Published private(set) var outcome: Outcome = .playing
-
-    init(segment: Segment, stationByID: [String: Station], reverse: Bool = Bool.random()) {
-        self.segment = segment
-        isReversed = reverse
-        let resolved = segment.stationIDs.compactMap { stationByID[$0] }
-        stations = reverse ? resolved.reversed() : resolved
-        if stations.count < 2 { outcome = .failed }
-    }
-
-    var anchor: Station { stations[0] }
-    var currentTarget: Station? { currentIndex < stations.count ? stations[currentIndex] : nil }
-    var target: Station? { outcome == .playing ? currentTarget : nil }
-    var progress: Double { guard stations.count > 1 else { return 0 }; return Double(currentIndex - 1) / Double(stations.count - 1) }
-    var stars: Int { max(1, 3 - penalties) }
-    var hint: String? { target.map { AnswerMatcher.initialConsonants(of: $0.name) } }
-
-    func useHint() {
-        guard outcome == .playing, !hintUsedForCurrentStation else { return }
-        hintUsedForCurrentStation = true
-        penalties += 1
-    }
-
-    func retry() {
-        currentIndex = 1
-        lives = 3
-        penalties = 0
-        wrongAnswers = 0
-        hintUsedForCurrentStation = false
-        outcome = stations.count < 2 ? .failed : .playing
-    }
-
-    @discardableResult
-    func submit(_ answer: String) -> SubmissionResult {
-        guard outcome == .playing, let target else { return .ignored }
-        if AnswerMatcher.matches(answer, station: target) {
-            currentIndex += 1
-            hintUsedForCurrentStation = false
-            if currentIndex >= stations.count { outcome = .completed(stars: stars) }
-            return .correct
-        }
-
-        lives -= 1
-        penalties += 1
-        wrongAnswers += 1
-        if lives == 0 { outcome = .failed }
-        return .incorrect
-    }
-}
-
 struct SinglePlayerQuestion: Hashable, Sendable {
     let lineID: String
     let routePatternID: String
@@ -165,6 +101,8 @@ struct QuestionCountdown: Equatable {
 
 @MainActor
 final class SinglePlayerSession: ObservableObject {
+    enum SubmissionResult: Equatable { case correct, incorrect, ignored }
+
     static let roundDuration: TimeInterval = 15
     static let fullScoreRemainingTime: TimeInterval = 10
 
@@ -217,7 +155,7 @@ final class SinglePlayerSession: ObservableObject {
     func submit(
         _ answer: String,
         remainingTime: TimeInterval = SinglePlayerSession.roundDuration
-    ) -> GameSession.SubmissionResult {
+    ) -> SubmissionResult {
         guard !isFinished, !isRevealingIncorrectAnswer, !isPaused, let current else { return .ignored }
         if AnswerMatcher.matches(answer, station: current.target) {
             score += Self.points(
@@ -232,7 +170,7 @@ final class SinglePlayerSession: ObservableObject {
     }
 
     @discardableResult
-    func expireCurrentQuestion() -> GameSession.SubmissionResult {
+    func expireCurrentQuestion() -> SubmissionResult {
         guard !isFinished, !isRevealingIncorrectAnswer, !isPaused, current != nil else { return .ignored }
         lives -= 1
         isRevealingIncorrectAnswer = true
