@@ -205,4 +205,21 @@ struct CatalogTests {
         #expect(Set(records.map(\.leaderboardID)) == Set([regionLeaderboard, lineLeaderboard]))
         #expect(lineLeaderboard.hasSuffix("line.seoul_4.v1"))
     }
+
+    @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        #expect(catalog.challengePoolVersion == "2026.08.4")
+
+        let line7 = try #require(catalog.stationByID["s7-028"])
+        #expect(line7.name == "이수")
+        for answer in ["이수", "총신대입구", "이수역"] {
+            #expect(AnswerMatcher.matches(answer, station: line7))
+        }
+
+        let line4 = try #require(catalog.stationByID["s4-027"])
+        #expect(line4.name == "총신대입구")
+        for answer in ["총신대입구", "총신대입구(이수)", "이수"] {
+            #expect(AnswerMatcher.matches(answer, station: line4))
+        }
+    }
 }

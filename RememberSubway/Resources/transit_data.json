@@ -1,6 +1,6 @@
 {
   "challengePoolVersion" : "2026.08.4",
-  "contentVersion" : "2026.08.official.4",
+  "contentVersion" : "2026.08.official.5",
   "dataAsOf" : "2026-08-22",
   "lines" : [
     {
@@ -3499,7 +3499,7 @@
     },
     {
       "aliases" : [
-
+        "이수"
       ],
       "fullName" : "총신대입구(이수)",
       "id" : "s4-027",
@@ -4560,11 +4560,10 @@
     },
     {
       "aliases" : [
-
+        "총신대입구"
       ],
-      "fullName" : "총신대입구(이수)",
       "id" : "s7-028",
-      "name" : "총신대입구"
+      "name" : "이수"
     },
     {
       "aliases" : [
