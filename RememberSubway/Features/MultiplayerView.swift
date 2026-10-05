@@ -34,6 +34,8 @@ struct MultiplayerContainerView: View {
             content
                 .navigationTitle(navigationTitle)
                 .navigationBarTitleDisplayMode(.inline)
+                // 경기 진행(카운트다운·문제·라운드 결과·최종 결과) 중에는 탭 바를 숨긴다.
+                .toolbarVisibility(isMatchInProgress ? .hidden : .automatic, for: .tabBar)
                 .toolbar {
                     AppToolbar(
                         showStats: $showStats,
@@ -55,6 +57,13 @@ struct MultiplayerContainerView: View {
                 selectedRoom = nil
                 coordinator.join(room: room, code: roomCodeEntry)
             }
+        }
+    }
+
+    private var isMatchInProgress: Bool {
+        switch coordinator.screenState {
+        case .countdown, .playing, .roundResult, .matchResult: true
+        default: false
         }
     }
 

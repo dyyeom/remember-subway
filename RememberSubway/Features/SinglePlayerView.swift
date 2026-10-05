@@ -296,6 +296,8 @@ struct SinglePlayerChallengePlayView: View {
         .navigationTitle(AppLocalization.text("single.challenge"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        // 준비·플레이·결과 내내 하단 탭 바를 숨겨 게임 화면에 집중하게 한다. 홈으로 돌아가면 다시 보인다.
+        .toolbarVisibility(.hidden, for: .tabBar)
         .tint(currentLine?.color ?? .accentColor)
         // 시스템 뒤로 버튼과 엣지 스와이프를 막아 진행 중 이탈은 `중단` 확인 팝업으로만 하게 한다.
         .navigationBarBackButtonHidden(true)
