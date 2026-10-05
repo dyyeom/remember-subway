@@ -47,6 +47,8 @@ struct SubwayActionButtonStyle: ButtonStyle {
     let color: Color
     let prominent: Bool
     var minHeight: CGFloat = 52
+    /// false면 비활성이어도 흐리게 만들지 않는다. 공개된 초성처럼 읽혀야 하는 값에 쓴다.
+    var dimsWhenDisabled = true
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
@@ -64,7 +66,7 @@ struct SubwayActionButtonStyle: ButtonStyle {
                 RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
                     .stroke(prominent ? color : SubwayTheme.border, lineWidth: prominent ? 2 : 1)
             }
-            .opacity(isEnabled ? (configuration.isPressed ? 0.78 : 1) : 0.42)
+            .opacity(isEnabled ? (configuration.isPressed ? 0.78 : 1) : (dimsWhenDisabled ? 0.42 : 1))
             .contentShape(Rectangle())
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
@@ -368,7 +370,7 @@ struct GameGlassActionBar: View {
         SubwayPanel(accent: color) {
             HStack(spacing: 12) {
                 hintButton
-                    .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false))
+                    .buttonStyle(SubwayActionButtonStyle(color: color, prominent: false, dimsWhenDisabled: hintText == nil))
                     .disabled(hintDisabled)
 
                 Button(AppLocalization.text("game.checkAnswer"), systemImage: "checkmark.circle", action: onConfirm)
