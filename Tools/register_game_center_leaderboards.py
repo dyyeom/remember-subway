@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""App Store Connect API로 역순서 Game Center 리더보드를 등록합니다.
+"""App Store Connect API로 사이역 Game Center 리더보드를 등록합니다.
 
 기본값은 미리보기입니다. 실제 요청에는 --apply를 사용하세요.
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 # leaderboards; v2 additionally requires an inline leaderboard version.
 API_ROOT = "https://api.appstoreconnect.apple.com/v1"
 DEFAULT_DATA = Path(__file__).resolve().parents[1] / "RememberSubway/Resources/transit_data.json"
-PREFIX = "kr.co.remembersubway.single"
+PREFIX = "com.evolvingark.remembersubway.single"
 
 def b64(value: bytes) -> str:
     return base64.urlsafe_b64encode(value).rstrip(b"=").decode("ascii")

@@ -1,6 +1,6 @@
 name: RememberSubway
 options:
-  bundleIdPrefix: io.evolveark.remembersubway
+  bundleIdPrefix: com.evolvingark.remembersubway
   deploymentTarget:
     iOS: "26.0"
   xcodeVersion: "26.0"
@@ -22,7 +22,7 @@ targets:
       - path: RememberSubway
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: io.evolveark.remembersubway.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.evolvingark.remembersubway.app
         PRODUCT_NAME: RememberSubway
         PRODUCT_MODULE_NAME: RememberSubway
         TARGETED_DEVICE_FAMILY: "1"
@@ -50,7 +50,7 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: io.evolveark.remembersubway.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.evolvingark.remembersubway.tests
         DEVELOPMENT_TEAM: GW3G2WPCXT
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/RememberSubway.app/RememberSubway"
         BUNDLE_LOADER: "$(TEST_HOST)"

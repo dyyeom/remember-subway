@@ -1,9 +1,9 @@
 # 사이역 제품 요구사항 문서(PRD)
 
 최종 갱신일: 2026-10-05  
-문서 버전: 1.11  
+문서 버전: 1.12  
 구현 기준 브랜치: `main`  
-번들 ID: `io.evolveark.remembersubway.app`  
+번들 ID: `com.evolvingark.remembersubway.app`  
 앱 버전: 1.0.0 (빌드 10) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
 
 ## 1. 제품 개요
@@ -213,3 +213,4 @@ SwiftData 스키마는 `SinglePlayerBestRecord`, `AppSettingsRecord`, `PendingAc
 - 1.9 (2026-10-05): 게임·경기 진행 화면에서 하단 탭 바를 숨기고, 멀티 결과 우승 폭죽이 콘텐츠 위에 보이도록 수정했다. 스크린샷 제작용 DEBUG 전용 런치 인자(`-ScreenshotScene`)를 추가했다(Release 미포함). 데이터·저장·통신 영향 없음.
 - 1.10 (2026-10-06): 7호선 `총신대입구`를 공식 역명 `이수`로 바꾸고 `총신대입구`를 별칭으로, 4호선 `총신대입구(이수)`에 `이수` 별칭을 추가했다. `contentVersion`을 `2026.08.official.5`로 올렸으며 `challengePoolVersion`은 유지해 최고 기록·문제 순서·리더보드에 영향이 없다. 이전 데이터 버전 앱과는 근처 대전 입장이 거절된다. 정답 인정 테스트를 추가했다.
 - 1.11 (2026-10-06): 멀티 버전 불일치 안내를 양쪽 업데이트 문구로 바꾸고, 방장이 거절한 연결을 즉시 닫으며 참가자는 거절 시 재접속하지 않도록 했다. `MatchCoordinator`에 서비스 주입 지점을 두고 버전 불일치 테스트 6개를 추가했다(총 42개). 빌드 8.
+- 1.12 (2026-10-06): 팀 이름 변경(EvolvingArk)에 맞춰 번들 ID를 `com.evolvingark.remembersubway.app`으로, Game Center 리더보드 ID 접두어를 `com.evolvingark.remembersubway.single`로 바꿨다. App Store Connect에 새 앱으로 등록하며, 이전 앱(`io.evolveark…`)의 기기 기록·Game Center 랭킹은 이어지지 않는다.

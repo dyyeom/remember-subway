@@ -30,7 +30,7 @@ enum AppModelContainer {
         MultiplayerMatchRecord.self
     ])
 
-    private static let logger = Logger(subsystem: "io.evolveark.remembersubway.app", category: "Storage")
+    private static let logger = Logger(subsystem: "com.evolvingark.remembersubway.app", category: "Storage")
 
     /// 영구 저장소를 열지 못하면 기존 저장 파일은 건드리지 않고 이번 실행만 인메모리 저장소로 이어 간다.
     /// `configuration`이 없으면 기본 영구 저장소를 연다.

@@ -27,7 +27,7 @@ final class SinglePlayerBestRecord {
     @Attribute(.unique) var key: String
     var poolVersion: String
     var scopeID: String = "legacy"
-    var leaderboardID: String = "kr.co.remembersubway.single.v1"
+    var leaderboardID: String = "com.evolvingark.remembersubway.single.v1"
     var bestScore: Int
     var pendingSubmission: Bool
     var updatedAt: Date
@@ -35,7 +35,7 @@ final class SinglePlayerBestRecord {
     init(
         poolVersion: String,
         scopeID: String = "legacy",
-        leaderboardID: String = "kr.co.remembersubway.single.v1",
+        leaderboardID: String = "com.evolvingark.remembersubway.single.v1",
         bestScore: Int = 0,
         pendingSubmission: Bool = false,
         updatedAt: Date = .now

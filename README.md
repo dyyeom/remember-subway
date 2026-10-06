@@ -39,10 +39,10 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
 
 App Store Connect에서 다음 식별자를 생성해야 실제 제출이 활성화됩니다.
 
-- 지역 전체 상시 리더보드: `kr.co.remembersubway.single.region.{region_id}.v1`
-- 노선별 상시 리더보드: `kr.co.remembersubway.single.line.{line_id}.v1`
+- 지역 전체 상시 리더보드: `com.evolvingark.remembersubway.single.region.{region_id}.v1`
+- 노선별 상시 리더보드: `com.evolvingark.remembersubway.single.line.{line_id}.v1`
 
-리더보드 ID의 하이픈은 밑줄로 변환합니다. 예를 들어 서울 4호선은 `kr.co.remembersubway.single.line.seoul_4.v1`입니다. 앱에 포함된 모든 지역과 노선 ID를 App Store Connect에 상시 리더보드로 등록해야 실제 순위 제출과 조회가 동작합니다. 기본 호환 ID는 `kr.co.remembersubway.single.v1`입니다.
+리더보드 ID의 하이픈은 밑줄로 변환합니다. 예를 들어 서울 4호선은 `com.evolvingark.remembersubway.single.line.seoul_4.v1`입니다. 앱에 포함된 모든 지역과 노선 ID를 App Store Connect에 상시 리더보드로 등록해야 실제 순위 제출과 조회가 동작합니다. 기본 호환 ID는 `com.evolvingark.remembersubway.single.v1`입니다.
 
 인증이나 네트워크가 실패해도 싱글플레이는 계속되며 최고 점수는 SwiftData에 제출 대기 상태로 저장됩니다. 제거된 일반 학습 모드의 업적은 더 이상 제출하지 않습니다.
 

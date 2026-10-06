@@ -31,7 +31,7 @@ final class NearbyMatchService: ObservableObject, NearbyMatchServing {
     }
 
     static let serviceType = "_rsubway._tcp"
-    private static let queue = DispatchQueue(label: "io.evolveark.remembersubway.nearby", qos: .userInitiated)
+    private static let queue = DispatchQueue(label: "com.evolvingark.remembersubway.nearby", qos: .userInitiated)
 
     @Published private(set) var state: State = .idle
     @Published private(set) var discoveredRooms: [DiscoveredRoom] = []

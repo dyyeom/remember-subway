@@ -9,12 +9,12 @@ final class GameCenterService: NSObject, ObservableObject, @preconcurrency GKGam
     @Published private(set) var isAuthenticated = GKLocalPlayer.local.isAuthenticated
     @Published private(set) var lastError: String?
 
-    static let singlePlayerLeaderboardID = "kr.co.remembersubway.single.v1"
+    static let singlePlayerLeaderboardID = "com.evolvingark.remembersubway.single.v1"
 
     static func singlePlayerLeaderboardID(regionID: String, lineID: String?) -> String {
         let scope = lineID.map { "line.\(leaderboardComponent($0))" }
             ?? "region.\(leaderboardComponent(regionID))"
-        return "kr.co.remembersubway.single.\(scope).v1"
+        return "com.evolvingark.remembersubway.single.\(scope).v1"
     }
 
     func authenticate() {
