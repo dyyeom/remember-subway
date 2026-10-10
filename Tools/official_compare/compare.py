@@ -99,6 +99,8 @@ add("suin-bundang", "KRNA 수인선 역명 2026-06-30", "15064055", ALL, partial
 add("daejeon-1", "대전교통공사 역명 및 주소", "15083331", ALL, name="한 글", order="역번호")
 extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extra.json")  # 보조 자료: {"line": [{"label":..., "stations":[...], "partial":bool}]}
 extras = json.load(open(extra)) if os.path.exists(extra) else {}
+# 대조 예외: {"_exclude": {"line": {"역명": "사유"}}} — 자료에 있어도 앱에 넣지 않기로 확정한 역
+excludes = extras.pop("_exclude", {})
 
 stations = {s["id"]: s for s in app["stations"]}
 lines = {l["id"]: l for l in app["lines"]}
@@ -132,6 +134,8 @@ def compare(line, label, names, partial, ordered):
     res = {"missing": [], "extra": [], "name": [], "order": []}
     matched = []
     for raw in names:
+        if base(raw) in {base(k) for k in excludes.get(line, {})}:
+            continue
         i = idx.get(base(raw))
         if not i:
             res["missing"].append(raw); continue

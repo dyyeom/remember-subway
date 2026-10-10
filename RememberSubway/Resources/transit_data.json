@@ -1,6 +1,6 @@
 {
   "challengePoolVersion" : "2026.10.1",
-  "contentVersion" : "2026.10.official.1",
+  "contentVersion" : "2026.10.official.2",
   "dataAsOf" : "2026-10-10",
   "lines" : [
     {
@@ -2861,7 +2861,6 @@
       "aliases" : [
 
       ],
-      "fullName" : "구로디지털단지(원광디지털대)",
       "id" : "s2-032",
       "name" : "구로디지털단지"
     },
@@ -3268,7 +3267,6 @@
       "aliases" : [
 
       ],
-      "fullName" : "학여울(서울무역전시컨벤션센터)",
       "id" : "s3-038",
       "name" : "학여울"
     },
@@ -4522,7 +4520,6 @@
       "aliases" : [
 
       ],
-      "fullName" : "청담(한국금거래소)",
       "id" : "s7-021",
       "name" : "청담"
     },
@@ -5669,10 +5666,10 @@
     },
     {
       "aliases" : [
-
+        "서구청"
       ],
       "id" : "i2-010",
-      "name" : "서구청"
+      "name" : "서해구청"
     },
     {
       "aliases" : [
@@ -8117,7 +8114,7 @@
       "aliases" : [
 
       ],
-      "fullName" : "서부산유통지구(금호마을·에어부산)",
+      "fullName" : "서부산유통지구(금호마을)",
       "id" : "bgl-003",
       "name" : "서부산유통지구"
     },

@@ -255,6 +255,39 @@ struct CatalogTests {
         #expect(!AnswerMatcher.matches("구포", station: try #require(catalog.stationByID["b2-031"])))
     }
 
+    @Test func seohaeGuOfficeAcceptsNewAndOldNames() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let station = try #require(catalog.stationByID["i2-010"])
+        #expect(station.name == "서해구청")
+        for answer in ["서해구청", "서해구청역", "서구청", "서구청역"] {
+            #expect(AnswerMatcher.matches(answer, station: station))
+        }
+    }
+
+    @Test func paidStationNameSponsorsAreNotAcceptedAnswers() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let cases: [(id: String, name: String, fullName: String?, rejected: [String])] = [
+            ("s7-021", "청담", nil, ["청담(한국금거래소)", "한국금거래소"]),
+            ("s2-032", "구로디지털단지", nil, ["구로디지털단지(원광디지털대)", "원광디지털대"]),
+            ("s3-038", "학여울", nil, ["학여울(서울무역전시컨벤션센터)", "서울무역전시컨벤션센터"]),
+            ("bgl-003", "서부산유통지구", "서부산유통지구(금호마을)", ["서부산유통지구(금호마을·에어부산)", "에어부산"])
+        ]
+        for item in cases {
+            let station = try #require(catalog.stationByID[item.id])
+            #expect(station.name == item.name)
+            #expect(station.fullName == item.fullName)
+            #expect(AnswerMatcher.matches(item.name, station: station))
+            for answer in item.rejected {
+                #expect(!AnswerMatcher.matches(answer, station: station), "\(item.id): \(answer)")
+            }
+        }
+        let allAnswers = catalog.stations.flatMap(\.acceptedAnswers)
+        for sponsor in ["한국금거래소", "원광디지털대", "에어부산", "서울무역전시컨벤션센터"] {
+            #expect(!allAnswers.contains { $0.contains(sponsor) })
+        }
+        #expect(!catalog.stations.contains { $0.name == "학익" })
+    }
+
     @Test func busanLine2RunsModeokMoraGunamInOrder() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         let line = try #require(catalog.lineByID["busan-2"])
