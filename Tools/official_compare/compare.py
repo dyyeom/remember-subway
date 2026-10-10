@@ -2,6 +2,9 @@
 # usage: python3 -I Tools/official_compare/compare.py RememberSubway/Resources/transit_data.json DL_DIR
 #   DL_DIR은 fetch.py로 내려받은 data.go.kr 파일 폴더(파일명 = 공공데이터 PK).
 #   보조 자료(공식 파일이 없는 노선)는 이 스크립트 옆 extra.json에서 읽는다.
+# 규칙(README.md): 공공데이터에서만 보이는 역명 변경은 바로 반영하지 않는다. 운영기관 공지·고시·언론 보도 중
+#   하나로 실제 시행이 확인된 경우에만 반영하고, 아니면 extra.json `_unconfirmed_renames`에 등록한다.
+#   출력 끝의 "역명 변경 후보(시행 확인 필요)" 목록이 그 확인 대상이다.
 import sys, os, re, csv, io, json, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import xlsx
@@ -133,11 +136,23 @@ def keyfn(order):
 
 summary = collections.OrderedDict()
 report = []
+def neighbors_between(line, a, c):
+    """앱 계통에서 a와 c 사이에 정확히 한 역이 끼어 있으면 그 역 ID들을 돌려준다."""
+    found = set()
+    for seq in patterns[line]:
+        for x, y, z in zip(seq, seq[1:], seq[2:]):
+            if (x, z) in ((a, c), (c, a)): found.add(y)
+    return found
+
 def compare(line, label, names, partial, ordered):
     ids, idx = app_index(line)
-    res = {"missing": [], "extra": [], "name": [], "order": []}
+    # rename: 역명 변경 후보(시행 확인 필요). 자료에만 있는 이름이 앱의 한 역 자리를 그대로 차지하는 경우.
+    #   README 규칙대로 바로 반영하지 말고 운영기관 공지·고시·언론 보도로 시행을 확인한 뒤 반영하거나,
+    #   미시행이면 extra.json `_unconfirmed_renames`에 등록한다.
+    res = {"missing": [], "extra": [], "name": [], "order": [], "rename": []}
     held = []
     matched = []
+    slots = []  # 자료 순서대로 (raw, 앱 역 ID 또는 None)
     held_map = {base(k): v["app"] for k, v in unconfirmed.get(line, {}).items()}
     for raw in names:
         if base(raw) in {base(k) for k in excludes.get(line, {})}:
@@ -146,22 +161,38 @@ def compare(line, label, names, partial, ordered):
             held.append(f"자료 '{raw}' → 앱 '{held_map[base(raw)]}' 유지")
             raw = held_map[base(raw)]
         i = idx.get(base(raw))
+        slots.append((raw, i))
         if not i:
             res["missing"].append(raw); continue
         matched.append(i)
         s = stations[i]
         full = s.get("fullName") or s["name"]
         if base(raw) != base(s["name"]) and base(raw) != base(full):
-            res["name"].append(f"본역명: 앱 '{s['name']}' / 자료 '{raw}'")
+            res["name"].append(f"본역명(자료가 앱 별칭과 같음): 앱 '{s['name']}' / 자료 '{raw}'")
         if sub(raw) != sub(full) and sub(raw):
             res["name"].append(f"부역명: 앱 '{full}' / 자료 '{raw}'")
         elif sub(full) and not sub(raw):
             res["name"].append(f"부역명 없음(자료): 앱 '{full}' / 자료 '{raw}'")
+    # 자료에만 있는 역의 앞뒤 역이 앱에서 한 역을 사이에 두고 이웃하고, 그 역이 자료에 없으면 역명 변경 후보로 분류한다.
+    renamed = set()
+    for k, (raw, i) in enumerate(slots):
+        if i or k == 0 or k == len(slots) - 1: continue
+        a, c = slots[k - 1][1], slots[k + 1][1]
+        if not a or not c: continue
+        between = [x for x in neighbors_between(line, a, c) if x not in matched and x not in renamed]
+        if len(between) == 1:
+            x = between[0]
+            renamed.add(x)
+            res["missing"].remove(raw)
+            res["rename"].append(f"앱 '{stations[x]['name']}' / 자료 '{raw}'")
     if not partial:
-        res["extra"] = [stations[i]["name"] for i in ids if i not in matched]
+        res["extra"] = [stations[i]["name"] for i in ids if i not in matched and i not in renamed]
+        # 순서가 없는 자료라도 자료에만 있는 역과 앱에만 있는 역이 하나씩이면 같은 역의 이름 차이로 본다.
+        if len(res["missing"]) == 1 and len(res["extra"]) == 1:
+            res["rename"].append(f"앱 '{res['extra'].pop()}' / 자료 '{res['missing'].pop()}'")
     if ordered:
         for a, b in zip(matched, matched[1:]):
-            if a != b and not adjacent(line, a, b):
+            if a != b and not adjacent(line, a, b) and not any(x in renamed for x in neighbors_between(line, a, b)):
                 res["order"].append(f"{stations[a]['name']}→{stations[b]['name']}")
     ok = not any(res.values())
     summary.setdefault(line, []).append((label, len(names), ok, res, held))
@@ -184,7 +215,12 @@ for line in lines:
     for label, n, ok, res, held in items:
         total += 1; total_ok += ok
         print(f"  [{'일치' if ok else '차이'}] {label}: {n}역")
-        for k, title in (("missing", "앱에 없음"), ("extra", "자료에 없음"), ("name", "이름"), ("order", "순서(비인접)")):
+        for k, title in (("missing", "앱에 없음"), ("extra", "자료에 없음"), ("name", "이름"), ("order", "순서(비인접)"),
+                         ("rename", "역명 변경 후보(시행 확인 필요)")):
             if res[k]: print(f"     - {title}: {', '.join(res[k])}")
         if held: print(f"     - 보류(시행 미확인, extra.json): {', '.join(held)}")
 print(f"\n총 {total}건 중 일치 {total_ok}건")
+renames = sorted({(line, r) for line, items in summary.items() for *_, res, _h in items for r in res["rename"]})
+if renames:
+    print("\n## 역명 변경 후보(시행 확인 필요) — 공공데이터만으로 반영 금지, README 규칙 참고")
+    for line, r in renames: print(f"  - {line}: {r}")
