@@ -19,7 +19,7 @@ struct StatsView: View {
             }
             if !singlePlayer.isEmpty {
                 Section(AppLocalization.text("stats.recentSingle.section")) {
-                    ForEach(singlePlayer.prefix(10)) { record in
+                    ForEach(ProgressStore.representativeRecords(singlePlayer).prefix(10)) { record in
                         LabeledContent(singlePlayerScopeName(record), value: AppLocalization.format("score.points.format", record.bestScore))
                     }
                 }

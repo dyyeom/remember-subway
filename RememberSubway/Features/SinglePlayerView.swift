@@ -156,10 +156,8 @@ struct SinglePlayerChallengeHomeView: View {
     }
 
     private var currentBest: Int {
-        bestRecords.first {
-            $0.poolVersion == catalogStore.catalog.challengePoolVersion
-                && $0.scopeID == scopeID
-        }?.bestScore ?? 0
+        // 문제 풀 버전이 바뀌어도 같은 범위의 최고 기록을 이어서 보여 준다.
+        ProgressStore.bestScore(scopeID: scopeID, in: bestRecords)
     }
 }
 

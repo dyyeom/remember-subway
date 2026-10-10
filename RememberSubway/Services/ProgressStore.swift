@@ -10,6 +10,27 @@ enum ProgressStore {
         let didImproveBest: Bool
     }
 
+    /// 범위(지역·노선)의 대표 최고 기록. 문제 풀 버전(`poolVersion`)과 상관없이 bestScore가 가장 높은 기록을 쓰고,
+    /// 같으면 최근에 갱신된 기록을 고른다. 버전별 레코드는 지우지 않으므로 Game Center 제출 대기 상태도 그대로 남는다.
+    static func bestRecord(scopeID: String, in records: [SinglePlayerBestRecord]) -> SinglePlayerBestRecord? {
+        records
+            .filter { $0.scopeID == scopeID }
+            .max { ($0.bestScore, $0.updatedAt) < ($1.bestScore, $1.updatedAt) }
+    }
+
+    static func bestScore(scopeID: String, in records: [SinglePlayerBestRecord]) -> Int {
+        bestRecord(scopeID: scopeID, in: records)?.bestScore ?? 0
+    }
+
+    /// 범위마다 대표 기록 하나만 남긴 목록. 최근 갱신 순으로 정렬한다.
+    static func representativeRecords(_ records: [SinglePlayerBestRecord]) -> [SinglePlayerBestRecord] {
+        Set(records.map(\.scopeID))
+            .compactMap { bestRecord(scopeID: $0, in: records) }
+            .sorted { $0.updatedAt > $1.updatedAt }
+    }
+
+    /// 최고 기록은 범위 기준으로 이어진다. 같은 범위의 기존 대표 기록보다 높을 때만 그 기록을 갱신하고,
+    /// 범위에 기록이 없을 때만 현재 `poolVersion` 키로 새 기록을 만든다.
     static func recordSinglePlayer(
         score: Int,
         poolVersion: String,
@@ -17,9 +38,8 @@ enum ProgressStore {
         leaderboardID: String = GameCenterService.singlePlayerLeaderboardID,
         context: ModelContext
     ) throws -> SinglePlayerRecordUpdate {
-        let key = "\(poolVersion):\(scopeID)"
-        let descriptor = FetchDescriptor<SinglePlayerBestRecord>(predicate: #Predicate { $0.key == key })
-        let record = try context.fetch(descriptor).first ?? SinglePlayerBestRecord(
+        let descriptor = FetchDescriptor<SinglePlayerBestRecord>(predicate: #Predicate { $0.scopeID == scopeID })
+        let record = bestRecord(scopeID: scopeID, in: try context.fetch(descriptor)) ?? SinglePlayerBestRecord(
             poolVersion: poolVersion,
             scopeID: scopeID,
             leaderboardID: leaderboardID
