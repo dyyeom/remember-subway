@@ -1,7 +1,7 @@
 # 사이역 제품 요구사항 문서(PRD)
 
 최종 갱신일: 2026-10-05  
-문서 버전: 1.13  
+문서 버전: 1.14  
 구현 기준 브랜치: `main`  
 번들 ID: `com.evolvingark.remembersubway.app`  
 앱 버전: 1.0.0 (빌드 10) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
@@ -131,7 +131,7 @@
 
 ## 5. 데이터와 저장
 
-정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.10.official.1`, `challengePoolVersion` `2026.10.1`, 기준일 2026-10-10이며 5개 지역, 13개 운영기관, 32개 노선, 40개 운행 계통, 1,052개 역, 15개 출처를 포함한다.
+정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.10.official.2`, `challengePoolVersion` `2026.10.1`, 기준일 2026-10-10이며 5개 지역, 13개 운영기관, 32개 노선, 40개 운행 계통, 1,052개 역, 15개 출처를 포함한다.
 
 - 수도권: 서울 1~9호선, 인천 1~2호선, 수인분당선, 경의중앙선, 경춘선, 경강선, 서해선, 신분당선, 공항철도, 우이신설선, 신림선 등
 - 부산: 부산 1~4호선, 부산김해경전철, 동해선
@@ -216,3 +216,4 @@ SwiftData 스키마는 `SinglePlayerBestRecord`, `AppSettingsRecord`, `PendingAc
 - 1.11 (2026-10-06): 멀티 버전 불일치 안내를 양쪽 업데이트 문구로 바꾸고, 방장이 거절한 연결을 즉시 닫으며 참가자는 거절 시 재접속하지 않도록 했다. `MatchCoordinator`에 서비스 주입 지점을 두고 버전 불일치 테스트 6개를 추가했다(총 42개). 빌드 8.
 - 1.12 (2026-10-06): 팀 이름 변경(EvolvingArk)에 맞춰 번들 ID를 `com.evolvingark.remembersubway.app`으로, Game Center 리더보드 ID 접두어를 `com.evolvingark.remembersubway.single`로 바꿨다. App Store Connect에 새 앱으로 등록하며, 이전 앱(`io.evolveark…`)의 기기 기록·Game Center 랭킹은 이어지지 않는다.
 - 1.13 (2026-10-10): 국가철도공단·운영기관 공식 자료로 전 노선 역명·순서를 전수 대조해 반영했다(`Tools/official_compare/`). 대경선 북삼역 추가(7→8역), 역명 변경 반영(뚝섬유원지→자양(뚝섬한강공원), 당고개→불암산, 신길온천→능길, 동부산대학→윗반송, 대공원→수성알파시티(삼성라이온즈파크); 옛 이름은 정답 별칭), 부산 2호선 구포→구남 오기와 순서 수정, 공식 부역명 추가(석남(거북시장), 거제(법원·검찰청)). 역 ID는 유지. `contentVersion` 2026.10.official.1, `challengePoolVersion` 2026.10.1(기기 최고 기록은 새 기준으로 다시 시작, Game Center 랭킹은 유지). 선택한 노선 색으로 화면 강조색이 바뀌도록 했고(0.3초 전환, Reduce Motion 시 즉시, 선택 햅틱), 전체 노선은 딥 틸 `#124A50`(`SubwayAllLines`)을 쓴다. Action 노랑은 전체 노선 표시에 쓰지 않는다.
+- 1.14 (2026-10-11): 인천 2호선 서구청→서해구청(옛 이름은 별칭). 유료 역명병기를 정답 표기에서 제외했다(청담(한국금거래소), 구로디지털단지(원광디지털대), 학여울(서울무역전시컨벤션센터), 서부산유통지구의 에어부산). 정답은 공식 본역명·공식 부역명·검수 별칭만 인정하며 유료 병기는 포함하지 않는다. 미개통 학익역은 대조 예외로 등록. `contentVersion` 2026.10.official.2, `challengePoolVersion` 유지.
