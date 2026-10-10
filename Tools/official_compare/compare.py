@@ -101,6 +101,10 @@ extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extra.json")  
 extras = json.load(open(extra)) if os.path.exists(extra) else {}
 # 대조 예외: {"_exclude": {"line": {"역명": "사유"}}} — 자료에 있어도 앱에 넣지 않기로 확정한 역
 excludes = extras.pop("_exclude", {})
+# 시행 미확인 역명 변경: {"_unconfirmed_renames": {"line": {"자료 역명": {"app": "앱 역명", "reason": "사유"}}}}
+#   공공데이터에만 바뀐 이름이 보이고 실제 시행은 확인되지 않은 경우. 대조 때 자료 이름을 앱 이름으로
+#   바꿔 읽고 '보류'로만 표시한다(차이로 세지 않음).
+unconfirmed = extras.pop("_unconfirmed_renames", {})
 
 stations = {s["id"]: s for s in app["stations"]}
 lines = {l["id"]: l for l in app["lines"]}
@@ -132,10 +136,15 @@ report = []
 def compare(line, label, names, partial, ordered):
     ids, idx = app_index(line)
     res = {"missing": [], "extra": [], "name": [], "order": []}
+    held = []
     matched = []
+    held_map = {base(k): v["app"] for k, v in unconfirmed.get(line, {}).items()}
     for raw in names:
         if base(raw) in {base(k) for k in excludes.get(line, {})}:
             continue
+        if base(raw) in held_map:
+            held.append(f"자료 '{raw}' → 앱 '{held_map[base(raw)]}' 유지")
+            raw = held_map[base(raw)]
         i = idx.get(base(raw))
         if not i:
             res["missing"].append(raw); continue
@@ -155,7 +164,7 @@ def compare(line, label, names, partial, ordered):
             if a != b and not adjacent(line, a, b):
                 res["order"].append(f"{stations[a]['name']}→{stations[b]['name']}")
     ok = not any(res.values())
-    summary.setdefault(line, []).append((label, len(names), ok, res))
+    summary.setdefault(line, []).append((label, len(names), ok, res, held))
 
 for line, label, pk, flt, name, order, partial in S:
     rows = [r for r in load(pk) if flt(r)]
@@ -172,9 +181,10 @@ for line in lines:
     ids, _ = app_index(line)
     items = summary.get(line, [])
     print(f"\n## {line} {lines[line]['name']} (앱 {len(ids)}역) — 자료 {len(items)}건")
-    for label, n, ok, res in items:
+    for label, n, ok, res, held in items:
         total += 1; total_ok += ok
         print(f"  [{'일치' if ok else '차이'}] {label}: {n}역")
         for k, title in (("missing", "앱에 없음"), ("extra", "자료에 없음"), ("name", "이름"), ("order", "순서(비인접)")):
             if res[k]: print(f"     - {title}: {', '.join(res[k])}")
+        if held: print(f"     - 보류(시행 미확인, extra.json): {', '.join(held)}")
 print(f"\n총 {total}건 중 일치 {total_ok}건")

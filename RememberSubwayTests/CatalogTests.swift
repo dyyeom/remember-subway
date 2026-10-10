@@ -238,8 +238,6 @@ struct CatalogTests {
         let cases: [(id: String, name: String, fullName: String?, answers: [String])] = [
             ("s7-020", "자양", "자양(뚝섬한강공원)", ["자양", "자양역", "자양(뚝섬한강공원)", "뚝섬유원지", "뚝섬유원지역"]),
             ("s4-004", "불암산", nil, ["불암산", "불암산역", "당고개", "당고개역"]),
-            ("s4-049", "능길", nil, ["능길", "신길온천"]),
-            ("sb-048", "능길", nil, ["능길", "신길온천"]),
             ("b4-012", "윗반송", nil, ["윗반송", "동부산대학"]),
             ("d2-023", "수성알파시티", "수성알파시티(삼성라이온즈파크)", ["수성알파시티", "대공원"]),
             ("b2-031", "구남", nil, ["구남"])
@@ -253,6 +251,21 @@ struct CatalogTests {
             }
         }
         #expect(!AnswerMatcher.matches("구포", station: try #require(catalog.stationByID["b2-031"])))
+    }
+
+    @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        #expect(catalog.contentVersion == "2026.10.official.3")
+        // 공공데이터의 '능길'은 실제 시행 전이라 반영하지 않는다. 역 ID는 그대로다.
+        for id in ["s4-049", "sb-048"] {
+            let station = try #require(catalog.stationByID[id])
+            #expect(station.name == "신길온천")
+            #expect(station.fullName == nil)
+            #expect(AnswerMatcher.matches("신길온천", station: station))
+            #expect(AnswerMatcher.matches("신길온천역", station: station))
+            #expect(!AnswerMatcher.matches("능길", station: station))
+        }
+        #expect(!catalog.stations.flatMap(\.acceptedAnswers).contains { $0.contains("능길") })
     }
 
     @Test func seohaeGuOfficeAcceptsNewAndOldNames() throws {
