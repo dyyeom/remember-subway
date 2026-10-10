@@ -75,7 +75,7 @@ struct CatalogTests {
             "busan-1": 40, "busan-2": 43, "busan-3": 17, "busan-4": 14,
             "busan-gimhae": 21, "donghae": 23,
             "daegu-1": 35, "daegu-2": 29, "daegu-3": 30,
-            "daegyeong": 7,
+            "daegyeong": 8,
             "gwangju-1": 20, "daejeon-1": 22
         ]
 
@@ -89,7 +89,7 @@ struct CatalogTests {
         #expect(catalog.lines(in: capital).count == 20)
         #expect(!catalog.regions.contains { $0.id == "seoul" || $0.id == "incheon" })
         #expect(catalog.sources.count >= 15)
-        #expect(catalog.dataAsOf == "2026-08-22")
+        #expect(catalog.dataAsOf == "2026-10-10")
     }
 
     @Test func bundledCatalogIncludesKorailMetropolitanCoverage() throws {
@@ -208,7 +208,7 @@ struct CatalogTests {
 
     @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.challengePoolVersion == "2026.08.4")
+        #expect(catalog.challengePoolVersion == "2026.10.1")
 
         let line7 = try #require(catalog.stationByID["s7-028"])
         #expect(line7.name == "이수")
@@ -221,5 +221,48 @@ struct CatalogTests {
         for answer in ["총신대입구", "총신대입구(이수)", "이수"] {
             #expect(AnswerMatcher.matches(answer, station: line4))
         }
+    }
+
+    @Test func daegyeongLineIncludesBuksamBetweenSagokAndWaegwan() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let line = try #require(catalog.lineByID["daegyeong"])
+        let pattern = try #require(catalog.patterns(for: line).first)
+        let names = pattern.stationIDs.compactMap { catalog.stationByID[$0]?.name }
+        #expect(names == ["구미", "사곡", "북삼", "왜관", "서대구", "대구", "동대구", "경산"])
+        // 기존 역 ID는 유지하고 새 역만 새 ID를 받는다.
+        #expect(pattern.stationIDs == ["dk-001", "dk-002", "dk-008", "dk-003", "dk-004", "dk-005", "dk-006", "dk-007"])
+    }
+
+    @Test func renamedStationsKeepIDsAndAcceptOldAndNewNames() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let cases: [(id: String, name: String, fullName: String?, answers: [String])] = [
+            ("s7-020", "자양", "자양(뚝섬한강공원)", ["자양", "자양역", "자양(뚝섬한강공원)", "뚝섬유원지", "뚝섬유원지역"]),
+            ("s4-004", "불암산", nil, ["불암산", "불암산역", "당고개", "당고개역"]),
+            ("s4-049", "능길", nil, ["능길", "신길온천"]),
+            ("sb-048", "능길", nil, ["능길", "신길온천"]),
+            ("b4-012", "윗반송", nil, ["윗반송", "동부산대학"]),
+            ("d2-023", "수성알파시티", "수성알파시티(삼성라이온즈파크)", ["수성알파시티", "대공원"]),
+            ("b2-031", "구남", nil, ["구남"])
+        ]
+        for item in cases {
+            let station = try #require(catalog.stationByID[item.id])
+            #expect(station.name == item.name)
+            #expect(station.fullName == item.fullName)
+            for answer in item.answers {
+                #expect(AnswerMatcher.matches(answer, station: station), "\(item.id): \(answer)")
+            }
+        }
+        #expect(!AnswerMatcher.matches("구포", station: try #require(catalog.stationByID["b2-031"])))
+    }
+
+    @Test func busanLine2RunsModeokMoraGunamInOrder() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let line = try #require(catalog.lineByID["busan-2"])
+        let ids = try #require(catalog.patterns(for: line).first).stationIDs
+        let names = ids.compactMap { catalog.stationByID[$0]?.name }
+        let start = try #require(names.firstIndex(of: "사상"))
+        #expect(Array(names[start...(start + 6)]) == ["사상", "덕포", "모덕", "모라", "구남", "구명", "덕천"])
+        #expect(catalog.stationByID["b2-029"]?.name == "모라")
+        #expect(catalog.stationByID["b2-030"]?.name == "모덕")
     }
 }
