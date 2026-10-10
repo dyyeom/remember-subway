@@ -6,6 +6,7 @@ struct SinglePlayerChallengeHomeView: View {
     @EnvironmentObject private var catalogStore: TransitCatalogStore
     @EnvironmentObject private var gameCenter: GameCenterService
     @Query(sort: \SinglePlayerBestRecord.updatedAt, order: .reverse) private var bestRecords: [SinglePlayerBestRecord]
+    @Query private var settings: [AppSettingsRecord]
     @Binding var showSettings: Bool
     @Binding var showStats: Bool
     @State private var selectedRegionID: String?
@@ -17,8 +18,7 @@ struct SinglePlayerChallengeHomeView: View {
                 SubwayHomeHeader(
                     symbol: "trophy.fill",
                     title: AppLocalization.text("single.home.title"),
-                    message: scoreDescription,
-                    accent: SubwayTheme.action
+                    message: scoreDescription
                 )
                 VStack(spacing: 0) {
                     HStack {
@@ -55,12 +55,8 @@ struct SinglePlayerChallengeHomeView: View {
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 6)
-                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                        .stroke(SubwayTheme.border, lineWidth: 1)
-                }
-                SubwayPanel(accent: SubwayTheme.border) {
+                .subwayPanelBackground()
+                SubwayPanel(accented: true) {
                     VStack(spacing: 12) {
                     LabeledContent(
                         AppLocalization.text("single.myBestScore"),
@@ -85,13 +81,13 @@ struct SinglePlayerChallengeHomeView: View {
                     } label: {
                         Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: true))
                 }
                 if gameCenter.isAuthenticated {
                     Button(AppLocalization.format("single.ranking.format", challengeName), systemImage: "list.number") {
                         gameCenter.showLeaderboard(id: leaderboardID)
                     }
-                        .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                        .buttonStyle(SubwayActionButtonStyle(prominent: false))
                 }
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
@@ -106,6 +102,8 @@ struct SinglePlayerChallengeHomeView: View {
                 showSettings: $showSettings,
             )
         }
+        // 노선(또는 전체 노선)을 고르는 즉시 화면 전체 강조색이 바뀐다.
+        .animatedSubwayAccent(SubwayAccent(line: selectedLine), hapticsEnabled: settings.first?.hapticsEnabled ?? true)
         .task {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
@@ -298,7 +296,7 @@ struct SinglePlayerChallengePlayView: View {
         .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
         // 준비·플레이·결과 내내 하단 탭 바를 숨겨 게임 화면에 집중하게 한다. 홈으로 돌아가면 다시 보인다.
         .toolbarVisibility(.hidden, for: .tabBar)
-        .tint(currentLine?.color ?? .accentColor)
+        .subwayAccent(playAccent)
         // 시스템 뒤로 버튼과 엣지 스와이프를 막아 진행 중 이탈은 `중단` 확인 팝업으로만 하게 한다.
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -351,6 +349,11 @@ struct SinglePlayerChallengePlayView: View {
         session.current.flatMap { catalog.lineByID[$0.lineID] }
     }
 
+    /// 현재 문제 노선 색. 문제가 없을 때는 도전 노선(전체 노선이면 딥 틸)으로 대신한다.
+    private var playAccent: SubwayAccent {
+        SubwayAccent(line: currentLine ?? challengeLine)
+    }
+
     private var layout: GamePlayLayoutMetrics {
         keyboardPresented ? .keyboardPresented : .regular
     }
@@ -363,7 +366,7 @@ struct SinglePlayerChallengePlayView: View {
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                    .stroke(focused ? (currentLine?.color ?? .accentColor) : SubwayTheme.border, lineWidth: focused ? 2 : 1)
+                    .stroke(focused ? playAccent.color : SubwayTheme.border, lineWidth: focused ? 2 : 1)
             }
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
@@ -376,7 +379,7 @@ struct SinglePlayerChallengePlayView: View {
 
     private var actionBar: some View {
         GameGlassActionBar(
-            color: currentLine?.color ?? .accentColor,
+            color: playAccent.color,
             hintTitle: AppLocalization.text("game.initialHint"),
             hintText: session.hintVisible ? session.hint : nil,
             hintDisabled: session.hintVisible || session.isFinished || session.isRevealingIncorrectAnswer || session.isPaused,
@@ -415,13 +418,13 @@ struct SinglePlayerChallengePlayView: View {
                         .foregroundStyle(
                             isStarting
                                 ? Color.secondary
-                                : (currentLine?.colorForeground ?? .black)
+                                : playAccent.foreground
                         )
                         .frame(maxWidth: .infinity, minHeight: 56)
                         .background(
                             isStarting
                                 ? Color.gray.opacity(0.28)
-                                : (currentLine?.color ?? SubwayTheme.action),
+                                : playAccent.color,
                             in: Capsule()
                         )
                         .contentShape(Capsule())
@@ -437,7 +440,7 @@ struct SinglePlayerChallengePlayView: View {
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                    .stroke(currentLine?.color ?? SubwayTheme.action, lineWidth: 2)
+                    .stroke(playAccent.color, lineWidth: 2)
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
         }
@@ -454,7 +457,7 @@ struct SinglePlayerChallengePlayView: View {
             VStack(spacing: 16) {
                 Image(systemName: "rectangle.portrait.and.arrow.right")
                     .font(.system(size: 32, weight: .semibold))
-                    .foregroundStyle(currentLine?.color ?? SubwayTheme.action)
+                    .foregroundStyle(playAccent.emphasis)
                     .accessibilityHidden(true)
 
                 Text(AppLocalization.text("single.stopConfirmation.title"))
@@ -488,7 +491,7 @@ struct SinglePlayerChallengePlayView: View {
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                    .stroke(currentLine?.color ?? SubwayTheme.action, lineWidth: 2)
+                    .stroke(playAccent.color, lineWidth: 2)
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
             .accessibilityElement(children: .contain)
@@ -571,7 +574,7 @@ struct SinglePlayerChallengePlayView: View {
                 submittedQuestion?.target.name ?? AppLocalization.text("station.nameFallback")
             )
             feedbackKind = .correct
-            feedbackColor = submittedLine?.color ?? .accentColor
+            feedbackColor = submittedLine?.color ?? playAccent.color
             answer = ""
             impact(.success)
             startQuestionTimer()
@@ -739,9 +742,9 @@ struct SinglePlayerChallengePlayView: View {
                 Text(resultStatus.message)
                     .font(.callout).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 Button(AppLocalization.text("single.tryAgain"), systemImage: "arrow.clockwise") { restart() }
-                    .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: true))
+                    .buttonStyle(SubwayActionButtonStyle(color: playAccent.color, prominent: true))
                 Button(AppLocalization.text("common.finish"), systemImage: "checkmark") { dismiss() }
-                    .buttonStyle(SubwayActionButtonStyle(color: currentLine?.color ?? SubwayTheme.action, prominent: false))
+                    .buttonStyle(SubwayActionButtonStyle(color: playAccent.color, prominent: false))
             }
             .padding(28)
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))

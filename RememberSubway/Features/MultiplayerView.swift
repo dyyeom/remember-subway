@@ -25,6 +25,10 @@ struct MultiplayerContainerView: View {
     ) {
         self.catalog = catalog
         _coordinator = StateObject(wrappedValue: MatchCoordinator(catalog: catalog))
+        // 첫 화면부터 기본 지역·노선의 강조색으로 그려 탭을 열 때 색 전환·햅틱이 생기지 않게 한다.
+        let firstRegion = catalog.regions.min { $0.sortOrder < $1.sortOrder }
+        _selectedRegionID = State(initialValue: firstRegion?.id)
+        _selectedLineID = State(initialValue: firstRegion.flatMap { catalog.lines(in: $0).first?.id })
         _showSettings = showSettings
         _showStats = showStats
     }
@@ -58,6 +62,22 @@ struct MultiplayerContainerView: View {
                 coordinator.join(room: room, code: roomCodeEntry)
             }
         }
+        // 홈에서는 선택한 노선, 로비·경기·결과에서는 방 설정 노선 색으로 화면 전체 강조색을 맞춘다.
+        .animatedSubwayAccent(
+            screenAccent,
+            hapticsEnabled: (settings.first?.hapticsEnabled ?? true) && coordinator.screenState == .home
+        )
+    }
+
+    private var screenAccent: SubwayAccent {
+        switch coordinator.screenState {
+        case .home: SubwayAccent(line: selectedLine)
+        default: SubwayAccent(line: configuredLine ?? selectedLine)
+        }
+    }
+
+    private var configuredLine: Line? {
+        coordinator.configuration.flatMap { catalog.lineByID[$0.lineID] }
     }
 
     private var isMatchInProgress: Bool {
@@ -105,8 +125,7 @@ struct MultiplayerContainerView: View {
                 SubwayHomeHeader(
                     symbol: "person.2.fill",
                     title: AppLocalization.text("multiplayer.home.title"),
-                    message: AppLocalization.text("multiplayer.simultaneousMatch"),
-                    accent: selectedLine?.color ?? SubwayTheme.action
+                    message: AppLocalization.text("multiplayer.simultaneousMatch")
                 )
 
                 VStack(spacing: 0) {
@@ -145,13 +164,9 @@ struct MultiplayerContainerView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 4)
-                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                        .stroke(selectedLine?.color ?? SubwayTheme.border, lineWidth: selectedLine == nil ? 1 : 2)
-                }
+                .subwayPanelBackground()
 
-                SubwayPanel(accent: selectedLine?.color ?? SubwayTheme.border) {
+                SubwayPanel(accented: true) {
                     VStack(alignment: .leading, spacing: 12) {
                         Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
                             .font(.headline)
@@ -174,7 +189,7 @@ struct MultiplayerContainerView: View {
                         Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
                             .multilineTextAlignment(.center)
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: true, minHeight: SubwayTheme.controlHeight))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: true, minHeight: SubwayTheme.controlHeight))
                     .disabled(!canEnterMultiplayer || selectedLine == nil)
 
                     Button {
@@ -183,7 +198,7 @@ struct MultiplayerContainerView: View {
                         Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
                             .multilineTextAlignment(.center)
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: selectedLine?.color ?? SubwayTheme.action, prominent: false, minHeight: SubwayTheme.controlHeight))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: false, minHeight: SubwayTheme.controlHeight))
                     .disabled(!canEnterMultiplayer)
                 }
                 .controlSize(.large)
@@ -213,11 +228,7 @@ struct MultiplayerContainerView: View {
                     }
                     .padding(24)
                     .frame(maxWidth: .infinity)
-                    .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                            .stroke(SubwayTheme.border, lineWidth: 1)
-                    }
+                    .subwayPanelBackground()
                 }
 
                 if let configuration = coordinator.configuration,
@@ -250,11 +261,7 @@ struct MultiplayerContainerView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 4)
-                .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                        .stroke(SubwayTheme.border, lineWidth: 1)
-                }
+                .subwayPanelBackground()
 
                 if coordinator.isHost {
                     Button {
@@ -262,7 +269,7 @@ struct MultiplayerContainerView: View {
                     } label: {
                         Label(AppLocalization.text("common.startGame"), systemImage: "play.fill")
                     }
-                    .buttonStyle(SubwayActionButtonStyle(color: coordinator.configuration.flatMap { catalog.lineByID[$0.lineID]?.color } ?? SubwayTheme.action, prominent: true))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: true))
                     .disabled(!coordinator.canStart)
                 } else {
                     Label(AppLocalization.text("multiplayer.waitingForHost"), systemImage: "hourglass")
@@ -297,9 +304,9 @@ struct MultiplayerContainerView: View {
                     guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
                     UIApplication.shared.open(url)
                 }
-                .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
+                .buttonStyle(SubwayActionButtonStyle(prominent: true))
                 Button(AppLocalization.text("multiplayer.backHome")) { coordinator.leave() }
-                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: false))
             }
         }
     }
@@ -422,7 +429,7 @@ private struct RoomBrowserView: View {
         .background(SubwayTheme.background.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Button(AppLocalization.text("multiplayer.backHome"), systemImage: "chevron.backward", action: exit)
-                .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                .buttonStyle(SubwayActionButtonStyle(prominent: false))
                 .controlSize(.large)
                 .padding(.horizontal, AppLayout.pageHorizontal)
                 .padding(.vertical, 12)
@@ -453,7 +460,7 @@ private struct JoinCodeView: View {
                     }
                     .onChange(of: code) { _, value in code = String(value.filter(\.isNumber).prefix(4)) }
                 Button(AppLocalization.text("multiplayer.join"), action: join)
-                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: true))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: true))
                     .controlSize(.large)
                     .disabled(code.count != 4)
             }
@@ -642,6 +649,7 @@ private struct RankingSheet: View {
 
 private struct MultiplayerResultView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.subwayAccent) private var accent
     @ObservedObject var coordinator: MatchCoordinator
     let catalog: TransitCatalog
 
@@ -657,7 +665,7 @@ private struct MultiplayerResultView: View {
                     .font(.largeTitle.bold())
                 if let player = coordinator.localPlayer {
                     Text(AppLocalization.format("stats.rankAndScore.format", player.rank, player.score)).font(.title2.bold().monospacedDigit())
-                SubwayPanel(accent: resultLine?.color ?? SubwayTheme.border) {
+                SubwayPanel(accented: true) {
                     VStack(spacing: 10) {
                         LabeledContent(AppLocalization.text("game.correctAnswers"), value: AppLocalization.format("count.items.format", player.correctAnswers))
                         LabeledContent(AppLocalization.text("game.hints"), value: AppLocalization.format("count.times.format", player.hintsUsed))
@@ -690,11 +698,11 @@ private struct MultiplayerResultView: View {
                         ? AppLocalization.text("multiplayer.rematch.sameRoom")
                         : AppLocalization.text("multiplayer.rematch.request"), systemImage: "arrow.clockwise")
                 }
-                .buttonStyle(SubwayActionButtonStyle(color: resultLine?.color ?? SubwayTheme.action, prominent: true))
+                .buttonStyle(SubwayActionButtonStyle(prominent: true))
                 .disabled(coordinator.rematchRequested && !coordinator.isHost)
 
                 Button(AppLocalization.text("common.leave")) { coordinator.leave() }
-                    .buttonStyle(SubwayActionButtonStyle(color: SubwayTheme.action, prominent: false))
+                    .buttonStyle(SubwayActionButtonStyle(prominent: false))
             }
             .padding(24)
         }
@@ -703,12 +711,10 @@ private struct MultiplayerResultView: View {
         // 폭죽은 불투명 배경에 가려지지 않도록 콘텐츠 위에 겹치되, 터치와 VoiceOver에는 관여하지 않는다.
         .overlay {
             if coordinator.localPlayer?.rank == 1 {
-                CelebrationFireworksView(color: resultLine?.color ?? .accentColor, reduceMotion: reduceMotion)
+                CelebrationFireworksView(color: accent.color, reduceMotion: reduceMotion)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
         }
     }
-
-    private var resultLine: Line? { coordinator.configuration.flatMap { catalog.lineByID[$0.lineID] } }
 }

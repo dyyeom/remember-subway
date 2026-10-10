@@ -11,6 +11,9 @@ struct RootTabView: View {
     @State private var showSettings = false
     @State private var showStats = false
     @State private var showStorageNotice: Bool
+    @State private var selectedTab = RootTab.singlePlayer
+    /// 각 탭 홈이 올려 보낸 현재 강조색. 탭 바 tint가 선택된 탭의 강조색을 따라간다.
+    @State private var tabAccents: [RootTab: SubwayAccent] = [:]
     /// 영구 저장소를 열지 못해 인메모리 저장소로 실행 중인지 여부.
     let isStorageVolatile: Bool
 
@@ -23,29 +26,36 @@ struct RootTabView: View {
         Group {
             if catalogStore.isLoading {
                 ProgressView()
-                    .tint(SubwayTheme.action)
+                    .tint(SubwayTheme.allLines)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(SubwayTheme.background.ignoresSafeArea())
             } else if let error = catalogStore.loadingError {
                 EmptyStateView(title: AppLocalization.text("catalog.error.open.title"), message: error, symbol: "exclamationmark.triangle")
             } else {
-                TabView {
-                    Tab(AppLocalization.text("tab.singlePlayer"), systemImage: "person.fill") {
+                TabView(selection: $selectedTab) {
+                    Tab(AppLocalization.text("tab.singlePlayer"), systemImage: "person.fill", value: RootTab.singlePlayer) {
                         NavigationStack {
                             SinglePlayerChallengeHomeView(
                                 showSettings: $showSettings,
                                 showStats: $showStats,
                             )
                         }
+                        .onPreferenceChange(SubwayTabAccentPreferenceKey.self) { accent in
+                            if let accent { tabAccents[.singlePlayer] = accent }
+                        }
                     }
-                    Tab(AppLocalization.text("tab.multiplayer"), systemImage: "person.3.fill") {
+                    Tab(AppLocalization.text("tab.multiplayer"), systemImage: "person.3.fill", value: RootTab.multiplayer) {
                         MultiplayerContainerView(
                             catalog: catalogStore.catalog,
                             showSettings: $showSettings,
                             showStats: $showStats,
                         )
+                        .onPreferenceChange(SubwayTabAccentPreferenceKey.self) { accent in
+                            if let accent { tabAccents[.multiplayer] = accent }
+                        }
                     }
                 }
+                .tint((tabAccents[selectedTab] ?? .allLines).emphasis)
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
@@ -88,6 +98,11 @@ struct RootTabView: View {
         }
         try? modelContext.save()
     }
+}
+
+private enum RootTab: Hashable {
+    case singlePlayer
+    case multiplayer
 }
 
 /// 기록이 저장되지 않는 상태를 알리는 비차단 안내. 닫으면 이번 실행 동안 다시 표시하지 않는다.

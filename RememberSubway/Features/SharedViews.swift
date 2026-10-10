@@ -20,10 +20,96 @@ enum SubwayTheme {
     static let border = Color("SubwayBorder")
     static let action = Color("SubwayAction")
     static let danger = Color("SubwayDanger")
+    /// '전체 노선'을 나타내는 강조색(딥 틸 #124A50). 이 색 위 글자는 흰색.
+    static let allLines = Color("SubwayAllLines")
+}
+
+/// 화면 전체 강조색. 선택한 노선(없으면 '전체 노선' 딥 틸)에서 한 번만 계산해 환경값으로 내려보낸다.
+struct SubwayAccent: Equatable {
+    /// 채움·테두리에 쓰는 원래 색.
+    let color: Color
+    /// `color`로 채운 면 위의 글자·아이콘 색.
+    let foreground: Color
+    /// 흰 표면 위 글자·아이콘·시스템 tint용 색. 밝은 노선은 읽히도록 어둡게 낮춘다.
+    let emphasis: Color
+
+    static let allLines = SubwayAccent(color: SubwayTheme.allLines, foreground: .white, emphasis: SubwayTheme.allLines)
+
+    init(color: Color, foreground: Color, emphasis: Color) {
+        self.color = color
+        self.foreground = foreground
+        self.emphasis = emphasis
+    }
+
+    /// 특정 노선이면 그 노선 색, `nil`(전체 노선·미선택)이면 딥 틸.
+    init(line: Line?) {
+        guard let line else {
+            self = .allLines
+            return
+        }
+        let isBright = line.colorForeground == .black
+        self.init(
+            color: line.color,
+            foreground: line.colorForeground,
+            emphasis: isBright ? line.color.scaledBrightness(0.55) : line.color
+        )
+    }
+}
+
+extension EnvironmentValues {
+    @Entry var subwayAccent: SubwayAccent = .allLines
+}
+
+extension View {
+    /// 강조색을 하위 컴포넌트(환경값)와 시스템 컨트롤(`tint`)에 함께 적용한다.
+    func subwayAccent(_ accent: SubwayAccent) -> some View {
+        environment(\.subwayAccent, accent)
+            .tint(accent.emphasis)
+    }
+
+    /// 이 뷰를 화면 강조색 테두리의 `SubwayPanel`로 감싼다.
+    func subwayPanelBackground() -> some View {
+        SubwayPanel(accented: true) { self }
+    }
+
+    /// 선택이 바뀔 때 강조색을 부드럽게 전환하고 가벼운 햅틱을 준다. Reduce Motion이면 즉시 바꾼다.
+    func animatedSubwayAccent(_ accent: SubwayAccent, hapticsEnabled: Bool) -> some View {
+        modifier(AnimatedSubwayAccentModifier(target: accent, hapticsEnabled: hapticsEnabled))
+    }
+}
+
+/// 탭 바 tint가 각 탭의 현재 강조색을 따라가도록 홈 화면이 올려 보내는 값.
+struct SubwayTabAccentPreferenceKey: PreferenceKey {
+    static let defaultValue: SubwayAccent? = nil
+    static func reduce(value: inout SubwayAccent?, nextValue: () -> SubwayAccent?) {
+        value = value ?? nextValue()
+    }
+}
+
+private struct AnimatedSubwayAccentModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var displayed: SubwayAccent?
+    let target: SubwayAccent
+    let hapticsEnabled: Bool
+
+    func body(content: Content) -> some View {
+        let current = displayed ?? target
+        content
+            .subwayAccent(current)
+            .preference(key: SubwayTabAccentPreferenceKey.self, value: current)
+            .onAppear { displayed = target }
+            .onChange(of: target) { _, newValue in
+                withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
+                    displayed = newValue
+                }
+            }
+            .sensoryFeedback(.selection, trigger: target) { _, _ in hapticsEnabled }
+    }
 }
 
 struct SubwayPanel<Content: View>: View {
-    let accent: Color
+    @Environment(\.subwayAccent) private var subwayAccent
+    private let accent: Color?
     @ViewBuilder let content: () -> Content
 
     init(accent: Color = SubwayTheme.border, @ViewBuilder content: @escaping () -> Content) {
@@ -31,12 +117,19 @@ struct SubwayPanel<Content: View>: View {
         self.content = content
     }
 
+    /// 화면 강조색(`subwayAccent`) 테두리를 쓰는 패널.
+    init(accented: Bool, @ViewBuilder content: @escaping () -> Content) {
+        self.accent = accented ? nil : SubwayTheme.border
+        self.content = content
+    }
+
     var body: some View {
+        let stroke = accent ?? subwayAccent.color
         content()
             .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous))
             .overlay {
                 RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                    .stroke(accent.opacity(0.9), lineWidth: accent == SubwayTheme.border ? 1 : 2)
+                    .stroke(stroke.opacity(0.9), lineWidth: stroke == SubwayTheme.border ? 1 : 2)
             }
     }
 }
@@ -44,58 +137,51 @@ struct SubwayPanel<Content: View>: View {
 /// Full-width action button. `minHeight` is the minimum height of the whole button,
 /// padding included, so callers should not add their own height or width frames.
 struct SubwayActionButtonStyle: ButtonStyle {
-    let color: Color
+    /// `nil`이면 화면 강조색(`subwayAccent`)을 따른다.
+    var color: Color? = nil
     let prominent: Bool
     var minHeight: CGFloat = 52
     /// false면 비활성이어도 흐리게 만들지 않는다. 공개된 초성처럼 읽혀야 하는 값에 쓴다.
     var dimsWhenDisabled = true
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.subwayAccent) private var subwayAccent
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        let fill = color ?? subwayAccent.color
+        let fillForeground = color.map(\.subwayForeground) ?? subwayAccent.foreground
+        return configuration.label
             .font(.headline)
-            .foregroundStyle(prominent ? colorForeground : SubwayTheme.ink)
+            .foregroundStyle(prominent ? fillForeground : SubwayTheme.ink)
             .padding(.horizontal, 18)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, minHeight: minHeight)
             .background(
-                prominent ? color : SubwayTheme.stationSurface,
+                prominent ? fill : SubwayTheme.stationSurface,
                 in: RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
             )
             .overlay {
                 RoundedRectangle(cornerRadius: SubwayTheme.controlCornerRadius, style: .continuous)
-                    .stroke(prominent ? color : SubwayTheme.border, lineWidth: prominent ? 2 : 1)
+                    .stroke(fill, lineWidth: prominent ? 2 : 1.5)
             }
             .opacity(isEnabled ? (configuration.isPressed ? 0.78 : 1) : (dimsWhenDisabled ? 0.42 : 1))
             .contentShape(Rectangle())
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
-
-    private var colorForeground: Color {
-        let uiColor = UIColor(color)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
-        return luminance > 0.56 ? .black : .white
-    }
 }
 
 struct SubwayHomeHeader: View {
+    @Environment(\.subwayAccent) private var accent
     let symbol: String
     let title: String
     let message: String
-    let accent: Color
 
     var body: some View {
         HStack(alignment: .center, spacing: 14) {
             Image(systemName: symbol)
                 .font(.system(size: 28, weight: .semibold))
-                .foregroundStyle(accent)
+                .foregroundStyle(accent.emphasis)
                 .frame(width: 52, height: 52)
-                .background(accent.opacity(0.14), in: Circle())
+                .background(accent.color.opacity(0.14), in: Circle())
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -115,7 +201,7 @@ struct SubwayHomeHeader: View {
         .background(SubwayTheme.stationSurface, in: RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: SubwayTheme.stationCornerRadius, style: .continuous)
-                .stroke(accent, lineWidth: 2)
+                .stroke(accent.color, lineWidth: 2)
         }
     }
 }
@@ -164,6 +250,29 @@ extension Color {
         }
         self.init(.sRGB, red: Double(red) / 255, green: Double(green) / 255, blue: Double(blue) / 255, opacity: 1)
     }
+
+    /// 휘도 0.56 기준으로 이 색 위에 올릴 글자색(흑/백).
+    var subwayForeground: Color {
+        let resolved = resolve(in: EnvironmentValues())
+        return Self.subwayForeground(red: Double(resolved.red), green: Double(resolved.green), blue: Double(resolved.blue))
+    }
+
+    static func subwayForeground(red: Double, green: Double, blue: Double) -> Color {
+        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+        return luminance > 0.56 ? .black : .white
+    }
+
+    /// RGB 채널을 같은 비율로 낮춰 색상은 유지하고 밝기만 줄인다.
+    func scaledBrightness(_ factor: Double) -> Color {
+        let resolved = resolve(in: EnvironmentValues())
+        return Color(
+            .sRGB,
+            red: Double(resolved.red) * factor,
+            green: Double(resolved.green) * factor,
+            blue: Double(resolved.blue) * factor,
+            opacity: Double(resolved.opacity)
+        )
+    }
 }
 
 extension Line {
@@ -175,8 +284,7 @@ extension Line {
         let red = Double(value >> 16) / 255
         let green = Double(value >> 8 & 0xFF) / 255
         let blue = Double(value & 0xFF) / 255
-        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
-        return luminance > 0.56 ? .black : .white
+        return Color.subwayForeground(red: red, green: green, blue: blue)
     }
 }
 
