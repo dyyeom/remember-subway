@@ -1,7 +1,7 @@
 # 사이역 제품 요구사항 문서(PRD)
 
 최종 갱신일: 2026-10-05  
-문서 버전: 1.12  
+문서 버전: 1.13  
 구현 기준 브랜치: `main`  
 번들 ID: `com.evolvingark.remembersubway.app`  
 앱 버전: 1.0.0 (빌드 10) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
@@ -122,6 +122,7 @@
 - 앱은 라이트 모드로 고정하며(`UIUserInterfaceStyle=Light`) 세로 방향만 지원한다.
 - 시스템 재질과 리퀴드 글래스는 사용하지 않는다. 밝은 배경, 흰 표지판 표면, 테두리, 노선색 강조를 쓰는 지하철 안내판 테마로 통일한다.
 - 시각 토큰은 `SubwayTheme`·`AppLayout`과 에셋 색상(Background, StationSurface, Ink, Muted, Border, Action, Danger)으로 관리한다. 페이지 여백은 좌우 24pt·상하 20pt, 라운드는 표지판·팝업 28pt·컨트롤 20pt, 컨트롤 높이는 56pt를 기준으로 한다. 노선색은 `Line.colorHex`를 사용한다.
+- 화면 강조색은 선택한 노선 색을 따른다. 싱글·멀티 홈에서 노선을 바꾸면 헤더·선택 카드·메뉴 값·시작 버튼·정보 패널·툴바·탭 바 강조색이 0.3초 동안 전환되고(Reduce Motion 시 즉시) 선택 햅틱을 준다. 싱글 `전체 노선`은 어떤 노선 색과도 겹치지 않는 딥 틸 `#124A50`을 쓴다. 밝은 노선 색은 흰 배경 위 글자·아이콘에 쓸 때 어둡게 보정한다.
 - 게임 화면은 노선색 캡슐 띠 위에 이전·다음 역을 표시하고 가운데 `?` 패널로 현재 역을 묻는 인접역 표지판을 사용한다.
 - 노선은 노선색 원형 배지(약칭)와 노선명을 함께 쓰는 식별 라벨로 표시한다. 배지 글자색은 노선색 휘도에 따라 흑·백 중 선택한다.
 - 주요 버튼은 공통 버튼 스타일을 사용한다. 최소 높이 52pt, 강조형은 노선색 또는 Action색 채움, 보조형은 흰 바탕과 테두리를 사용한다.
@@ -130,7 +131,7 @@
 
 ## 5. 데이터와 저장
 
-정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.08.official.5`, `challengePoolVersion` `2026.08.4`, 기준일 2026-08-22이며 5개 지역, 13개 운영기관, 32개 노선, 40개 운행 계통, 1,051개 역, 15개 출처를 포함한다.
+정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.10.official.1`, `challengePoolVersion` `2026.10.1`, 기준일 2026-10-10이며 5개 지역, 13개 운영기관, 32개 노선, 40개 운행 계통, 1,052개 역, 15개 출처를 포함한다.
 
 - 수도권: 서울 1~9호선, 인천 1~2호선, 수인분당선, 경의중앙선, 경춘선, 경강선, 서해선, 신분당선, 공항철도, 우이신설선, 신림선 등
 - 부산: 부산 1~4호선, 부산김해경전철, 동해선
@@ -214,3 +215,4 @@ SwiftData 스키마는 `SinglePlayerBestRecord`, `AppSettingsRecord`, `PendingAc
 - 1.10 (2026-10-06): 7호선 `총신대입구`를 공식 역명 `이수`로 바꾸고 `총신대입구`를 별칭으로, 4호선 `총신대입구(이수)`에 `이수` 별칭을 추가했다. `contentVersion`을 `2026.08.official.5`로 올렸으며 `challengePoolVersion`은 유지해 최고 기록·문제 순서·리더보드에 영향이 없다. 이전 데이터 버전 앱과는 근처 대전 입장이 거절된다. 정답 인정 테스트를 추가했다.
 - 1.11 (2026-10-06): 멀티 버전 불일치 안내를 양쪽 업데이트 문구로 바꾸고, 방장이 거절한 연결을 즉시 닫으며 참가자는 거절 시 재접속하지 않도록 했다. `MatchCoordinator`에 서비스 주입 지점을 두고 버전 불일치 테스트 6개를 추가했다(총 42개). 빌드 8.
 - 1.12 (2026-10-06): 팀 이름 변경(EvolvingArk)에 맞춰 번들 ID를 `com.evolvingark.remembersubway.app`으로, Game Center 리더보드 ID 접두어를 `com.evolvingark.remembersubway.single`로 바꿨다. App Store Connect에 새 앱으로 등록하며, 이전 앱(`io.evolveark…`)의 기기 기록·Game Center 랭킹은 이어지지 않는다.
+- 1.13 (2026-10-10): 국가철도공단·운영기관 공식 자료로 전 노선 역명·순서를 전수 대조해 반영했다(`Tools/official_compare/`). 대경선 북삼역 추가(7→8역), 역명 변경 반영(뚝섬유원지→자양(뚝섬한강공원), 당고개→불암산, 신길온천→능길, 동부산대학→윗반송, 대공원→수성알파시티(삼성라이온즈파크); 옛 이름은 정답 별칭), 부산 2호선 구포→구남 오기와 순서 수정, 공식 부역명 추가(석남(거북시장), 거제(법원·검찰청)). 역 ID는 유지. `contentVersion` 2026.10.official.1, `challengePoolVersion` 2026.10.1(기기 최고 기록은 새 기준으로 다시 시작, Game Center 랭킹은 유지). 선택한 노선 색으로 화면 강조색이 바뀌도록 했고(0.3초 전환, Reduce Motion 시 즉시, 선택 햅틱), 전체 노선은 딥 틸 `#124A50`(`SubwayAllLines`)을 쓴다. Action 노랑은 전체 노선 표시에 쓰지 않는다.
