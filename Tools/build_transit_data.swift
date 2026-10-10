@@ -233,9 +233,15 @@ let lineSeeds: [LineSeed] = [
     LineSeed(
         line: Line(id: "gyeongchun", regionID: "capital", operatorID: "korail", name: "경춘선", shortName: "경춘", colorHex: "0C8E72", sortOrder: 16),
         prefix: "gc",
-        patterns: [PatternSeed("청량리 → 춘천", [
-            "청량리|청량리(서울시립대입구)", "회기", "중랑", "상봉|상봉(시외버스터미널)", "망우", "신내", "갈매", "별내", "퇴계원", "사릉", "금곡", "평내호평", "천마산", "마석", "대성리", "청평", "상천", "가평", "굴봉산", "백양리", "강촌", "김유정", "남춘천", "춘천"
-        ])]
+        patterns: [
+            PatternSeed("청량리 → 춘천", [
+                "청량리|청량리(서울시립대입구)", "회기", "중랑", "상봉|상봉(시외버스터미널)", "망우", "신내", "갈매", "별내", "퇴계원", "사릉", "금곡", "평내호평", "천마산", "마석", "대성리", "청평", "상천", "가평", "굴봉산", "백양리", "강촌", "김유정", "남춘천", "춘천"
+            ]),
+            // 광운대 출발 열차는 중간 정차 없이 상봉에서 본선과 합류한다(국가철도공단 경춘선 역정보: 광운대 119, 상봉 K120).
+            PatternSeed("gwangundae", "광운대 → 춘천", kind: "branch", [
+                "광운대", "상봉|상봉(시외버스터미널)", "망우", "신내", "갈매", "별내", "퇴계원", "사릉", "금곡", "평내호평", "천마산", "마석", "대성리", "청평", "상천", "가평", "굴봉산", "백양리", "강촌", "김유정", "남춘천", "춘천"
+            ])
+        ]
     ),
     LineSeed(
         line: Line(id: "gyeonggang", regionID: "capital", operatorID: "korail", name: "경강선", shortName: "경강", colorHex: "003DA5", sortOrder: 17),
@@ -392,7 +398,7 @@ for seed in lineSeeds {
 let catalog = Catalog(
     schemaVersion: 1,
     contentVersion: "2026.10.official.3",
-    challengePoolVersion: "2026.10.1",
+    challengePoolVersion: "2026.10.2",
     dataAsOf: "2026-10-10",
     sources: [
         Source(title: "국가철도공단 전국도시철도역사정보 표준데이터", url: URL(string: "https://www.data.go.kr/data/15013205/standard.do")!),

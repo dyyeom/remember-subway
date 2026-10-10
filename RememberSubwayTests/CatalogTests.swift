@@ -70,7 +70,7 @@ struct CatalogTests {
             "seoul-9": 38, "seoul-ui": 13, "seoul-sillim": 11,
             "incheon-1": 33, "incheon-2": 27,
             "suin-bundang": 63, "gyeongui-jungang": 58,
-            "gyeongchun": 24, "gyeonggang": 12, "seohae": 21,
+            "gyeongchun": 25, "gyeonggang": 12, "seohae": 21,
             "shinbundang": 16, "arex": 14,
             "busan-1": 40, "busan-2": 43, "busan-3": 17, "busan-4": 14,
             "busan-gimhae": 21, "donghae": 23,
@@ -121,7 +121,8 @@ struct CatalogTests {
         let expectedPatternNames: [String: Set<String>] = [
             "seoul-1": ["연천 → 인천", "광운대 → 신창", "영등포 → 광명", "병점 → 서동탄"],
             "seoul-3": ["대화 → 오금"],
-            "seoul-4": ["진접 → 오이도"]
+            "seoul-4": ["진접 → 오이도"],
+            "gyeongchun": ["청량리 → 춘천", "광운대 → 춘천"]
         ]
 
         for (lineID, expectedNames) in expectedPatternNames {
@@ -208,7 +209,7 @@ struct CatalogTests {
 
     @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.challengePoolVersion == "2026.10.1")
+        #expect(catalog.challengePoolVersion == "2026.10.2")
 
         let line7 = try #require(catalog.stationByID["s7-028"])
         #expect(line7.name == "이수")
@@ -231,6 +232,37 @@ struct CatalogTests {
         #expect(names == ["구미", "사곡", "북삼", "왜관", "서대구", "대구", "동대구", "경산"])
         // 기존 역 ID는 유지하고 새 역만 새 ID를 받는다.
         #expect(pattern.stationIDs == ["dk-001", "dk-002", "dk-008", "dk-003", "dk-004", "dk-005", "dk-006", "dk-007"])
+    }
+
+    @Test func gyeongchunLineIncludesGwangundaeBranchJoiningAtSangbong() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let line = try #require(catalog.lineByID["gyeongchun"])
+        let patterns = catalog.patterns(for: line)
+        #expect(patterns.count == 2)
+
+        let main = try #require(patterns.first { $0.id == "gyeongchun-main" })
+        let branch = try #require(patterns.first { $0.id == "gyeongchun-gwangundae" })
+        #expect(branch.kind == .branch)
+        let names = branch.stationIDs.compactMap { catalog.stationByID[$0]?.name }
+        #expect(names.prefix(3) == ["광운대", "상봉", "망우"])
+        #expect(names.last == "춘천")
+        // 상봉부터는 본선과 같은 역 ID를 쓰고, 경춘선 광운대만 새 ID를 받는다.
+        #expect(Array(branch.stationIDs.dropFirst()) == Array(main.stationIDs.drop { catalog.stationByID[$0]?.name != "상봉" }))
+        #expect(branch.stationIDs.first == "gc-025")
+        #expect(catalog.stationByID["s1-023"]?.name == "광운대")
+        #expect(main.stationIDs.prefix(4).compactMap { catalog.stationByID[$0]?.name } == ["청량리", "회기", "중랑", "상봉"])
+
+        // 새 계통에서만 생기는 문제: (없음)–광운대–상봉, 광운대–상봉–망우.
+        let pool = MultiplayerQuestionFactory.pool(catalog: catalog, lineID: "gyeongchun")
+        #expect(pool.count == 26)
+        #expect(pool.contains { $0.previousStationID == nil && $0.targetStationID == "gc-025" && $0.nextStationID == "gc-004" })
+        #expect(pool.contains { $0.previousStationID == "gc-025" && $0.targetStationID == "gc-004" && $0.nextStationID == "gc-005" })
+        // 망우 이후는 본선과 같은 조합이라 중복 제거된다.
+        #expect(pool.filter { $0.routePatternID == "gyeongchun-gwangundae" }.count == 2)
+
+        let single = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: "capital", lineID: "gyeongchun", shuffleSeed: 1)
+        #expect(single.contains { $0.previous == nil && $0.target.id == "gc-025" && $0.next?.id == "gc-004" })
+        #expect(single.contains { $0.previous?.id == "gc-025" && $0.target.id == "gc-004" && $0.next?.id == "gc-005" })
     }
 
     @Test func renamedStationsKeepIDsAndAcceptOldAndNewNames() throws {

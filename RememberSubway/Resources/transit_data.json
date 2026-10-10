@@ -1,5 +1,5 @@
 {
-  "challengePoolVersion" : "2026.10.1",
+  "challengePoolVersion" : "2026.10.2",
   "contentVersion" : "2026.10.official.3",
   "dataAsOf" : "2026-10-10",
   "lines" : [
@@ -1324,6 +1324,36 @@
         "gc-001",
         "gc-002",
         "gc-003",
+        "gc-004",
+        "gc-005",
+        "gc-006",
+        "gc-007",
+        "gc-008",
+        "gc-009",
+        "gc-010",
+        "gc-011",
+        "gc-012",
+        "gc-013",
+        "gc-014",
+        "gc-015",
+        "gc-016",
+        "gc-017",
+        "gc-018",
+        "gc-019",
+        "gc-020",
+        "gc-021",
+        "gc-022",
+        "gc-023",
+        "gc-024"
+      ]
+    },
+    {
+      "id" : "gyeongchun-gwangundae",
+      "kind" : "branch",
+      "lineID" : "gyeongchun",
+      "name" : "광운대 → 춘천",
+      "stationIDs" : [
+        "gc-025",
         "gc-004",
         "gc-005",
         "gc-006",
@@ -6826,6 +6856,13 @@
       ],
       "id" : "gc-024",
       "name" : "춘천"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gc-025",
+      "name" : "광운대"
     },
     {
       "aliases" : [
