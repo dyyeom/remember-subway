@@ -285,6 +285,35 @@ struct CatalogTests {
         #expect(!AnswerMatcher.matches("구포", station: try #require(catalog.stationByID["b2-031"])))
     }
 
+    @Test func lineChipNamesFollowShortNameRules() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let chipNames = Dictionary(uniqueKeysWithValues: catalog.lines.map { ($0.id, $0.chipName) })
+        #expect(chipNames["seoul-2"] == "2호선")
+        #expect(chipNames["incheon-1"] == "인천1")
+        #expect(chipNames["incheon-2"] == "인천2")
+        #expect(chipNames["suin-bundang"] == "수인분당")
+        #expect(chipNames["gyeongui-jungang"] == "경의중앙")
+        #expect(chipNames["seoul-ui"] == "우이신설")
+        #expect(chipNames["seoul-sillim"] == "신림")
+        #expect(chipNames["arex"] == "공항철도")
+        #expect(chipNames["busan-1"] == "1호선")
+        #expect(chipNames["busan-gimhae"] == "부산김해경전철")
+        #expect(chipNames["donghae"] == "동해")
+        #expect(chipNames["daegu-3"] == "3호선")
+        #expect(chipNames["daegyeong"] == "대경")
+        #expect(chipNames["gwangju-1"] == "1호선")
+        #expect(chipNames["daejeon-1"] == "1호선")
+        // 공항철도 배지 약칭은 영문 대신 한글 두 글자.
+        #expect(catalog.lineByID["arex"]?.shortName == "공항")
+        // 두 글자 이하 이름은 '선'을 떼지 않는다.
+        #expect(Line.chipName(for: "가선") == "가선")
+        // 같은 지역 안에서 칩 이름이 겹치지 않는다(서울·인천 호선 구분).
+        for region in catalog.regions {
+            let names = catalog.lines(in: region).map(\.chipName)
+            #expect(Set(names).count == names.count, "\(region.id)")
+        }
+    }
+
     @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         #expect(catalog.contentVersion == "2026.10.official.4")

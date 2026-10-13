@@ -67,6 +67,28 @@ struct Line: Codable, Identifiable, Hashable, Sendable {
     let sortOrder: Int
 }
 
+extension Line {
+    /// 노선 칩처럼 좁은 자리에 쓰는 짧은 이름. 전체 이름은 VoiceOver·제목에 그대로 쓴다.
+    var chipName: String { Self.chipName(for: name) }
+
+    /// - "서울 2호선"·"부산 1호선" 같은 '<지역> N호선'은 "N호선"
+    /// - "인천 N호선"은 수도권에서 서울 노선과 구분되도록 "인천N"
+    /// - 그 밖에 '선'으로 끝나는 이름은 끝의 '선'을 뗀다(수인분당선 → 수인분당). 두 글자 이하는 그대로 둔다.
+    static func chipName(for name: String) -> String {
+        let parts = name.split(separator: " ")
+        if parts.count == 2, parts[1].hasSuffix("호선") {
+            let number = parts[1].dropLast(2)
+            if !number.isEmpty, number.allSatisfy(\.isNumber) {
+                return parts[0] == "인천" ? "인천\(number)" : String(parts[1])
+            }
+        }
+        if name.hasSuffix("선"), name.count > 2 {
+            return String(name.dropLast())
+        }
+        return name
+    }
+}
+
 struct RoutePattern: Codable, Identifiable, Hashable, Sendable {
     enum Kind: String, Codable, Sendable { case main, branch, loop }
 
