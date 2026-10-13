@@ -97,6 +97,13 @@ for line, pk in [("seoul-1","15064037"),("seoul-2","15064039"),("seoul-3","15064
                  ("busan-2","15064688"),("busan-3","15064695"),("busan-4","15064700"),("donghae","15064706"),("busan-gimhae","15064713"),
                  ("daegu-1","15068942"),("daegu-2","15068943"),("daegu-3","15068944"),("gwangju-1","15068945"),("daejeon-1","15068947")]:
     add(line, "KRNA 역명 2026-06-30", pk, ALL)
+# 수도권 경전철. 김포골드라인 역명 파일(15064683)은 2026-06-30판 내용이 서해선이라 쓰지 않고 extra.json 운영사 노선안내로 대조한다.
+add("uijeongbu-lrt", "KRNA 의정부경전철 역정보", "15041030", eq("선명", "의정부"), order="역번호")
+add("uijeongbu-lrt", "KRNA 의정부경전철 역간거리", "15081852", eq("선명", "의정부"), order="seq")
+add("uijeongbu-lrt", "KRNA 역명 2026-06-30", "15064659", ALL)
+add("yongin-everline", "KRNA 에버라인 역정보(2025-06)", "15041035", eq("선명", "에버라인"), order="역번호")
+add("yongin-everline", "KRNA 에버라인 역간거리", "15081850", eq("선명", "에버라인"), order="seq")
+add("yongin-everline", "KRNA 역명 2026-06-30", "15064619", ALL)
 add("suin-bundang", "KRNA 분당선 역명 2026-06-30", "15064054", ALL, partial=True)
 add("suin-bundang", "KRNA 수인선 역명 2026-06-30", "15064055", ALL, partial=True)
 add("daejeon-1", "대전교통공사 역명 및 주소", "15083331", ALL, name="한 글", order="역번호")
