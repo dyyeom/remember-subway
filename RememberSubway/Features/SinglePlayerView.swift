@@ -11,6 +11,8 @@ struct SinglePlayerChallengeHomeView: View {
     @Binding var showStats: Bool
     @State private var selectedRegionID: String?
     @State private var selectedLineID: String?
+    /// 첫 실행 노선 칩 코치마크를 이미 닫았는지(노선을 한 번 바꾸거나 ✕). 기기별 1회라 SwiftData 대신 UserDefaults에 둔다.
+    @AppStorage("coachmark.lineChips.dismissed") private var lineChipCoachmarkDismissed = false
 
     var body: some View {
         ScrollView {
@@ -20,41 +22,35 @@ struct SinglePlayerChallengeHomeView: View {
                     title: AppLocalization.text("single.home.title"),
                     message: scoreDescription
                 )
-                VStack(spacing: 0) {
-                    HStack {
-                        Label(AppLocalization.text("single.region.label"), systemImage: "map")
-                            .font(.headline)
-                            .foregroundStyle(SubwayTheme.ink)
-                        Spacer()
-                        Picker(AppLocalization.text("single.region.label"), selection: $selectedRegionID) {
-                            Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
-                            ForEach(regions) { region in
-                                Text(region.name).tag(Optional(region.id))
-                            }
-                        }
-                        .pickerStyle(.menu)
-                    }
-                    .frame(minHeight: 56)
+                VStack(alignment: .leading, spacing: 0) {
+                    Label(AppLocalization.text("single.region.label"), systemImage: "map")
+                        .font(.headline)
+                        .foregroundStyle(SubwayTheme.ink)
+                        .frame(minHeight: 44)
 
-                    Divider().padding(.leading, 36)
+                    RegionSegmentedControl(
+                        title: AppLocalization.text("single.region.label"),
+                        regions: regions,
+                        selection: $selectedRegionID
+                    )
 
-                    HStack {
+                    Divider().padding(.vertical, 12)
+
+                    LineChipPicker(
+                        lines: lines,
+                        selection: $selectedLineID,
+                        includesAllLines: true,
+                        scrollResetKey: selectedRegionID,
+                        showsCoachmark: coachmarkBinding
+                    ) {
                         Label(AppLocalization.text("single.line.label"), systemImage: "tram.fill")
                             .font(.headline)
                             .foregroundStyle(SubwayTheme.ink)
-                        Spacer()
-                        Picker(AppLocalization.text("single.line.label"), selection: $selectedLineID) {
-                            Text(AppLocalization.text("single.allLines")).tag(Optional<String>.none)
-                            ForEach(lines) { line in
-                                Text(line.name).tag(Optional(line.id))
-                            }
-                        }
-                        .pickerStyle(.menu)
                     }
-                    .frame(minHeight: 56)
                 }
-                .padding(.horizontal, 18)
-                .padding(.vertical, 6)
+                .padding(.horizontal, SubwayTheme.selectionCardInset)
+                .padding(.top, 6)
+                .padding(.bottom, 16)
                 .subwayPanelBackground()
                 SubwayPanel(accented: true) {
                     VStack(spacing: 12) {
@@ -108,6 +104,13 @@ struct SinglePlayerChallengeHomeView: View {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
         .onChange(of: selectedRegionID) { _, _ in selectedLineID = nil }
+    }
+
+    private var coachmarkBinding: Binding<Bool> {
+        Binding(
+            get: { !lineChipCoachmarkDismissed },
+            set: { lineChipCoachmarkDismissed = !$0 }
+        )
     }
 
     private var regions: [Region] {

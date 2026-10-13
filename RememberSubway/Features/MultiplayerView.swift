@@ -128,7 +128,7 @@ struct MultiplayerContainerView: View {
                     message: AppLocalization.text("multiplayer.simultaneousMatch")
                 )
 
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     selectionRow(AppLocalization.text("multiplayer.nickname.label"), systemImage: "person.fill") {
                         TextField(AppLocalization.text("multiplayer.nickname.placeholder"), text: $nickname)
                             .multilineTextAlignment(.trailing)
@@ -139,31 +139,25 @@ struct MultiplayerContainerView: View {
                             .onSubmit { nicknameFocused = false }
                             .onChange(of: nickname) { _, value in saveNickname(value) }
                     }
-                    Divider().padding(.leading, 52)
-                    selectionRow(AppLocalization.text("common.region"), systemImage: "map") {
-                        TrailingMenuPicker(
-                            title: AppLocalization.text("common.region"),
-                            selection: $selectedRegionID,
-                            valueText: selectedRegion?.name ?? AppLocalization.text("common.selectRegion")
-                        ) {
-                            Text(AppLocalization.text("common.selectRegion")).tag(Optional<String>.none)
-                            ForEach(regions) { Text($0.name).tag(Optional($0.id)) }
-                        }
-                    }
-                    Divider().padding(.leading, 52)
-                    selectionRow(AppLocalization.text("common.line"), systemImage: "tram.fill") {
-                        TrailingMenuPicker(
-                            title: AppLocalization.text("common.line"),
-                            selection: $selectedLineID,
-                            valueText: selectedLine?.name ?? AppLocalization.text("common.selectLine")
-                        ) {
-                            Text(AppLocalization.text("common.selectLine")).tag(Optional<String>.none)
-                            ForEach(lines) { Text($0.name).tag(Optional($0.id)) }
-                        }
+                    Divider().padding(.leading, 38)
+                    sectionTitle(AppLocalization.text("common.region"), systemImage: "map")
+                    RegionSegmentedControl(
+                        title: AppLocalization.text("common.region"),
+                        regions: regions,
+                        selection: $selectedRegionID
+                    )
+                    Divider().padding(.vertical, 12)
+                    LineChipPicker(
+                        lines: lines,
+                        selection: $selectedLineID,
+                        scrollResetKey: selectedRegionID
+                    ) {
+                        sectionTitle(AppLocalization.text("common.line"), systemImage: "tram.fill")
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 4)
+                .padding(.horizontal, SubwayTheme.selectionCardInset)
+                .padding(.top, 4)
+                .padding(.bottom, 16)
                 .subwayPanelBackground()
 
                 SubwayPanel(accented: true) {
@@ -319,6 +313,16 @@ struct MultiplayerContainerView: View {
             Button(AppLocalization.text("common.cancel"), role: .cancel) { coordinator.leave() }
         }
         .padding()
+    }
+
+    private func sectionTitle(_ title: String, systemImage: String) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: systemImage).foregroundStyle(.secondary).frame(width: 24)
+            Text(title).font(.body.weight(.medium))
+        }
+        .frame(minHeight: 44)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 
     private func selectionRow<Content: View>(_ title: String, systemImage: String, @ViewBuilder content: () -> Content) -> some View {

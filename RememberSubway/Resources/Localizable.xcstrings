@@ -1172,6 +1172,40 @@
         }
       }
     },
+    "home.lineCount.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d lines"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d개 노선"
+          }
+        }
+      }
+    },
+    "home.lineCount.one" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 line"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1개 노선"
+          }
+        }
+      }
+    },
     "legacy.browseSegments" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2719,6 +2753,23 @@
         }
       }
     },
+    "single.allLines.short" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전체"
+          }
+        }
+      }
+    },
     "single.challenge" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2732,6 +2783,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "도전"
+          }
+        }
+      }
+    },
+    "single.coachmark.lineChips" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a line to challenge"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "원하는 노선을 골라 도전해 보세요"
           }
         }
       }
