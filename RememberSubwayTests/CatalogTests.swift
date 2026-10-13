@@ -287,7 +287,7 @@ struct CatalogTests {
 
     @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.contentVersion == "2026.10.official.3")
+        #expect(catalog.contentVersion == "2026.10.official.4")
         // 공공데이터의 '능길'은 실제 시행 전이라 반영하지 않는다. 역 ID는 그대로다.
         for id in ["s4-049", "sb-048"] {
             let station = try #require(catalog.stationByID[id])

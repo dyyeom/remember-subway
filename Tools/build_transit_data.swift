@@ -265,7 +265,7 @@ let lineSeeds: [LineSeed] = [
         ])]
     ),
     LineSeed(
-        line: Line(id: "arex", regionID: "capital", operatorID: "arex", name: "공항철도", shortName: "AREX", colorHex: "0090D2", sortOrder: 20),
+        line: Line(id: "arex", regionID: "capital", operatorID: "arex", name: "공항철도", shortName: "공항", colorHex: "0090D2", sortOrder: 20),
         prefix: "ar",
         patterns: [PatternSeed("서울역 → 인천공항2터미널", [
             "서울역||서울", "공덕", "홍대입구", "디지털미디어시티", "마곡나루|마곡나루(서울식물원)", "김포공항", "계양", "검암", "청라국제도시", "영종", "운서", "공항화물청사", "인천공항1터미널", "인천공항2터미널"
@@ -397,7 +397,7 @@ for seed in lineSeeds {
 
 let catalog = Catalog(
     schemaVersion: 1,
-    contentVersion: "2026.10.official.3",
+    contentVersion: "2026.10.official.4",
     challengePoolVersion: "2026.10.2",
     dataAsOf: "2026-10-10",
     sources: [
