@@ -160,42 +160,15 @@ struct MultiplayerContainerView: View {
                 .padding(.bottom, 16)
                 .subwayPanelBackground()
 
+                // 경기 규칙은 한 줄 요약으로 보여 줘 홈 첫 화면에 선택 카드가 다 들어오게 한다.
                 SubwayPanel(accented: true) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label(AppLocalization.text("multiplayer.simultaneousMatch"), systemImage: "timer")
-                            .font(.headline)
-                            .foregroundStyle(SubwayTheme.ink)
-                        LabeledContent(AppLocalization.text("multiplayer.questions"), value: AppLocalization.text("multiplayer.tenQuestions"))
-                        LabeledContent(AppLocalization.text("multiplayer.timeLimit"), value: AppLocalization.text("multiplayer.tenSecondsEach"))
-                        LabeledContent(AppLocalization.text("multiplayer.players"), value: AppLocalization.text("multiplayer.twoToEightPlayers"))
-                    }
-                    .padding(18)
+                    Label(AppLocalization.text("multiplayer.rulesSummary"), systemImage: "timer")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(SubwayTheme.ink)
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 4)
                 }
-
-                HStack(alignment: .top, spacing: 12) {
-                    Button {
-                        guard let regionID = selectedRegionID, let lineID = selectedLineID else { return }
-                        coordinator.host(
-                            configuration: MultiplayerRoomConfiguration(regionID: regionID, lineID: lineID),
-                            nickname: validNickname
-                        )
-                    } label: {
-                        Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
-                            .multilineTextAlignment(.center)
-                    }
-                    .buttonStyle(SubwayActionButtonStyle(prominent: true, minHeight: SubwayTheme.controlHeight))
-                    .disabled(!canEnterMultiplayer || selectedLine == nil)
-
-                    Button {
-                        coordinator.browse(nickname: validNickname)
-                    } label: {
-                        Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
-                            .multilineTextAlignment(.center)
-                    }
-                    .buttonStyle(SubwayActionButtonStyle(prominent: false, minHeight: SubwayTheme.controlHeight))
-                    .disabled(!canEnterMultiplayer)
-                }
-                .controlSize(.large)
             }
             .padding(.horizontal, AppLayout.pageHorizontal)
             .padding(.vertical, AppLayout.pageVertical)
@@ -203,9 +176,38 @@ struct MultiplayerContainerView: View {
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .background(SubwayTheme.background.ignoresSafeArea())
+        // 방 만들기·찾기는 탭 바 바로 위에 고정해 작은 화면에서도 첫 화면에 보이게 한다.
+        .subwayBottomActionBar { homeActions }
         .onScrollPhaseChange { _, phase in
             if phase.isScrolling { nicknameFocused = false }
         }
+    }
+
+    private var homeActions: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Button {
+                guard let regionID = selectedRegionID, let lineID = selectedLineID else { return }
+                coordinator.host(
+                    configuration: MultiplayerRoomConfiguration(regionID: regionID, lineID: lineID),
+                    nickname: validNickname
+                )
+            } label: {
+                Label(AppLocalization.text("multiplayer.createRoom"), systemImage: "plus.circle.fill")
+                    .multilineTextAlignment(.center)
+            }
+            .buttonStyle(SubwayActionButtonStyle(prominent: true, minHeight: SubwayTheme.controlHeight))
+            .disabled(!canEnterMultiplayer || selectedLine == nil)
+
+            Button {
+                coordinator.browse(nickname: validNickname)
+            } label: {
+                Label(AppLocalization.text("multiplayer.findNearbyRoom"), systemImage: "dot.radiowaves.left.and.right")
+                    .multilineTextAlignment(.center)
+            }
+            .buttonStyle(SubwayActionButtonStyle(prominent: false, minHeight: SubwayTheme.controlHeight))
+            .disabled(!canEnterMultiplayer)
+        }
+        .controlSize(.large)
     }
 
     private var lobby: some View {

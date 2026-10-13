@@ -67,18 +67,6 @@ struct SinglePlayerChallengeHomeView: View {
                     }
                     .padding(18)
                 }
-                if let selectedRegion {
-                    NavigationLink {
-                        SinglePlayerChallengePlayView(
-                            catalog: catalogStore.catalog,
-                            region: selectedRegion,
-                            challengeLine: selectedLine
-                        )
-                    } label: {
-                        Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
-                    }
-                    .buttonStyle(SubwayActionButtonStyle(prominent: true))
-                }
                 if gameCenter.isAuthenticated {
                     Button(AppLocalization.format("single.ranking.format", challengeName), systemImage: "list.number") {
                         gameCenter.showLeaderboard(id: leaderboardID)
@@ -91,6 +79,8 @@ struct SinglePlayerChallengeHomeView: View {
         }
         .scrollContentBackground(.hidden)
         .background(SubwayTheme.background.ignoresSafeArea())
+        // 시작 버튼은 탭 바 바로 위에 고정해 작은 화면에서도 첫 화면에 보이게 한다.
+        .subwayBottomActionBar { startButton }
         .navigationTitle(AppLocalization.text("tab.singlePlayer"))
         .toolbar {
             AppToolbar(
@@ -104,6 +94,21 @@ struct SinglePlayerChallengeHomeView: View {
             if selectedRegionID == nil { selectedRegionID = regions.first?.id }
         }
         .onChange(of: selectedRegionID) { _, _ in selectedLineID = nil }
+    }
+
+    @ViewBuilder private var startButton: some View {
+        if let selectedRegion {
+            NavigationLink {
+                SinglePlayerChallengePlayView(
+                    catalog: catalogStore.catalog,
+                    region: selectedRegion,
+                    challengeLine: selectedLine
+                )
+            } label: {
+                Label(AppLocalization.format("single.startChallenge.format", challengeName), systemImage: "play.fill")
+            }
+            .buttonStyle(SubwayActionButtonStyle(prominent: true))
+        }
     }
 
     private var coachmarkBinding: Binding<Bool> {

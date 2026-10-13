@@ -74,6 +74,30 @@ extension View {
         SubwayPanel(accented: true) { self }
     }
 
+    /// 화면 하단(탭 바 바로 위)에 고정되는 주요 동작 버튼 영역. 스크롤 내용은 이 영역 위에서 끝난다.
+    func subwayBottomActionBar<Bar: View>(@ViewBuilder _ bar: () -> Bar) -> some View {
+        safeAreaInset(edge: .bottom, spacing: 0) {
+            bar()
+                .padding(.horizontal, AppLayout.pageHorizontal)
+                .padding(.top, 10)
+                .padding(.bottom, 10)
+                .frame(maxWidth: .infinity)
+                .background {
+                    // 위쪽 12pt는 배경색으로 부드럽게 이어 스크롤 내용이 뚝 잘려 보이지 않게 한다.
+                    SubwayTheme.background
+                        .overlay(alignment: .top) {
+                            LinearGradient(
+                                colors: [SubwayTheme.background.opacity(0), SubwayTheme.background],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .frame(height: 12)
+                            .offset(y: -12)
+                        }
+                }
+        }
+    }
+
     /// 선택이 바뀔 때 강조색을 부드럽게 전환하고 가벼운 햅틱을 준다. Reduce Motion이면 즉시 바꾼다.
     func animatedSubwayAccent(_ accent: SubwayAccent, hapticsEnabled: Bool) -> some View {
         modifier(AnimatedSubwayAccentModifier(target: accent, hapticsEnabled: hapticsEnabled))

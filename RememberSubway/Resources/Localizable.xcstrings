@@ -2260,6 +2260,23 @@
         }
       }
     },
+    "multiplayer.rulesSummary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 questions · 10 sec each · 2–8 players"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10문제 · 문제당 10초 · 2~8명"
+          }
+        }
+      }
+    },
     "multiplayer.searching.message" : {
       "extractionState" : "stale",
       "localizations" : {
