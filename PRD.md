@@ -4,7 +4,7 @@
 문서 버전: 1.17  
 구현 기준 브랜치: `main`  
 번들 ID: `com.evolvingark.remembersubway.app`  
-앱 버전: 1.2.0 (빌드 12) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
+앱 버전: 1.1.0 (빌드 13) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
 
 ## 1. 제품 개요
 
