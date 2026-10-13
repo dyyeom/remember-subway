@@ -17,5 +17,37 @@ struct AnswerMatcherTests {
     @Test func extractsKoreanInitials() {
         #expect(AnswerMatcher.initialConsonants(of: "을지로3가") == "ㅇㅈㄹ3ㄱ")
     }
-}
 
+    @Test(arguments: [
+        ("sui-003", "4", "19민주묘지"),
+        ("ev-008", "시청", "용인대"),
+        ("ev-015", "전대", "에버랜드"),
+        ("b2-012", "경성대", "부경대"),
+        ("b2-017", "국제금융센터", "부산은행"),
+        ("g1-003", "학동", "증심사입구"),
+        ("s2-023", "교대(법원", "검찰청)")
+    ])
+    @MainActor
+    func acceptsMiddleDotVariantsInStationNames(stationID: String, head: String, tail: String) throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let station = try #require(catalog.stationByID[stationID])
+        let separators = ["", ".", " "] + AnswerMatcher.middleDotVariants.map { String(Character($0)) }
+        for separator in separators {
+            let answer = head + separator + tail
+            #expect(AnswerMatcher.matches(answer, station: station), "\(stationID): \(answer.unicodeScalars.map { String($0.value, radix: 16) })")
+            #expect(AnswerMatcher.matches(answer + "역", station: station) || stationID == "s2-023", "\(stationID): \(answer)역")
+        }
+    }
+
+    @Test func middleDotVariantsDoNotStripHangulJamo() {
+        #expect(AnswerMatcher.normalize("ㆍ전대ᆞ에버랜드ㆍ") == "전대에버랜드")
+        #expect(AnswerMatcher.normalize("ㄱㅏㅎ") == "ㄱㅏㅎ")
+        #expect(AnswerMatcher.normalize("한") != "")
+        #expect(!AnswerMatcher.matches("전대ㆍ에버", station: Station(id: "x", name: "전대·에버랜드", fullName: nil, aliases: [])))
+    }
+
+    @Test func initialConsonantsKeepMiddleDot() {
+        #expect(AnswerMatcher.initialConsonants(of: "전대·에버랜드") == "ㅈㄷ·ㅇㅂㄹㄷ")
+        #expect(AnswerMatcher.initialConsonants(of: "4·19민주묘지") == "4·19ㅁㅈㅁㅈ")
+    }
+}
