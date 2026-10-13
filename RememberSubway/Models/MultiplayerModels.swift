@@ -132,30 +132,16 @@ enum MultiplayerScoring {
 enum MultiplayerQuestionFactory {
     static func pool(catalog: TransitCatalog, lineID: String) -> [MultiplayerQuestion] {
         let patterns = catalog.routePatterns.filter { $0.lineID == lineID }
-        var seenTriples = Set<String>()
-        var questions: [MultiplayerQuestion] = []
-
-        for pattern in patterns where pattern.stationIDs.count >= 3 {
-            let indices: [Int]
-            indices = Array(pattern.stationIDs.indices)
-
-            for index in indices {
-                let previous = index > 0 ? pattern.stationIDs[index - 1] : (pattern.kind == .loop ? pattern.stationIDs.last : nil)
-                let target = pattern.stationIDs[index]
-                let next = index + 1 < pattern.stationIDs.count ? pattern.stationIDs[index + 1] : (pattern.kind == .loop ? pattern.stationIDs.first : nil)
-                let triple = "\(previous ?? "none")|\(target)|\(next ?? "none")"
-                guard seenTriples.insert(triple).inserted else { continue }
-                questions.append(MultiplayerQuestion(
-                    id: "\(pattern.id):\(index)",
-                    lineID: lineID,
-                    routePatternID: pattern.id,
-                    previousStationID: previous,
-                    targetStationID: target,
-                    nextStationID: next
-                ))
-            }
+        return RouteQuestionSlot.uniqueSlots(in: patterns, minimumStationCount: 3).map { slot in
+            MultiplayerQuestion(
+                id: "\(slot.pattern.id):\(slot.index)",
+                lineID: lineID,
+                routePatternID: slot.pattern.id,
+                previousStationID: slot.previousStationID,
+                targetStationID: slot.targetStationID,
+                nextStationID: slot.nextStationID
+            )
         }
-        return questions
     }
 
     static func questions(

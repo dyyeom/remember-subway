@@ -211,7 +211,7 @@ struct CatalogTests {
 
     @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.challengePoolVersion == "2026.10.3")
+        #expect(catalog.challengePoolVersion == "2026.10.4")
 
         let line7 = try #require(catalog.stationByID["s7-028"])
         #expect(line7.name == "이수")
@@ -422,5 +422,43 @@ struct CatalogTests {
         #expect(Array(names[start...(start + 6)]) == ["사상", "덕포", "모덕", "모라", "구남", "구명", "덕천"])
         #expect(catalog.stationByID["b2-029"]?.name == "모라")
         #expect(catalog.stationByID["b2-030"]?.name == "모덕")
+    }
+
+    @Test(arguments: [
+        ("gyeongchun", 26),
+        ("seoul-1", 107),
+        ("seoul-5", 57),
+        ("gyeongui-jungang", 60)
+    ])
+    func singlePlayerQuestionsSkipDuplicateTriplesOnOverlappingPatterns(lineID: String, expectedCount: Int) throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let questions = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: "capital", lineID: lineID, shuffleSeed: 1)
+        let triples = questions.map { "\($0.previous?.id ?? "none")|\($0.target.id)|\($0.next?.id ?? "none")" }
+        #expect(questions.count == expectedCount)
+        #expect(Set(triples).count == triples.count)
+        // 멀티와 같은 규칙이라 같은 노선의 문제 조합이 일치한다.
+        // 단, 멀티는 2개 역짜리 계통(1호선 병점–서동탄)을 쓰지 않으므로 그 계통은 비교에서 뺀다.
+        let shortPatternIDs = Set(catalog.routePatterns.filter { $0.stationIDs.count < 3 }.map(\.id))
+        let comparableTriples = questions.filter { !shortPatternIDs.contains($0.routePatternID) }
+            .map { "\($0.previous?.id ?? "none")|\($0.target.id)|\($0.next?.id ?? "none")" }
+        let multiTriples = MultiplayerQuestionFactory.pool(catalog: catalog, lineID: lineID)
+            .map { "\($0.previousStationID ?? "none")|\($0.targetStationID)|\($0.nextStationID ?? "none")" }
+        #expect(Set(multiTriples) == Set(comparableTriples))
+    }
+
+    @Test func singlePlayerRegionPoolHasNoDuplicateTriples() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let expected = ["capital": 804, "busan": 158, "daegu": 102, "daejeon": 22, "gwangju": 20]
+        for region in catalog.regions {
+            let questions = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: region.id, shuffleSeed: 1)
+            let triples = questions.map { "\($0.previous?.id ?? "none")|\($0.target.id)|\($0.next?.id ?? "none")" }
+            #expect(Set(triples).count == triples.count, "\(region.id)")
+            #expect(questions.count == expected[region.id], "\(region.id)")
+            // 지역 전체 문제 수는 노선별 문제 수의 합과 같다(다른 노선끼리는 역 ID가 달라 겹치지 않는다).
+            let perLine = catalog.lines.filter { $0.regionID == region.id }.map {
+                SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: region.id, lineID: $0.id, shuffleSeed: 1).count
+            }.reduce(0, +)
+            #expect(questions.count == perLine, "\(region.id)")
+        }
     }
 }

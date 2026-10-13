@@ -427,7 +427,7 @@ for seed in lineSeeds {
 let catalog = Catalog(
     schemaVersion: 1,
     contentVersion: "2026.10.official.5",
-    challengePoolVersion: "2026.10.3",
+    challengePoolVersion: "2026.10.4",
     dataAsOf: "2026-10-13",
     sources: [
         Source(title: "국가철도공단 전국도시철도역사정보 표준데이터", url: URL(string: "https://www.data.go.kr/data/15013205/standard.do")!),
