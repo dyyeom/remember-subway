@@ -350,9 +350,9 @@ struct CatalogTests {
         let cases: [(id: String, accepted: [String], rejected: [String])] = [
             ("uj-013", ["어룡", "어룡역", "어룡(용현산업단지)"], ["용현산업단지"]),
             ("ev-001", ["기흥", "기흥(백남준아트센터)"], []),
-            ("ev-008", ["시청·용인대", "시청용인대", "시청.용인대역"], ["시청"]),
+            ("ev-008", ["시청·용인대", "시청용인대", "시청.용인대역", "시청", "용인대역"], ["용인"]),
             ("ev-011", ["용인중앙시장", "용인중앙시장(용인예술과학대)", "운동장·송담대", "운동장송담대역"], ["용인예술과학대"]),
-            ("ev-015", ["전대·에버랜드", "전대에버랜드"], ["에버랜드"]),
+            ("ev-015", ["전대·에버랜드", "전대에버랜드", "전대", "에버랜드"], ["에버"]),
             ("gp-007", ["사우", "사우역", "사우(김포시청)"], ["김포시청"]),
             ("gp-010", ["김포공항"], ["김포"])
         ]
@@ -367,7 +367,7 @@ struct CatalogTests {
 
     @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.contentVersion == "2026.10.official.5")
+        #expect(catalog.contentVersion == "2026.10.official.6")
         // 공공데이터의 '능길'은 실제 시행 전이라 반영하지 않는다. 역 ID는 그대로다.
         for id in ["s4-049", "sb-048"] {
             let station = try #require(catalog.stationByID[id])

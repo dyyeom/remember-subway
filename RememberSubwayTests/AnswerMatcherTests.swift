@@ -39,6 +39,35 @@ struct AnswerMatcherTests {
         }
     }
 
+    @Test(arguments: [
+        ("ev-008", "시청·용인대", "시청", "용인대"),
+        ("ev-015", "전대·에버랜드", "전대", "에버랜드"),
+        ("b2-012", "경성대·부경대", "경성대", "부경대"),
+        ("b2-017", "국제금융센터·부산은행", "국제금융센터", "부산은행"),
+        ("g1-003", "학동·증심사입구", "학동", "증심사입구")
+    ])
+    @MainActor
+    func acceptsEachPartOfMiddleDotJoinedStationNames(stationID: String, name: String, head: String, tail: String) throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let station = try #require(catalog.stationByID[stationID])
+        #expect(station.name == name)
+        let answers = [name, head + tail, head + "ㆍ" + tail, head, tail, head + "역", tail + "역"]
+        for answer in answers {
+            #expect(AnswerMatcher.matches(answer, station: station), "\(stationID): \(answer)")
+        }
+    }
+
+    @Test @MainActor
+    func doesNotSplitFourNineteenMemorialStation() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let station = try #require(catalog.stationByID["sui-003"])
+        #expect(station.name == "4·19민주묘지")
+        #expect(AnswerMatcher.matches("419민주묘지", station: station))
+        #expect(AnswerMatcher.matches("4ㆍ19민주묘지", station: station))
+        #expect(!AnswerMatcher.matches("4", station: station))
+        #expect(!AnswerMatcher.matches("19민주묘지", station: station))
+    }
+
     @Test func middleDotVariantsDoNotStripHangulJamo() {
         #expect(AnswerMatcher.normalize("ㆍ전대ᆞ에버랜드ㆍ") == "전대에버랜드")
         #expect(AnswerMatcher.normalize("ㄱㅏㅎ") == "ㄱㅏㅎ")
