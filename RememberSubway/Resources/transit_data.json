@@ -1,7 +1,7 @@
 {
-  "challengePoolVersion" : "2026.10.2",
-  "contentVersion" : "2026.10.official.4",
-  "dataAsOf" : "2026-10-10",
+  "challengePoolVersion" : "2026.10.3",
+  "contentVersion" : "2026.10.official.5",
+  "dataAsOf" : "2026-10-13",
   "lines" : [
     {
       "colorHex" : "0052A4",
@@ -184,6 +184,33 @@
       "sortOrder" : 20
     },
     {
+      "colorHex" : "F39C00",
+      "id" : "uijeongbu-lrt",
+      "name" : "의정부경전철",
+      "operatorID" : "uijeongbu-lrt",
+      "regionID" : "capital",
+      "shortName" : "의정",
+      "sortOrder" : 21
+    },
+    {
+      "colorHex" : "6FB245",
+      "id" : "yongin-everline",
+      "name" : "용인에버라인",
+      "operatorID" : "yongin-lrt",
+      "regionID" : "capital",
+      "shortName" : "에버",
+      "sortOrder" : 22
+    },
+    {
+      "colorHex" : "AD8605",
+      "id" : "gimpo-goldline",
+      "name" : "김포골드라인",
+      "operatorID" : "gimpo-goldline",
+      "regionID" : "capital",
+      "shortName" : "김포",
+      "sortOrder" : 23
+    },
+    {
       "colorHex" : "F06A00",
       "id" : "busan-1",
       "name" : "부산 1호선",
@@ -324,6 +351,18 @@
     {
       "id" : "incheon-transit",
       "name" : "인천교통공사"
+    },
+    {
+      "id" : "uijeongbu-lrt",
+      "name" : "의정부경량전철"
+    },
+    {
+      "id" : "yongin-lrt",
+      "name" : "용인경량전철"
+    },
+    {
+      "id" : "gimpo-goldline",
+      "name" : "김포골드라인에스알에스"
     },
     {
       "id" : "busan-transit",
@@ -1473,6 +1512,70 @@
       ]
     },
     {
+      "id" : "uijeongbu-lrt-main",
+      "kind" : "main",
+      "lineID" : "uijeongbu-lrt",
+      "name" : "발곡 → 탑석",
+      "stationIDs" : [
+        "uj-001",
+        "uj-002",
+        "uj-003",
+        "uj-004",
+        "uj-005",
+        "uj-006",
+        "uj-007",
+        "uj-008",
+        "uj-009",
+        "uj-010",
+        "uj-011",
+        "uj-012",
+        "uj-013",
+        "uj-014",
+        "uj-015"
+      ]
+    },
+    {
+      "id" : "yongin-everline-main",
+      "kind" : "main",
+      "lineID" : "yongin-everline",
+      "name" : "기흥 → 전대·에버랜드",
+      "stationIDs" : [
+        "ev-001",
+        "ev-002",
+        "ev-003",
+        "ev-004",
+        "ev-005",
+        "ev-006",
+        "ev-007",
+        "ev-008",
+        "ev-009",
+        "ev-010",
+        "ev-011",
+        "ev-012",
+        "ev-013",
+        "ev-014",
+        "ev-015"
+      ]
+    },
+    {
+      "id" : "gimpo-goldline-main",
+      "kind" : "main",
+      "lineID" : "gimpo-goldline",
+      "name" : "양촌 → 김포공항",
+      "stationIDs" : [
+        "gp-001",
+        "gp-002",
+        "gp-003",
+        "gp-004",
+        "gp-005",
+        "gp-006",
+        "gp-007",
+        "gp-008",
+        "gp-009",
+        "gp-010"
+      ]
+    },
+    {
       "id" : "busan-1-main",
       "kind" : "main",
       "lineID" : "busan-1",
@@ -1940,6 +2043,26 @@
     {
       "title" : "대전교통공사 노선도",
       "url" : "https://www.djtc.kr/kor/board.do?bbsIdx=4567&menuIdx=325"
+    },
+    {
+      "title" : "의정부경전철 역사정보",
+      "url" : "https://www.ulrt.co.kr/doc/contents/information/stations.php"
+    },
+    {
+      "title" : "국가철도공단 의정부경전철 역간거리",
+      "url" : "https://www.data.go.kr/data/15081852/fileData.do"
+    },
+    {
+      "title" : "용인에버라인 노선안내",
+      "url" : "https://www.ever-line.co.kr/page/?M2_IDX=28908"
+    },
+    {
+      "title" : "국가철도공단 에버라인 역간거리",
+      "url" : "https://www.data.go.kr/data/15081850/fileData.do"
+    },
+    {
+      "title" : "김포골드라인 노선안내",
+      "url" : "https://gimpogoldline.com/?page_id=489"
     }
   ],
   "stations" : [
@@ -7312,6 +7435,290 @@
       ],
       "id" : "ar-014",
       "name" : "인천공항2터미널"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-001",
+      "name" : "발곡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-002",
+      "name" : "회룡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-003",
+      "name" : "범골"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-004",
+      "name" : "경전철의정부"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-005",
+      "name" : "의정부시청"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-006",
+      "name" : "흥선"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-007",
+      "name" : "의정부중앙"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-008",
+      "name" : "동오"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-009",
+      "name" : "새말"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-010",
+      "name" : "경기도청북부청사"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-011",
+      "name" : "효자"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-012",
+      "name" : "곤제"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "어룡(용현산업단지)",
+      "id" : "uj-013",
+      "name" : "어룡"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-014",
+      "name" : "송산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "uj-015",
+      "name" : "탑석"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "기흥(백남준아트센터)",
+      "id" : "ev-001",
+      "name" : "기흥"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-002",
+      "name" : "강남대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-003",
+      "name" : "지석"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-004",
+      "name" : "어정"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-005",
+      "name" : "동백"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-006",
+      "name" : "초당"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-007",
+      "name" : "삼가"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-008",
+      "name" : "시청·용인대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-009",
+      "name" : "명지대"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-010",
+      "name" : "김량장"
+    },
+    {
+      "aliases" : [
+        "운동장·송담대"
+      ],
+      "fullName" : "용인중앙시장(용인예술과학대)",
+      "id" : "ev-011",
+      "name" : "용인중앙시장"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-012",
+      "name" : "고진"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-013",
+      "name" : "보평"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-014",
+      "name" : "둔전"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "ev-015",
+      "name" : "전대·에버랜드"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-001",
+      "name" : "양촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-002",
+      "name" : "구래"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-003",
+      "name" : "마산"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-004",
+      "name" : "장기"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-005",
+      "name" : "운양"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-006",
+      "name" : "걸포북변"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "fullName" : "사우(김포시청)",
+      "id" : "gp-007",
+      "name" : "사우"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-008",
+      "name" : "풍무"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-009",
+      "name" : "고촌"
+    },
+    {
+      "aliases" : [
+
+      ],
+      "id" : "gp-010",
+      "name" : "김포공항"
     },
     {
       "aliases" : [

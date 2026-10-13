@@ -74,7 +74,9 @@ extension Line {
     /// - "서울 2호선"·"부산 1호선" 같은 '<지역> N호선'은 "N호선"
     /// - "인천 N호선"은 수도권에서 서울 노선과 구분되도록 "인천N"
     /// - 그 밖에 '선'으로 끝나는 이름은 끝의 '선'을 뗀다(수인분당선 → 수인분당). 두 글자 이하는 그대로 둔다.
+    /// - 수도권 경전철 브랜드 이름은 `chipNameOverrides`의 약칭을 쓴다(김포골드라인 → 김포골드).
     static func chipName(for name: String) -> String {
+        if let override = chipNameOverrides[name] { return override }
         let parts = name.split(separator: " ")
         if parts.count == 2, parts[1].hasSuffix("호선") {
             let number = parts[1].dropLast(2)
@@ -87,6 +89,13 @@ extension Line {
         }
         return name
     }
+
+    /// '선'으로 끝나지 않는 긴 노선 이름의 칩 약칭.
+    static let chipNameOverrides: [String: String] = [
+        "김포골드라인": "김포골드",
+        "용인에버라인": "에버라인",
+        "의정부경전철": "의정부"
+    ]
 }
 
 struct RoutePattern: Codable, Identifiable, Hashable, Sendable {

@@ -72,6 +72,7 @@ struct CatalogTests {
             "suin-bundang": 63, "gyeongui-jungang": 58,
             "gyeongchun": 25, "gyeonggang": 12, "seohae": 21,
             "shinbundang": 16, "arex": 14,
+            "uijeongbu-lrt": 15, "yongin-everline": 15, "gimpo-goldline": 10,
             "busan-1": 40, "busan-2": 43, "busan-3": 17, "busan-4": 14,
             "busan-gimhae": 21, "donghae": 23,
             "daegu-1": 35, "daegu-2": 29, "daegu-3": 30,
@@ -86,10 +87,11 @@ struct CatalogTests {
         }
         let capital = try #require(catalog.regions.first { $0.id == "capital" })
         #expect(capital.name == "수도권")
-        #expect(catalog.lines(in: capital).count == 20)
+        #expect(catalog.lines(in: capital).count == 23)
+        #expect(catalog.lines.count == 35)
         #expect(!catalog.regions.contains { $0.id == "seoul" || $0.id == "incheon" })
         #expect(catalog.sources.count >= 15)
-        #expect(catalog.dataAsOf == "2026-10-10")
+        #expect(catalog.dataAsOf == "2026-10-13")
     }
 
     @Test func bundledCatalogIncludesKorailMetropolitanCoverage() throws {
@@ -209,7 +211,7 @@ struct CatalogTests {
 
     @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.challengePoolVersion == "2026.10.2")
+        #expect(catalog.challengePoolVersion == "2026.10.3")
 
         let line7 = try #require(catalog.stationByID["s7-028"])
         #expect(line7.name == "이수")
@@ -303,6 +305,9 @@ struct CatalogTests {
         #expect(chipNames["daegyeong"] == "대경")
         #expect(chipNames["gwangju-1"] == "1호선")
         #expect(chipNames["daejeon-1"] == "1호선")
+        #expect(chipNames["gimpo-goldline"] == "김포골드")
+        #expect(chipNames["yongin-everline"] == "에버라인")
+        #expect(chipNames["uijeongbu-lrt"] == "의정부")
         // 공항철도 배지 약칭은 영문 대신 한글 두 글자.
         #expect(catalog.lineByID["arex"]?.shortName == "공항")
         // 두 글자 이하 이름은 '선'을 떼지 않는다.
@@ -314,9 +319,55 @@ struct CatalogTests {
         }
     }
 
+    @Test func capitalLightRailLinesFollowOfficialStationOrder() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        let expected: [(id: String, operatorID: String, shortName: String, stations: [String])] = [
+            ("uijeongbu-lrt", "uijeongbu-lrt", "의정", [
+                "발곡", "회룡", "범골", "경전철의정부", "의정부시청", "흥선", "의정부중앙", "동오", "새말",
+                "경기도청북부청사", "효자", "곤제", "어룡", "송산", "탑석"
+            ]),
+            ("yongin-everline", "yongin-lrt", "에버", [
+                "기흥", "강남대", "지석", "어정", "동백", "초당", "삼가", "시청·용인대", "명지대", "김량장",
+                "용인중앙시장", "고진", "보평", "둔전", "전대·에버랜드"
+            ]),
+            ("gimpo-goldline", "gimpo-goldline", "김포", [
+                "양촌", "구래", "마산", "장기", "운양", "걸포북변", "사우", "풍무", "고촌", "김포공항"
+            ])
+        ]
+        for item in expected {
+            let line = try #require(catalog.lineByID[item.id])
+            #expect(line.regionID == "capital")
+            #expect(line.operatorID == item.operatorID)
+            #expect(catalog.operators.contains { $0.id == item.operatorID })
+            #expect(line.shortName == item.shortName)
+            #expect(line.sortOrder > 20)
+            let patterns = catalog.patterns(for: line)
+            #expect(patterns.count == 1)
+            let names = try #require(patterns.first).stationIDs.compactMap { catalog.stationByID[$0]?.name }
+            #expect(names == item.stations, "\(item.id)")
+        }
+
+        let cases: [(id: String, accepted: [String], rejected: [String])] = [
+            ("uj-013", ["어룡", "어룡역", "어룡(용현산업단지)"], ["용현산업단지"]),
+            ("ev-001", ["기흥", "기흥(백남준아트센터)"], []),
+            ("ev-008", ["시청·용인대", "시청용인대", "시청.용인대역"], ["시청"]),
+            ("ev-011", ["용인중앙시장", "용인중앙시장(용인예술과학대)", "운동장·송담대", "운동장송담대역"], ["용인예술과학대"]),
+            ("ev-015", ["전대·에버랜드", "전대에버랜드"], ["에버랜드"]),
+            ("gp-007", ["사우", "사우역", "사우(김포시청)"], ["김포시청"]),
+            ("gp-010", ["김포공항"], ["김포"])
+        ]
+        for item in cases {
+            let station = try #require(catalog.stationByID[item.id])
+            for answer in item.accepted { #expect(AnswerMatcher.matches(answer, station: station), "\(item.id): \(answer)") }
+            for answer in item.rejected { #expect(!AnswerMatcher.matches(answer, station: station), "\(item.id): \(answer)") }
+        }
+        #expect(GameCenterService.singlePlayerLeaderboardID(regionID: "capital", lineID: "gimpo-goldline")
+            == "com.evolvingark.remembersubway.single.line.gimpo_goldline.v1")
+    }
+
     @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.contentVersion == "2026.10.official.4")
+        #expect(catalog.contentVersion == "2026.10.official.5")
         // 공공데이터의 '능길'은 실제 시행 전이라 반영하지 않는다. 역 ID는 그대로다.
         for id in ["s4-049", "sb-048"] {
             let station = try #require(catalog.stationByID[id])

@@ -87,6 +87,10 @@ let operators = [
     Operator(id: "shinbundang", name: "신분당선"),
     Operator(id: "arex", name: "공항철도"),
     Operator(id: "incheon-transit", name: "인천교통공사"),
+    Operator(id: "uijeongbu-lrt", name: "의정부경량전철"),
+    Operator(id: "yongin-lrt", name: "용인경량전철"),
+    // 김포골드라인은 김포시 소유 도시철도로, 2024-09-28부터 김포골드라인에스알에스가 위탁 운영한다.
+    Operator(id: "gimpo-goldline", name: "김포골드라인에스알에스"),
     Operator(id: "busan-transit", name: "부산교통공사"),
     Operator(id: "bgl", name: "부산김해경전철"),
     Operator(id: "daegu-transit", name: "대구교통공사"),
@@ -271,6 +275,31 @@ let lineSeeds: [LineSeed] = [
             "서울역||서울", "공덕", "홍대입구", "디지털미디어시티", "마곡나루|마곡나루(서울식물원)", "김포공항", "계양", "검암", "청라국제도시", "영종", "운서", "공항화물청사", "인천공항1터미널", "인천공항2터미널"
         ])]
     ),
+    // 경전철 그룹. 노선 색은 운영기관 자료 기준:
+    // 의정부경전철 F39C00(ulrt.co.kr 역사정보 노선도), 용인에버라인 6FB245(ever-line.co.kr 노선안내 노선도),
+    // 김포골드라인 AD8605(gimpogoldline.com CI 메인 컬러 PANTONE 126 C, RGB 173·134·5).
+    LineSeed(
+        line: Line(id: "uijeongbu-lrt", regionID: "capital", operatorID: "uijeongbu-lrt", name: "의정부경전철", shortName: "의정", colorHex: "F39C00", sortOrder: 21),
+        prefix: "uj",
+        patterns: [PatternSeed("발곡 → 탑석", [
+            "발곡", "회룡", "범골", "경전철의정부", "의정부시청", "흥선", "의정부중앙", "동오", "새말", "경기도청북부청사", "효자", "곤제", "어룡|어룡(용현산업단지)", "송산", "탑석"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "yongin-everline", regionID: "capital", operatorID: "yongin-lrt", name: "용인에버라인", shortName: "에버", colorHex: "6FB245", sortOrder: 22),
+        prefix: "ev",
+        // 운동장·송담대는 2024-04 용인중앙시장(용인예술과학대)으로 역명 변경 시행(역명판·노선도 교체 완료, 용인시 발표).
+        patterns: [PatternSeed("기흥 → 전대·에버랜드", [
+            "기흥|기흥(백남준아트센터)", "강남대", "지석", "어정", "동백", "초당", "삼가", "시청·용인대", "명지대", "김량장", "용인중앙시장|용인중앙시장(용인예술과학대)|운동장·송담대", "고진", "보평", "둔전", "전대·에버랜드"
+        ])]
+    ),
+    LineSeed(
+        line: Line(id: "gimpo-goldline", regionID: "capital", operatorID: "gimpo-goldline", name: "김포골드라인", shortName: "김포", colorHex: "AD8605", sortOrder: 23),
+        prefix: "gp",
+        patterns: [PatternSeed("양촌 → 김포공항", [
+            "양촌", "구래", "마산", "장기", "운양", "걸포북변", "사우|사우(김포시청)", "풍무", "고촌", "김포공항"
+        ])]
+    ),
     LineSeed(
         line: Line(id: "busan-1", regionID: "busan", operatorID: "busan-transit", name: "부산 1호선", shortName: "1", colorHex: "F06A00", sortOrder: 1),
         prefix: "b1",
@@ -397,9 +426,9 @@ for seed in lineSeeds {
 
 let catalog = Catalog(
     schemaVersion: 1,
-    contentVersion: "2026.10.official.4",
-    challengePoolVersion: "2026.10.2",
-    dataAsOf: "2026-10-10",
+    contentVersion: "2026.10.official.5",
+    challengePoolVersion: "2026.10.3",
+    dataAsOf: "2026-10-13",
     sources: [
         Source(title: "국가철도공단 전국도시철도역사정보 표준데이터", url: URL(string: "https://www.data.go.kr/data/15013205/standard.do")!),
         Source(title: "국가철도공단 도시광역철도 노선별 역명", url: URL(string: "https://www.data.go.kr/data/15064037/fileData.do")!),
@@ -417,7 +446,12 @@ let catalog = Catalog(
         Source(title: "부산김해경전철 노선도", url: URL(string: "https://www.bglrt.com/00162.web")!),
         Source(title: "대구교통공사", url: URL(string: "https://www.dtro.or.kr/")!),
         Source(title: "광주교통공사 사이버스테이션", url: URL(string: "https://www.grtc.co.kr/cyber/map")!),
-        Source(title: "대전교통공사 노선도", url: URL(string: "https://www.djtc.kr/kor/board.do?bbsIdx=4567&menuIdx=325")!)
+        Source(title: "대전교통공사 노선도", url: URL(string: "https://www.djtc.kr/kor/board.do?bbsIdx=4567&menuIdx=325")!),
+        Source(title: "의정부경전철 역사정보", url: URL(string: "https://www.ulrt.co.kr/doc/contents/information/stations.php")!),
+        Source(title: "국가철도공단 의정부경전철 역간거리", url: URL(string: "https://www.data.go.kr/data/15081852/fileData.do")!),
+        Source(title: "용인에버라인 노선안내", url: URL(string: "https://www.ever-line.co.kr/page/?M2_IDX=28908")!),
+        Source(title: "국가철도공단 에버라인 역간거리", url: URL(string: "https://www.data.go.kr/data/15081850/fileData.do")!),
+        Source(title: "김포골드라인 노선안내", url: URL(string: "https://gimpogoldline.com/?page_id=489")!)
     ],
     regions: regions,
     operators: operators,
