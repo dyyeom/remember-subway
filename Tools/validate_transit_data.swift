@@ -21,6 +21,10 @@ let path = CommandLine.arguments.dropFirst().first ?? "RememberSubway/Resources/
 let data = try Data(contentsOf: URL(fileURLWithPath: path))
 let catalog = try JSONDecoder().decode(Catalog.self, from: data)
 var errors: [String] = []
+var warnings: [String] = []
+// 순환이 아닌 계통에서 같은 역이 두 번 나오는 것이 의도된 계통.
+// 6호선은 응암순환(응암→…→구산→응암)을 돈 뒤 신내로 가므로 응암이 두 번 나온다.
+let intendedRepeatedStations: Set<String> = ["seoul-6-loop"]
 func checkUnique(_ ids: [String], _ label: String) {
     if Set(ids).count != ids.count { errors.append("중복 \(label) ID") }
 }
@@ -45,6 +49,15 @@ for pattern in catalog.routePatterns {
     if pattern.stationIDs.count < 2 || pattern.stationIDs.contains(where: { !stations.contains($0) }) { errors.append("잘못된 역 경로: \(pattern.id)") }
     if zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains(where: ==) { errors.append("연속 중복 역: \(pattern.id)") }
     if pattern.stationCodes?.keys.contains(where: { !pattern.stationIDs.contains($0) }) == true { errors.append("잘못된 역 번호 참조: \(pattern.id)") }
+    // 순환 계통은 마지막 역 다음을 첫 역으로 잇기 때문에 첫 역을 끝에 다시 적으면 같은 역이 이웃이 된다.
+    if pattern.kind == "loop", pattern.stationIDs.first == pattern.stationIDs.last { errors.append("순환 계통의 처음과 끝 역이 같음: \(pattern.id)") }
+    if pattern.kind != "loop" {
+        var seen = Set<String>()
+        let repeated = pattern.stationIDs.filter { !seen.insert($0).inserted }
+        if !repeated.isEmpty, !intendedRepeatedStations.contains(pattern.id) {
+            warnings.append("순환이 아닌 계통에 같은 역이 두 번 나옴: \(pattern.id) (\(Set(repeated).sorted().joined(separator: ", ")))")
+        }
+    }
 }
 func contains(_ candidate: [String], asContiguousSubsequenceOf route: [String]) -> Bool {
     guard candidate.count < route.count else { return false }
@@ -61,5 +74,6 @@ for line in catalog.lines {
         errors.append("중복 부분 계통: \(pattern.id)")
     }
 }
+warnings.forEach { fputs("WARNING: \($0)\n", stderr) }
 if errors.isEmpty { print("OK: \(catalog.lines.count)개 노선, \(catalog.stations.count)개 역, \(catalog.routePatterns.count)개 계통") }
 else { errors.forEach { fputs("ERROR: \($0)\n", stderr) }; exit(1) }

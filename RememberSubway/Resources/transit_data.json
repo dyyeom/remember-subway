@@ -1,6 +1,6 @@
 {
-  "challengePoolVersion" : "2026.10.4",
-  "contentVersion" : "2026.10.official.6",
+  "challengePoolVersion" : "2026.11.1",
+  "contentVersion" : "2026.11.official.1",
   "dataAsOf" : "2026-10-13",
   "lines" : [
     {
@@ -625,8 +625,7 @@
         "s2-040",
         "s2-041",
         "s2-042",
-        "s2-043",
-        "s2-001"
+        "s2-043"
       ]
     },
     {
@@ -879,7 +878,7 @@
     },
     {
       "id" : "seoul-6-loop",
-      "kind" : "loop",
+      "kind" : "main",
       "lineID" : "seoul-6",
       "name" : "응암순환 → 신내",
       "stationIDs" : [

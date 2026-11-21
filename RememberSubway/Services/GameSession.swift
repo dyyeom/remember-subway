@@ -17,13 +17,23 @@ struct RouteQuestionSlot {
     let nextStationID: String?
 
     /// 계통 순서대로 훑으며 (이전 역 ID, 정답 역 ID, 다음 역 ID) 조합이 처음 나온 자리만 남긴다.
+    /// 순환 계통은 첫 역과 마지막 역을 잇는다. 순환이 아닌 계통이 출발역으로 되돌아오는 고리로 시작하면
+    /// (예: 6호선 응암순환), 첫 역의 이전 역은 고리를 돌아 다시 들어오기 직전 역이다.
     static func uniqueSlots(in patterns: [RoutePattern], minimumStationCount: Int) -> [RouteQuestionSlot] {
         var seenTriples = Set<String>()
         var slots: [RouteQuestionSlot] = []
         for pattern in patterns where pattern.stationIDs.count >= minimumStationCount {
             let ids = pattern.stationIDs
+            let firstPrevious: String?
+            if pattern.kind == .loop {
+                firstPrevious = ids.last
+            } else if let first = ids.first, let returnIndex = ids.dropFirst(2).firstIndex(of: first) {
+                firstPrevious = ids[returnIndex - 1]
+            } else {
+                firstPrevious = nil
+            }
             for index in ids.indices {
-                let previous = index > 0 ? ids[index - 1] : (pattern.kind == .loop ? ids.last : nil)
+                let previous = index > 0 ? ids[index - 1] : firstPrevious
                 let target = ids[index]
                 let next = index + 1 < ids.count ? ids[index + 1] : (pattern.kind == .loop ? ids.first : nil)
                 let triple = "\(previous ?? "none")|\(target)|\(next ?? "none")"

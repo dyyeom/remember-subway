@@ -47,6 +47,43 @@ struct CatalogTests {
         }
     }
 
+    @Test func routeQuestionNeighborsNeverRepeatTargetStation() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        for pattern in catalog.routePatterns {
+            if pattern.kind == .loop { #expect(pattern.stationIDs.first != pattern.stationIDs.last, "\(pattern.id)") }
+            #expect(!zip(pattern.stationIDs, pattern.stationIDs.dropFirst()).contains(where: ==), "\(pattern.id)")
+        }
+        for minimum in [2, 3] {
+            for slot in RouteQuestionSlot.uniqueSlots(in: catalog.routePatterns, minimumStationCount: minimum) {
+                #expect(slot.previousStationID != slot.targetStationID, "\(slot.pattern.id) #\(slot.index)")
+                #expect(slot.nextStationID != slot.targetStationID, "\(slot.pattern.id) #\(slot.index)")
+            }
+        }
+    }
+
+    @Test func loopAndLollipopQuestionsUseRealNeighbors() throws {
+        let catalog = try TransitCatalogStore.load(from: .main)
+        func triples(_ lineID: String) -> Set<[String]> {
+            let patterns = catalog.routePatterns.filter { $0.lineID == lineID }
+            let name = { (id: String?) in id.flatMap { catalog.stationByID[$0]?.name } ?? "-" }
+            return Set(RouteQuestionSlot.uniqueSlots(in: patterns, minimumStationCount: 2).map {
+                [name($0.previousStationID), name($0.targetStationID), name($0.nextStationID)]
+            })
+        }
+
+        let line2 = triples("seoul-2")
+        #expect(line2.contains(["충정로", "시청", "을지로입구"]))
+        #expect(line2.filter { $0[1] == "시청" } == Set([["충정로", "시청", "을지로입구"]]))
+
+        let line6 = triples("seoul-6")
+        #expect(!line6.contains { ($0[0] == "신내" && $0[1] == "응암") || ($0[1] == "신내" && $0[2] == "응암") })
+        #expect(!line6.contains { ($0[0] == "응암" && $0[1] == "신내") || ($0[1] == "응암" && $0[2] == "신내") })
+        let expectedEungam: Set<[String]> = [["구산", "응암", "역촌"], ["구산", "응암", "새절"]]
+        #expect(line6.filter { $0[1] == "응암" } == expectedEungam)
+        #expect(line6.filter { $0[1] == "신내" } == Set([["봉화산", "신내", "-"]]))
+        #expect(line6.filter { $0[1] == "구산" } == Set([["연신내", "구산", "응암"]]))
+    }
+
     @Test func  singlePlayerLineQuestionsStayInsideSelectedLine() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
         let questions = SinglePlayerQuestionFactory.questions(
@@ -211,7 +248,7 @@ struct CatalogTests {
 
     @Test func isuAndChongshinUnivStationsAcceptBothOfficialNames() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.challengePoolVersion == "2026.10.4")
+        #expect(catalog.challengePoolVersion == "2026.11.1")
 
         let line7 = try #require(catalog.stationByID["s7-028"])
         #expect(line7.name == "이수")
@@ -367,7 +404,7 @@ struct CatalogTests {
 
     @Test func singilOncheonKeepsCurrentNameAndRejectsUnconfirmedRename() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        #expect(catalog.contentVersion == "2026.10.official.6")
+        #expect(catalog.contentVersion == "2026.11.official.1")
         // 공공데이터의 '능길'은 실제 시행 전이라 반영하지 않는다. 역 ID는 그대로다.
         for id in ["s4-049", "sb-048"] {
             let station = try #require(catalog.stationByID[id])
@@ -448,7 +485,7 @@ struct CatalogTests {
 
     @Test func singlePlayerRegionPoolHasNoDuplicateTriples() throws {
         let catalog = try TransitCatalogStore.load(from: .main)
-        let expected = ["capital": 804, "busan": 158, "daegu": 102, "daejeon": 22, "gwangju": 20]
+        let expected = ["capital": 803, "busan": 158, "daegu": 102, "daejeon": 22, "gwangju": 20]
         for region in catalog.regions {
             let questions = SinglePlayerQuestionFactory.questions(catalog: catalog, regionID: region.id, shuffleSeed: 1)
             let triples = questions.map { "\($0.previous?.id ?? "none")|\($0.target.id)|\($0.next?.id ?? "none")" }
