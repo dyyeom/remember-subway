@@ -4,10 +4,14 @@
 역 데이터 자체는 `Tools/build_transit_data.swift`에서 고치고 다시 생성한다. JSON은 직접 고치지 않는다.
 
 ```sh
-python3 -I Tools/official_compare/fetch.py DL_DIR PK [PK...]   # compare.py에 적힌 PK 파일 내려받기
+python3 -I Tools/official_compare/fetch.py DL_DIR              # sources.py에 적힌 PK 파일 전부 내려받기
+python3 -I Tools/official_compare/fetch.py DL_DIR PK [PK...]   # 일부 PK만 다시 내려받기
+python3 -I Tools/official_compare/sources.py                   # 대조에 쓰는 PK 목록 출력
 python3 -I Tools/official_compare/compare.py RememberSubway/Resources/transit_data.json DL_DIR
 ```
 
+- `sources.py`: 대조할 data.go.kr 파일(PK·노선·필터) 목록. `fetch.py`와 `compare.py`가 같은 목록을 쓴다.
+  PK는 계산식 없이 문자열 상수로 적는다.
 - `compare.py`: 노선별로 자료마다 앱에 없음 / 자료에 없음 / 이름 / 순서(비인접) / 역명 변경 후보를 출력한다.
   마지막에 모든 노선의 **역명 변경 후보(시행 확인 필요)**를 따로 모아 보여 준다.
 - `extra.json`: 공식 파일이 없는 노선의 보조 자료와 대조 예외.

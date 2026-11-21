@@ -1,6 +1,6 @@
 # 앱 역 데이터와 공식 자료(data.go.kr 파일) 전수 대조
 # usage: python3 -I Tools/official_compare/compare.py RememberSubway/Resources/transit_data.json DL_DIR
-#   DL_DIR은 fetch.py로 내려받은 data.go.kr 파일 폴더(파일명 = 공공데이터 PK).
+#   DL_DIR은 fetch.py로 내려받은 data.go.kr 파일 폴더(파일명 = 공공데이터 PK). 대조 목록은 sources.py.
 #   보조 자료(공식 파일이 없는 노선)는 이 스크립트 옆 extra.json에서 읽는다.
 # 규칙(README.md): 공공데이터에서만 보이는 역명 변경은 바로 반영하지 않는다. 운영기관 공지·고시·언론 보도 중
 #   하나로 실제 시행이 확인된 경우에만 반영하고, 아니면 extra.json `_unconfirmed_renames`에 등록한다.
@@ -34,79 +34,7 @@ def load(pk):
     h = rows[0]
     return [dict(zip(h, r)) for r in rows[1:]]
 
-# (line_id, label, pk, filter(row)->bool, name_col, order_col or "seq" or None, partial)
-def eq(col, *vals): return lambda r: r.get(col, "").strip() in vals
-S = []
-def add(line, label, pk, flt, name="역명", order=None, partial=False): S.append((line, label, pk, flt, name, order, partial))
-add("seoul-1", "서울교통공사 역주소", "15044231", eq("호선", "1"), order="역번호", partial=True)
-add("seoul-1", "KRNA 1호선 역정보", "15041013", eq("선명", "1호선"))
-for b in ("1호선(경인선)", "1호선(광명선)", "1호선(서동탄선)", "1호선(경부선)"):
-    add("seoul-1", f"KRNA 역간거리 {b}", "15041460", eq("선명", b), order="seq", partial=True)
-for n in "2345678":
-    add(f"seoul-{n}", "서울교통공사 역주소", "15044231", eq("호선", n), order="역번호", partial=n in "3478")
-add("seoul-2", "KRNA 2호선 역간거리", "15041425", eq("선명", "2호선"), order="seq")
-add("seoul-3", "KRNA 3호선 역정보", "15041016", eq("선명", "3호선"))
-add("seoul-3", "KRNA 3호선 역간거리", "15041423", eq("선명", "3호선"), order="seq")
-add("seoul-4", "KRNA 4호선 역정보", "15041806", eq("선명", "4호선"))
-add("seoul-4", "KRNA 4호선 역간거리", "15041350", eq("선명", "4호선"), order="seq")
-add("seoul-6", "KRNA 6호선 역정보", "15041809", eq("선명", "6호선"))
-add("seoul-7", "KRNA 7호선 역정보", "15041808", eq("선명", "7호선"))
-add("seoul-7", "KRNA 7호선 역간거리", "15041340", eq("선명", "7호선"), order="seq")
-add("seoul-7", "인천교통공사 역주소", "15043811", eq("호선", "7호선"), order="seq", partial=True)
-add("seoul-8", "KRNA 8호선 역정보", "15041810", eq("선명", "8호선"))
-add("seoul-8", "KRNA 8호선 역간거리", "15041299", eq("선명", "8호선"), order="seq")
-add("seoul-9", "서울교통공사 역주소", "15044231", eq("호선", "9"), order="역번호", partial=True)
-add("seoul-9", "KRNA 9호선 역정보", "15041811", eq("선명", "9호선"))
-add("seoul-9", "KRNA 9호선 역간거리", "15041298", eq("선명", "9호선"), order="seq")
-add("seoul-ui", "KRNA 우이신설 역정보", "15041029", eq("선명", "우이신설"), order="역번호")
-add("incheon-1", "KRNA 인천1호선 역정보", "15041031", eq("선명", "인천1호선"))
-add("incheon-1", "인천교통공사 역주소", "15043811", eq("호선", "1호선"), order="seq")
-add("incheon-2", "KRNA 인천2호선 역정보", "15041032", eq("선명", "인천2호선"))
-add("incheon-2", "인천교통공사 역주소", "15043811", eq("호선", "2호선"), order="seq")
-add("suin-bundang", "KRNA 분당선 역정보", "15041812", eq("선명", "수인분당"))
-add("suin-bundang", "KRNA 분당선 역간거리", "15041284", eq("선명", "수인분당"), order="seq")
-add("suin-bundang", "KRNA 수인선 역간거리", "15041269", eq("선명", "수인분당"), order="seq")
-add("gyeongui-jungang", "KRNA 경의중앙 역정보", "15041027", eq("선명", "경의중앙"))
-add("gyeongui-jungang", "KRNA 경의중앙 역간거리", "15041327", eq("선명", "경의중앙"), order="seq")
-add("gyeongchun", "KRNA 경춘 역정보", "15041813", eq("선명", "경춘"))
-add("gyeongchun", "KRNA 경춘 역간거리", "15041295", eq("선명", "경춘"), order="seq")
-add("gyeonggang", "KRNA 경강 역정보", "15041028", eq("선명", "경강"))
-add("shinbundang", "KRNA 신분당 역정보", "15041033", eq("선명", "신분당"))
-add("shinbundang", "KRNA 신분당 역간거리", "15041074", eq("선명", "신분당"), order="seq")
-add("arex", "KRNA 공항철도 역정보", "15041034", eq("선명", "공항"))
-add("arex", "KRNA 공항철도 역간거리", "15041310", eq("선명", "공항"), order="seq")
-for n in "1234":
-    add(f"busan-{n}", f"KRNA 부산{n}호선 역정보", str(15041036 + int(n)), eq("선명", f"{n}호선"))
-    add(f"busan-{n}", "부산교통공사 역명정보", "3077187", eq("호선", f"{n}호선"), order="역번호")
-    add(f"busan-{n}", "KRNA 부산 호선구성", "15041436", eq("선명", f"{n}호선"), order="역구성순서")
-add("busan-gimhae", "KRNA 부산김해 역정보", "15041041", eq("선명", "부산김해경전철"), order="역번호")
-add("donghae", "KRNA 부산동해선 역정보(2024-09)", "15041042", eq("선명", "동해"), order="seq")
-for n, pk in zip("123", ("15041043", "15041045", "15041047")):
-    add(f"daegu-{n}", f"KRNA 대구{n}호선 역정보", pk, eq("선명", f"{n}호선"), order="역번호")
-    add(f"daegu-{n}", "대구교통공사 역주소", "15119035", eq("호선", n), name="역명(한글)", order="역번호")
-    add(f"daegu-{n}", "KRNA 대구 호선구성", "15041441", eq("선명", f"{n}호선"), order="역구성순서")
-add("gwangju-1", "KRNA 광주1호선 역정보(2023-07)", "15041048", eq("선명", "1호선"), order="seq")
-add("daejeon-1", "KRNA 대전1호선 역정보", "15041049", eq("선명", "1호선"), order="역번호")
-add("daejeon-1", "KRNA 대전 호선구성", "15041445", eq("선명", "1호선"), order="역구성순서")
-# 국가철도공단 도시광역철도 역명 (2026-06-30 기준, 순서 없음)
-ALL = lambda r: True
-for line, pk in [("seoul-1","15064037"),("seoul-2","15064039"),("seoul-3","15064040"),("seoul-4","15064041"),("seoul-5","15064043"),
-                 ("seoul-6","15064045"),("seoul-7","15064046"),("seoul-8","15064048"),("seoul-9","15064049"),("gyeonggang","15064050"),
-                 ("gyeongui-jungang","15064051"),("gyeongchun","15064052"),("arex","15064053"),("shinbundang","15064621"),
-                 ("seoul-ui","15064624"),("incheon-1","15064661"),("incheon-2","15064663"),("seohae","15064679"),("busan-1","15064687"),
-                 ("busan-2","15064688"),("busan-3","15064695"),("busan-4","15064700"),("donghae","15064706"),("busan-gimhae","15064713"),
-                 ("daegu-1","15068942"),("daegu-2","15068943"),("daegu-3","15068944"),("gwangju-1","15068945"),("daejeon-1","15068947")]:
-    add(line, "KRNA 역명 2026-06-30", pk, ALL)
-# 수도권 경전철. 김포골드라인 역명 파일(15064683)은 2026-06-30판 내용이 서해선이라 쓰지 않고 extra.json 운영사 노선안내로 대조한다.
-add("uijeongbu-lrt", "KRNA 의정부경전철 역정보", "15041030", eq("선명", "의정부"), order="역번호")
-add("uijeongbu-lrt", "KRNA 의정부경전철 역간거리", "15081852", eq("선명", "의정부"), order="seq")
-add("uijeongbu-lrt", "KRNA 역명 2026-06-30", "15064659", ALL)
-add("yongin-everline", "KRNA 에버라인 역정보(2025-06)", "15041035", eq("선명", "에버라인"), order="역번호")
-add("yongin-everline", "KRNA 에버라인 역간거리", "15081850", eq("선명", "에버라인"), order="seq")
-add("yongin-everline", "KRNA 역명 2026-06-30", "15064619", ALL)
-add("suin-bundang", "KRNA 분당선 역명 2026-06-30", "15064054", ALL, partial=True)
-add("suin-bundang", "KRNA 수인선 역명 2026-06-30", "15064055", ALL, partial=True)
-add("daejeon-1", "대전교통공사 역명 및 주소", "15083331", ALL, name="한 글", order="역번호")
+from sources import S
 extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extra.json")  # 보조 자료: {"line": [{"label":..., "stations":[...], "partial":bool}]}
 extras = json.load(open(extra)) if os.path.exists(extra) else {}
 # 대조 예외: {"_exclude": {"line": {"역명": "사유"}}} — 자료에 있어도 앱에 넣지 않기로 확정한 역
@@ -119,7 +47,9 @@ unconfirmed = extras.pop("_unconfirmed_renames", {})
 stations = {s["id"]: s for s in app["stations"]}
 lines = {l["id"]: l for l in app["lines"]}
 patterns = collections.defaultdict(list)
-for p in app["routePatterns"]: patterns[p["lineID"]].append(p["stationIDs"])
+# 순환 계통은 마지막 역과 첫 역도 이웃이다(첫 역을 끝에 다시 적지 않는다).
+for p in app["routePatterns"]:
+    patterns[p["lineID"]].append(p["stationIDs"] + p["stationIDs"][:1] if p["kind"] == "loop" else p["stationIDs"])
 
 def app_index(line):
     ids = []
