@@ -1,7 +1,7 @@
 # 사이역 제품 요구사항 문서(PRD)
 
 최종 갱신일: 2026-10-05  
-문서 버전: 1.19  
+문서 버전: 1.20  
 구현 기준 브랜치: `main`  
 번들 ID: `com.evolvingark.remembersubway.app`  
 앱 버전: 1.2.0 (빌드 14) · 최소 iOS 26.0 · Swift 6.0 · iPhone 전용
@@ -135,7 +135,7 @@
 
 ## 5. 데이터와 저장
 
-정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.10.official.6`, `challengePoolVersion` `2026.10.4`, 기준일 2026-10-13이며 5개 지역, 16개 운영기관, 35개 노선, 44개 운행 계통, 1,093개 역, 22개 출처를 포함한다.
+정적 번들 `transit_data.json`은 `schemaVersion`, `contentVersion`, `challengePoolVersion`, `dataAsOf`, 출처, 지역, 운영기관, 노선, 운행 계통, 역을 포함한다. 현재 데이터는 `schemaVersion` 1, `contentVersion` `2026.11.official.1`, `challengePoolVersion` `2026.11.1`, 기준일 2026-10-13이며 5개 지역, 16개 운영기관, 35개 노선, 44개 운행 계통, 1,093개 역, 22개 출처를 포함한다.
 
 - 수도권: 서울 1~9호선, 인천 1~2호선, 수인분당선, 경의중앙선, 경춘선, 경강선, 서해선, 신분당선, 공항철도, 우이신설선, 신림선, 의정부경전철, 용인에버라인, 김포골드라인
 - 부산: 부산 1~4호선, 부산김해경전철, 동해선
@@ -226,3 +226,4 @@ SwiftData 스키마는 `SinglePlayerBestRecord`, `AppSettingsRecord`, `PendingAc
 - 1.17 (2026-10-13): 수도권 경전철 3개 노선(의정부경전철 15역, 용인에버라인 15역, 김포골드라인 10역)을 운영기관 공식 자료로 추가하고 노선별 Game Center 리더보드 3개를 등록했다. 에버라인 운동장·송담대→용인중앙시장(용인예술과학대) 역명(옛 이름 별칭). `contentVersion` 2026.10.official.5, `challengePoolVersion` 2026.10.3.
 - 1.18 (2026-10-14): 싱글플레이 문제 풀에서 계통이 겹치는 구간의 중복 문제를 제거했다(경춘선 46→26, 1호선 132→107, 5호선 95→57, 경의중앙선 79→60, 수도권 전체 906→804). 싱글·멀티가 같은 함수(`RouteQuestionSlot.uniqueSlots`)를 쓴다. 천지인 키보드의 `ㆍ` 등 가운뎃점 변형을 정답 비교에서 무시한다. `challengePoolVersion` 2026.10.4(최고 기록 유지), `contentVersion` 유지.
 - 1.19 (2026-10-14): 가운뎃점으로 두 지명을 묶은 역 5곳에 부분 이름 별칭을 추가했다(4·19민주묘지 제외). `contentVersion` 2026.10.official.6. 1.2.0(빌드 14) 출시 준비.
+- 1.20 (2026-11-21): 순환 구간 문제 생성 버그를 고쳤다. 2호선 순환선의 중복 시청을 제거해 `시청–?–을지로입구`·`충정로–?–시청`(정답이 이웃에 보이던 문제) 대신 `충정로–?–을지로입구`를 출제한다. 6호선은 신내와 응암이 이어지지 않게 하고 응암 문제를 `구산–응암–역촌`·`구산–응암–새절`로 바로잡았다. 검증 도구와 테스트에 순환 처음·끝 중복, 정답이 이웃에 보이는 문제 검사를 추가했다. `contentVersion` 2026.11.official.1, `challengePoolVersion` 2026.11.1. 노선 데이터는 실제 개통·시행된 내용만 반영한다(예정 노선은 반영하지 않음).
